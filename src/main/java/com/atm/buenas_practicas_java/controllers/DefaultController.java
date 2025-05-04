@@ -110,4 +110,10 @@ public class DefaultController {
         return "redirect:/entities";
     }
 
+    @GetMapping("/")
+    public String mostrarHome(Model model)
+    {
+        return "home"; // View name
+    }
+
 }
