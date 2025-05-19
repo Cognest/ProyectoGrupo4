@@ -113,7 +113,7 @@ public class DefaultController {
     @GetMapping("/")
     public String mostrarHome(Model model)
     {
-        return "home"; // View name
+        return "index"; // View name
     }
 
 }
