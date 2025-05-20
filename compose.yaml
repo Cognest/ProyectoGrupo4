@@ -15,7 +15,7 @@ services:
       POSTGRES_PASSWORD: 'password123'
     ports:
       # Mapea el puerto 5432 del contenedor al puerto 5432 del anfitrión
-      - '5432:5432'
+      - '5433:5432'
     expose:
       # Expone el puerto 5432 dentro del contenedor para comunicación con otros servicios
-      - '5432'
+      - '5433'
