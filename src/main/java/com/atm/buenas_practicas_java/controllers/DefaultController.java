@@ -116,4 +116,10 @@ public class DefaultController {
         return "index"; // View name
     }
 
+    @GetMapping("/")
+    public String showhome(Model model)
+    {
+        return "home2"; // View name
+    }
+
 }
