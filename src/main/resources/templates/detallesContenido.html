@@ -1,0 +1,139 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+
+  <title>Detalles</title>
+</head>
+
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+
+  <!--<table>
+    <tr>
+      <th>Id</th>
+      <th>Nombre</th>
+    </tr>
+    <tr th:each="elemento , posicion : ${listaPrueba}">
+      <td th:text="${elemento.id}"></td>
+      <td th:text="${elemento.nombre}"></td>
+    </tr>
+  </table>-->
+
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+               class="w-100 shadow-1-strong rounded mb-4"
+               alt="Boat on Calm Water"/>
+
+          <div class="mb-2">
+            <h1 th:text="${imagen}"></h1>
+            <button type="button" class="btn btn-outline-success">Paisaje</button>
+            <button type="button" class="btn btn-outline-success">Mar</button>
+            <button type="button" class="btn btn-outline-success">Bote</button>
+          </div>
+
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded p-4 counts">
+            <div>
+              <div class="d-flex align-items-start align-items-center mb-4">
+                <img src="https://randomuser.me/api/portraits/men/99.jpg" class="avatar me-3 mt-1">
+                <h3 class="fw-bold">user1_</h3>
+              </div>
+              <h2 class="d-flex text-center"><a class="w-100 rounded btn-descargar" href="#">Descargar <i class="bi bi-download"></i></a></h2>
+              <div class="d-flex justify-content-between my-1">
+                <h4>Nº de visitas: </h4>
+                <span class="h4 fw-bold" th:text="${prueba.num_visitas}"></span>
+              </div>
+              <div class="d-flex justify-content-between my-1">
+                <h4>Nº de descargas: </h4>
+                <span class="h4 fw-bold" th:text="${prueba.num_descargas}"></span>
+              </div>
+
+              <div class="d-flex">
+                <button class="btn btn-outline-success d-flex me-1">
+                  <i class="bi bi-heart"></i>
+                  <div class="ms-2" th:text="${prueba.nota}"></div>
+                </button>
+                <button class="btn btn-outline-success ms-1">
+                  <i class="bi bi-bookmark"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 p-2 comentarios">
+        <h2>Comentarios</h2>
+        <div class="card mb-5 p-4 comment-card">
+          <form>
+            <div class="d-flex align-items-start">
+              <img src="https://randomuser.me/api/portraits/men/99.jpg" class="avatar me-3 mt-1" alt="Tu Avatar">
+              <div class="flex-grow-1">
+                <div class="mb-3">
+                  <textarea class="form-control" id="comentario" rows="3" placeholder="Escribe tu comentario..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Lista de comentarios -->
+        <div class="comment-card p-3 mb-3 d-flex">
+          <img src="https://randomuser.me/api/portraits/men/1.jpg" class="avatar me-3" alt="Avatar Juan">
+          <div>
+            <div class="fw-bold">Juan Pérez <small class="text-muted">· Hace 2 horas</small></div>
+            <p class="mb-0">Muy interesante el artículo, gracias por compartirlo.</p>
+          </div>
+        </div>
+
+        <div class="comment-card p-3 mb-3 d-flex">
+          <img src="https://randomuser.me/api/portraits/women/2.jpg" class="avatar me-3" alt="Avatar Laura">
+          <div>
+            <div class="fw-bold">Laura Gómez <small class="text-muted">· Hace 30 minutos</small></div>
+            <p class="mb-0">Me encantó la explicación. ¿Puedes ampliar el tema en otro post?</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section id="courses" class="courses section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Contenido</h2>
+      <p>Contenido Popular</p>
+    </div><!-- End Section Title -->
+
+    <div class="container">
+
+      <div class="masonry">
+        <div
+                class="masonry-item"
+                th:each="imagen, iterStat : ${imagenes}"
+                data-aos="fade-up"
+                th:attr="data-aos-delay=${iterStat.index * 100}"
+        >
+          <a th:href="'/imagenes/imagen' + ${iterStat.index}">
+            <img th:src="${imagen}" alt="Imagen dinámica" />
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </section><!-- /Courses Section -->
+</div>
+<!-- Fin ventanas que rellena java-->
+</body>
+
+</html>

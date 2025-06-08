@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios Bloqueados</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Usuarios Bloqueados</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <div class="container rounded border my-2">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12 text-center p-4" th:each="imagen, iterStat : ${imagenes}">
+                <img class="rounded-circle w-75 mb-2" th:src="${imagen}">
+                <h4 class="fw-bold">Usuario1</h4>
+                <p>14/02/2025</p>
+                <button class="btn btn-outline-secondary">Desbloquear</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
