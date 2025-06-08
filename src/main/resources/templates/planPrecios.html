@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Planes</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Plan de precios</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing section">
+
+        <div class="container">
+
+            <div class="row gy-3">
+
+                <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-item">
+                        <h3>Principiante</h3>
+                        <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
+                        <h4>1000<sup>Tk</sup><span> / 9,99 €</span></h4>
+                        <div class="btn-wrap">
+                            <a href="#" class="btn-buy">Comprar ahora</a>
+                        </div>
+                    </div>
+                </div><!-- End Pricing Item -->
+
+                <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pricing-item featured">
+                        <h3>Más vendido</h3>
+                        <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
+                        <h4>2800<sup>Tk</sup><span> / 24,99 €</span></h4>
+                        <div class="btn-wrap">
+                            <a href="#" class="btn-buy">Comprar ahora</a>
+                        </div>
+                    </div>
+                </div><!-- End Pricing Item -->
+
+                <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="pricing-item">
+                        <span class="advanced">25% dto.</span>
+                        <h3>Avanzado</h3>
+                        <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
+                        <h4>5000<sup>Tk</sup><span> / 39,99 €</span></h4>
+                        <div class="btn-wrap">
+                            <a href="#" class="btn-buy">Comprar ahora</a>
+                        </div>
+                    </div>
+                </div><!-- End Pricing Item -->
+
+                <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="pricing-item">
+                        <span class="advanced">35% dto.</span>
+                        <h3>Experto</h3>
+                        <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
+                        <h4>13500<sup>Tk</sup><span> / 99,99 €</span></h4>
+                        <div class="btn-wrap">
+                            <a href="#" class="btn-buy">Comprar ahora</a>
+                        </div>
+                    </div>
+                </div><!-- End Pricing Item -->
+
+            </div>
+
+        </div>
+
+    </section><!-- /Pricing Section -->
+</div>
+
+</body>
+</html>

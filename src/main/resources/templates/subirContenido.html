@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir contenido</title>
+</head>
+<body class="subirContenido">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <div class="container">
+        <div class="upload-card">
+            <!-- Encabezado -->
+            <div class="text-center mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/2950/2950651.png" alt="Upload" width="72">
+                <h2 class="mt-3">Sube tu Archivo</h2>
+                <p class="text-muted">Completa los datos para compartir tu contenido con otros usuarios.</p>
+            </div>
+
+            <form>
+                <!-- Sección: Información del archivo -->
+                <h5 class="section-title-publish fw-bold">Información del archivo</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Título del archivo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
+                        <input type="text" class="form-control" placeholder="Introduce el título del archivo" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descripción</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                        <textarea class="form-control" rows="3" placeholder="Agrega una breve descripción" required></textarea>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Etiquetas</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                        <input type="text" class="form-control" placeholder="Ej: proyecto, informe, pdf" required>
+                    </div>
+                </div>
+
+                <!-- Sección: Datos adicionales -->
+                <h5 class="section-title-publish fw-bold">Datos adicionales</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Precio (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+                        <input type="number" class="form-control" placeholder="Introduce el precio" min="0" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ubicación</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" class="form-control" placeholder="Ej: Madrid, España" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Selecciona un archivo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                        <input class="form-control" type="file" required>
+                    </div>
+                </div>
+
+                <!-- Botón de envío -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-publish">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
