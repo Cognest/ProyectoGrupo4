@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lista de reproductores</title>
+    <style>
+        /* RESET Y CONFIGURACION GENERAL */
+        *:focus {
+            outline: none;
+        }
+        html {
+            background: #f2f2f2;
+        }
+        body {
+            margin: 0;
+            font-family: "Raleway", sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* REPRODUCTOR INDIVIDUAL */
+        .music-player {
+            width: 300px;
+            background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+            box-shadow: 1px 10px 20px 5px #222;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 30px;
+            padding: 15px 20px 30px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* PORTADA */
+        .cover {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .cover img {
+            position: absolute;
+            top: 8%;
+            left: 14%;
+            width: 70%;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        /* TITULOS */
+        .titre {
+            margin-top: 10px;
+            padding: 0 10%;
+            text-align: center;
+        }
+        .titre h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 500;
+            color: #ccc;
+        }
+        .titre h1 {
+            margin: 5px 0 0;
+            font-size: 33px;
+            color: #fff;
+        }
+
+        /* CONTROLES */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin: 15px 0 10px;
+        }
+        button,
+        .volume-toggle {
+            background: transparent;
+            border: none;
+            color: #5bbb95;
+            font-family: FontAwesome;
+            cursor: pointer;
+        }
+        .play:before {
+            content: "\f04b";
+        }
+        .pause:before {
+            content: "\f04c";
+        }
+        .btn-play {
+            font-size: 22px;
+        }
+        .volume-toggle {
+            font-size: 20px;
+            flex: 0 0 auto;
+        }
+
+        /* SLIDER VOLUMEN */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0;
+            width: auto;
+        }
+        .volume-slider {
+            height: 16px;
+            width: 120px;
+            background: transparent;
+            position: relative;
+            flex: 0 0 auto;
+            appearance: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            margin-top: 0;
+            border: none;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            border: none;
+        }
+
+        .volume-slider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            transform: translateY(-50%);
+            background: linear-gradient(to right, #5bbb95 var(--vol, 100%), rgba(255, 255, 255, 0.15) var(--vol, 100%));
+            border-radius: 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* TIMELINE */
+        .progress-container {
+            width: 80%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+        .progress {
+            background: #5bbb95;
+            height: 8px;
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .time {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10%;
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .music-player {
+                padding: 10px 15px 25px;
+            }
+            .cover {
+                height: 160px;
+            }
+            .cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .titre h1 {
+                font-size: 24px;
+            }
+            .titre h3 {
+                font-size: 14px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+    </style>
+    <!-- Carga FontAwesome para iconos -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
+    />
+</head>
+<body>
+<div layout:fragment="contenido" >
+    <div class="container">
+
+        <!-- Primer reproductor -->
+        <div class="music-player" data-index="0">
+            <div class="cover">
+                <img src="https://pbs.twimg.com/media/FL6DkQAXIAMfAqM.jpg" alt="Mi canastera - Canelita" />
+            </div>
+            <div class="titre">
+                <h3>Canelita</h3>
+                <h1>Mi canastera</h1>
+            </div>
+            <audio preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+            <div class="controls">
+                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                <div class="volume-container">
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                <div class="progress"></div>
+            </div>
+            <div class="time">
+                <span class="current-time">0:00</span>
+                <span class="duration">0:00</span>
+            </div>
+        </div>
+
+        <!-- Segundo reproductor -->
+        <div class="music-player" data-index="0">
+            <div class="cover">
+                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
+            </div>
+            <div class="titre">
+                <h3>La Puñalada De Carmen</h3>
+                <h1>Desidia</h1>
+            </div>
+            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
+            <div class="controls">
+                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                <div class="volume-container">
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                <div class="progress"></div>
+            </div>
+            <div class="time">
+                <span class="current-time">0:00</span>
+                <span class="duration">0:00</span>
+            </div>
+        </div>
+
+        <!-- Tercer reproductor -->
+        <div class="music-player" data-index="0">
+            <div class="cover">
+                <img src="https://i0.wp.com/a33revoluciones.com/wp-content/uploads/2015/10/2-Mayhem.jpg?resize=600%2C589" alt="Mayhem-Deathcrush" />
+            </div>
+            <div class="titre">
+                <h3>Mayhem</h3>
+                <h1>Deathcrush</h1>
+            </div>
+            <audio preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+            <div class="controls">
+                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                <div class="volume-container">
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                <div class="progress"></div>
+            </div>
+            <div class="time">
+                <span class="current-time">0:00</span>
+                <span class="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

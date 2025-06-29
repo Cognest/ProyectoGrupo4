@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<title>Interfaz de Guardados</title>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <style>
+        .filterDiv {
+            display: none;
+        }
+
+        .filterDiv.show {
+            display: block;
+        }
+
+        .btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        *:focus {
+            outline: none;
+        }
+        html {
+            background: #f2f2f2;
+        }
+        body {
+            margin: 0;
+            font-family: "Raleway", sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* REPRODUCTOR INDIVIDUAL */
+        .music-player {
+            width: 300px;
+            background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+            box-shadow: 1px 10px 20px 5px #222;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 30px;
+            padding: 15px 20px 30px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* PORTADA */
+        .cover {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .cover img {
+            position: absolute;
+            top: 8%;
+            left: 14%;
+            width: 70%;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        /* TITULOS */
+        .titre {
+            margin-top: 10px;
+            padding: 0 10%;
+            text-align: center;
+        }
+        .titre h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 500;
+            color: #ccc;
+        }
+        .titre h1 {
+            margin: 5px 0 0;
+            font-size: 33px;
+            color: #fff;
+        }
+
+        /* CONTROLES */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin: 15px 0 10px;
+        }
+        button,
+        .volume-toggle {
+            background: transparent;
+            border: none;
+            color: #5bbb95;
+            font-family: FontAwesome;
+            cursor: pointer;
+        }
+        .play:before {
+            content: "\f04b";
+        }
+        .pause:before {
+            content: "\f04c";
+        }
+        .btn-play {
+            font-size: 22px;
+        }
+        .volume-toggle {
+            font-size: 20px;
+            flex: 0 0 auto;
+        }
+
+        /* SLIDER VOLUMEN */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0;
+            width: auto;
+        }
+        .volume-slider {
+            height: 16px;
+            width: 120px;
+            background: transparent;
+            position: relative;
+            flex: 0 0 auto;
+            appearance: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            margin-top: 0;
+            border: none;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            border: none;
+        }
+
+        .volume-slider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            transform: translateY(-50%);
+            background: linear-gradient(to right, #5bbb95 var(--vol, 100%), rgba(255, 255, 255, 0.15) var(--vol, 100%));
+            border-radius: 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* TIMELINE */
+        .progress-container {
+            width: 80%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+        .progress {
+            background: #5bbb95;
+            height: 8px;
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .time {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10%;
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .music-player {
+                padding: 10px 15px 25px;
+            }
+            .cover {
+                height: 160px;
+            }
+            .cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .titre h1 {
+                font-size: 24px;
+            }
+            .titre h3 {
+                font-size: 14px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+<div layout:fragment="contenido" >
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar izquierda -->
+            <div class="col-md-3 sidebar-guardados">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+
+                <a href="#" class="nav-link-guardados mt-4">Tu actividad</a>
+                <a href="#" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
+                <a href="#" class="nav-link-guardados mt-4">Conócenos</a>
+            </div>
+
+            <!-- Contenido central -->
+            <div class="col-md-9">
+                <div class="topbar">GUARDADO</div>
+
+                <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center gap-3 mt-3">
+                    <button class="btn custom-tab-nav w-75 active" data-filter="all">TODO</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-img"> IMAGENES</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-vid"> VIDEOS</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-aud"> AUDIO</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-tres-d"> 3D</button>
+                </div>
+
+                <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3 d-flex justify-content-center gap-3 ">
+
+<!--                    Primer reproductor-->
+                    <div class="filterDiv select-aud">
+                        <div class="music-player" data-index="0">
+                            <div class="cover">
+                                <img src="https://pbs.twimg.com/media/FL6DkQAXIAMfAqM.jpg" alt="Mi canastera - Canelita" />
+                            </div>
+                            <div class="titre">
+                                <h3>Canelita</h3>
+                                <h1>Mi canastera</h1>
+                            </div>
+                            <audio preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                            <div class="controls">
+                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                <div class="volume-container">
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+<!--                    Segundo reproductor-->
+                    <div class="filterDiv select-aud">
+                        <div class="music-player" data-index="0">
+                            <div class="cover">
+                                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
+                            </div>
+                            <div class="titre">
+                                <h3>La Puñalada De Carmen</h3>
+                                <h1>Desidia</h1>
+                            </div>
+                            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
+                            <div class="controls">
+                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                <div class="volume-container">
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    tercer reproductor-->
+                    <div class="filterDiv select-aud">
+                        <div class="music-player" data-index="0">
+                            <div class="cover">
+                                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
+                            </div>
+                            <div class="titre">
+                                <h3>La Puñalada De Carmen</h3>
+                                <h1>Desidia</h1>
+                            </div>
+                            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
+                            <div class="controls">
+                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                <div class="volume-container">
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-chat-user filterDiv select-img mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy una imagen</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-img mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy una imagen</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-vid mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy un video</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-vid mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy un video</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-vid mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy un video</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-tres-d mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy un 3D</span>
+                    </button>
+                    <button class="btn-chat-user filterDiv select-tres-d mb-4">
+                        <div class="archivo"></div>
+                        <span class="username">Hola soy un 3D</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function filterSelection(category) {
+                const items = document.getElementsByClassName("filterDiv");
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.remove("show");
+                    if (category === "all" || items[i].classList.contains(category)) {
+                        items[i].classList.add("show");
+                    }
+                }
+            }
+
+            filterSelection("all");
+
+            const buttons = document.querySelectorAll("#myBtnContainer .btn");
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const filter = this.getAttribute("data-filter");
+                    filterSelection(filter);
+                    document.querySelectorAll("#myBtnContainer .btn.active").forEach(b => b.classList.remove("active"));
+                    this.classList.add("active");
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

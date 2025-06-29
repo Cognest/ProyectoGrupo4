@@ -133,6 +133,25 @@ public class DefaultController {
         return "index"; // View name
     }
 
+    @GetMapping("/chat")
+    public String pantallaChat(Model model) {
+        return "chat";
+    }
+
+    @GetMapping("/guardados")
+    public String pantallaGuardados(Model model) {
+        return "guardados";
+    }
+
+    @GetMapping("/guardadosPrueba")
+    public String pantallaGuardadosPrueba(Model model) {
+        return "guardadosPrueba";
+    }
+
+    @GetMapping("/modelosPrueba")
+    public String pantallaModelosPrueba(Model model) {
+        return "modelosPrueba";
+    }
     @GetMapping("/iniciar-sesion")
     public String mostrarLogin(Model model)
     {

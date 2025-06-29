@@ -40,7 +40,7 @@
 
 <body class="index-page">
 
-<header id="header" class="header d-flex align-items-center sticky-top">
+<header id="header" class="header d-flex align-items-center">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
         <a th:href="@{/}" class="logo d-flex align-items-center me-auto">
@@ -107,7 +107,7 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a class="btn-getstarted" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+        <a class="btn-getstarted" th:href="@{/login}">Iniciar sesión</a>
 
     </div>
 </header>
@@ -116,16 +116,7 @@
     <h1>Sección sin modificar busqueda</h1>
 </main>
 
-<footer id="footer" class="footer position-relative light-background">
 
-    <div class="container footer-top">
-    </div>
-
-    <div class="container copyright text-center mt-4">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">Mentor</strong> <span>All Rights Reserved</span></p>
-    </div>
-
-</footer>
 
 <!-- Scroll Top -->
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -143,7 +134,7 @@
 
 <!-- Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
-<script th:src="@{/assets/js/audios.js}"></script>
+
 
 </body>
 

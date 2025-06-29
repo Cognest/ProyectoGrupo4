@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Modelos 3D</title>
+
+    <style>
+        #viewer {
+            width: 100%;
+            height: 600px;
+            background-color: #000;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #aaa;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="contenido">
+    <div class="container text-center">
+        <img id="preview"
+             src="/assets/img/KnightImg.png"
+             alt="Preview del modelo"
+             style="cursor:pointer; max-width:500px; margin: 20px auto; display: block;">
+        <div id="viewer" style="display:none; width:100%; height:600px; background-color:#000;"></div>
+    </div>
+</div>
+
+<!-- Fragmento para scripts específicos -->
+<div layout:fragment="scriptsEspecificos">
+    <script type="module" src="/assets/js/modelos.js"></script>
+</div>
+</body>
+</html>

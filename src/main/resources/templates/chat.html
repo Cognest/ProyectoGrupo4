@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla-chat}">
+<head>
+  <title>Interfaz de Chat</title>
+  <style>
+    .filterDiv {
+      display: none;
+    }
+
+    .filterDiv.show {
+      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn.active {
+      background-color: var(--accent-color);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="contenido" >
+
+  <div class="container-fluid chat-wrapper">
+    <div class="row h-100 gx-3 d-lg-flex">
+
+      <!-- Columna izquierda -->
+      <div class="col-md-3 chat-sidebar d-flex flex-column">
+        <!-- Cabecera con mi usuario y botones -->
+        <div class="chat-sidebar-header">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+              <div class="profile-pic pic-miusuario"></div>
+              <span class="fw-bold ms-2">@Mi Usuario</span>
+            </div>
+            <button class="btn-icon btn-dark-icon"> <i class="bi bi-three-dots-vertical fs-4"></i> </button>
+          </div>
+
+          <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center">
+            <button class="btn custom-tab-nav w-50 active" data-filter="all">General</button>
+            <button class="btn custom-tab-nav w-50" data-filter="fav"> Favoritos</button>
+          </div>
+        </div>
+
+        <!-- Lista scrollable de usuarios -->
+        <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3">
+
+          <!-- Usuarios de prueba para scroll -->
+          <button class="btn-chat-user active filterDiv fav"> <div class="profile-pic pic-usuario1"></div> <span class="username">@Usuario 1</span> <i class="bi bi-star-fill fs-5 ms-auto"></i> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario2"></div> <span class="username">@Usuario 2</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario3"></div> <span class="username">@Usuario 3</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario4"></div> <span class="username">@Usuario 4</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario5"></div> <span class="username">@Usuario 5</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario6"></div> <span class="username">@Usuario 6</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario7"></div> <span class="username">@Usuario 7</span> </button>
+          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario8"></div> <span class="username">@Usuario 8</span> </button>
+        </div>
+      </div>
+
+
+      <!-- Columna central -->
+      <div class="col-md-9 col-content flex-column p-0">
+
+        <div class="chat-header">
+          <div class="d-flex align-items-center">
+            <div class="profile-pic pic-usuario1"></div>
+            <span class="fw-bold ms-2">@Usuario 1</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <button class="btn-icon"><i class="bi bi-star-fill fs-4"></i> </button>
+            <button class="btn-icon"><i class="bi bi-three-dots-vertical fs-4"></i> </button>
+          </div>
+        </div>
+
+        <div class="chat-body overflow-auto">
+          <div class="message">Hola, me encanta el contenido que estas subiendo este mes, pero me parece un poco caro. Querría saber si estás dispuesto a negociar</div>
+          <div class="message sent">Hola!, claro que sí (siempre que compres varios archivos)</div>
+          <div class="message">De cuantos archivos estariamos hablando aproximadamente?</div>
+          <div class="message sent">5 archivos</div>
+          <div class="message sent">como mínimo</div>
+          <div class="message">Solo estoy interesado en 3...</div>
+          <div class="message sent">Lo siento, no me sale a cuenta hacer rebaja por debajo de cinco</div>
+          <div class="message">Pues por el culo te la hinco</div>
+          <div class="message">Espabila chaval, te falta via apia</div>
+        </div>
+
+        <div class="message-input">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Escribe un mensaje">
+            <button class="btn btn-light" type="button"><i class="bi bi-send-fill fs-4"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("DOM cargado");
+
+      function filterSelection(category) {
+        console.log("Filtro activado para:", category);
+        const items = document.getElementsByClassName("filterDiv");
+        for (let i = 0; i < items.length; i++) {
+          items[i].classList.remove("show");
+          if (category === "all" || items[i].classList.contains(category)) {
+            items[i].classList.add("show");
+          }
+        }
+      }
+
+      filterSelection("all");
+
+      const containers = ["#myBtnContainer", "#chatTabContainer"];
+      containers.forEach(containerId => {
+        const buttons = document.querySelectorAll(`${containerId} .btn`);
+        console.log("Botones encontrados en", containerId, buttons.length);
+        buttons.forEach(button => {
+          button.addEventListener("click", function () {
+            const filter = this.getAttribute("data-filter");
+            filterSelection(filter);
+
+            document.querySelectorAll(`${containerId} .btn.active`).forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+      });
+    });
+  </script>
+</div>
+</body>
+</html>
