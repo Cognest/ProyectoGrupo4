@@ -1,4 +1,4 @@
-package buenas_practicas_java.controllers;
+package com.atm.buenas_practicas_java.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
