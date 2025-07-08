@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <title>Búsqueda</title>
+    <style>
+        .search-container {
+            background: #f7f7f7;
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .filter-bar {
+            background: #fff;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
+        .filter-item {
+            margin-right: 20px;
+            color: #555;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .filter-item:hover {
+            color: #4a9eff;
+        }
+        .filter-item.active {
+            color: #4a9eff;
+            font-weight: 500;
+        }
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .grid-item:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .image-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .btn-download {
+            width: 100%;
+            background: #228b18;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn-download:hover {
+            background: #357abd;
+        }
+
+        /* Estilos para la paginación */
+        .pagination .page-link {
+            color: #2e8b57;  /* Verde mar oscuro para el texto */
+            border-color: #98fb98;  /* Verde menta claro para los bordes */
+        }
+
+        .pagination .page-link:hover {
+            background-color: #98fb98;  /* Verde menta claro al pasar el mouse */
+            border-color: #3cb371;  /* Verde medio mar para el borde al hover */
+            color: #008100;  /* Verde oscuro para el texto al hover */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #2e8b57;  /* Verde mar oscuro para el botón activo */
+            border-color: #2e8b57;
+            color: white;  /* Texto blanco en el botón activo */
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #90ee90;  /* Verde claro para elementos deshabilitados */
+            border-color: #98fb98;
+        }
+    </style>
+
+    <style>
+        /* ... (mantener otros estilos existentes) ... */
+
+        .grid-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .stats-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .grid-item:hover .stats-container {
+            opacity: 1;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-item i {
+            font-size: 14px;
+        }
+
+        .download-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(74, 158, 255, 0.9);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s ease, background-color 0.2s;
+        }
+
+        .grid-item:hover .download-btn {
+            opacity: 1;
+        }
+
+        .download-btn:hover {
+            background: rgba(34, 139, 34, 1);
+        }
+    </style>
+
+    <style>
+        /* ... (mantener los otros estilos existentes) ... */
+
+        /* Eliminar los estilos anteriores de masonry-grid */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .grid-item {
+            aspect-ratio: 3/4; /* Mantiene una proporción consistente */
+            width: 100%;
+            margin-bottom: 0; /* Eliminamos el margin-bottom anterior */
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin distorsionarse */
+            border-radius: 8px;
+        }
+
+        /* Ajustamos el responsive para mantener siempre 3 columnas */
+        @media (max-width: 768px) {
+            .masonry-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .masonry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="contenido">
+    <!-- Barra de búsqueda -->
+    <div class="search-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form th:action="@{/busqueda}" method="get">
+                        <input type="text"
+                               class="form-control form-control-lg"
+                               placeholder="Buscar imágenes, vectores, vídeos y música"
+                               name="query"
+                               th:value="${param.query}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de filtros -->
+    <div class="filter-bar">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center">
+                <div class="filter-item active">Todo</div>
+                <div class="filter-item">Fotos</div>
+                <div class="filter-item">Vectores</div>
+                <div class="filter-item">Ilustraciones</div>
+                <div class="filter-item">Vídeos</div>
+                <div class="filter-item">Música</div>
+                <div class="ms-auto">
+                    <select class="form-select form-select-sm">
+                        <option>Destacados</option>
+                        <option>Más recientes</option>
+                        <option>Más populares</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Filtros adicionales -->
+        <div class="mb-4">
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-secondary btn-sm">
+                    Orientación <i class="bi bi-chevron-down"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm">
+                    Tamaño <i class="bi bi-chevron-down"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm">
+                    Color <i class="bi bi-chevron-down"></i>
+                </button>
+                <!-- Más filtros según necesites -->
+            </div>
+        </div>
+
+        <!-- Grid de imágenes -->
+        <div class="masonry-grid">
+            <div th:each="i : ${#numbers.sequence(1, 12)}" class="grid-item">
+                <img th:src="@{'https://picsum.photos/400/500'}" alt="Imagen de muestra">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <i class="bi bi-heart-fill"></i>
+                        <span>1.2k</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-eye-fill"></i>
+                        <span>3.5k</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-download"></i>
+                        <span>456</span>
+                    </div>
+                </div>
+                <button class="download-btn">
+                    <i class="bi bi-download me-1"></i>Descargar
+                </button>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <nav class="my-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>
