@@ -133,6 +133,26 @@ public class DefaultController {
         return "index"; // View name
     }
 
+
+    @GetMapping("/config-usuario")
+    public String configUsuario(Model model)
+    {
+        return "configUsuario"; // View name
+    }
+
+
+    @GetMapping("/vista-usuario")
+    public String vistaUsuario(Model model) {
+        List<String> usuariosConectados = List.of("Juan", "María", "Lucas", "Ana");
+        model.addAttribute("usuariosConectados", usuariosConectados);
+        return "vistaUsuario"; // nombre del HTML
+    }
+    @GetMapping("/reportes")
+    public String reportes(Model model)
+    {
+        return "reportes"; // View name
+    }
+
     @GetMapping("/chat")
     public String pantallaChat(Model model) {
         return "chat";

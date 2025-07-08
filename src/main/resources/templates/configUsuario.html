@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Configuracion de Cuenta</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!--<h1>Configuración de Cuenta</h1> -->
+    <div class="configuracion-cuenta-container row">
+        <h1>Configuración de Cuenta</h1>
+
+        <!-- Menú lateral -->
+        <div class="menu-lateral col-4">
+            <div class="foto-perfil-container">
+                <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+                <button class="btn-editar-foto">Editar foto de perfil</button>
+            </div>
+            <nav class="menu-opciones">
+                <button class="menu-btn activo" id="btn-actividad">Tu actividad</button>
+                <button class="menu-btn activo"id="btn-config">Configuración de Cuenta</button>
+                <button class="menu-btn"id="btn-notificaciones">Notificaciones</button>
+                <button class="menu-btn"id="btn-privacidad">Privacidad del Contenido</button>
+            </nav>
+        </div>
+            <!-- Contenido principal -->
+            <div class="col-8">
+                <div class="fondo-rectangulo-verde p-4">
+                    <!-- Sección 1: Tu actividad -->
+                    <div id="contenido-actividad" class="contenido-principal">
+                        <h2>Tu actividad</h2>
+                        <p>Aquí se muestra la actividad reciente del usuario...</p>
+                    </div>
+
+                    <!-- Sección 2: Configuración de Cuenta -->
+                    <div id="contenido-config" class="contenido-principal" style="display:none;">
+                        <div class="botones-configuracion">
+                            <button class="config-btn-blanco">Contraseña y Seguridad</button>
+                            <button class="config-btn-blanco">Datos Personales</button>
+                            <button class="config-btn-blanco">Tu Información y Permisos</button>
+                            <button class="config-btn-blanco">Perfiles Bloqueados</button>
+                            <button class="config-btn-blanco">Comentarios</button>
+                            <button class="config-btn-blanco">Preferencias de Contenido</button>
+                        </div>
+                    </div>
+
+                    <!-- Sección 3: Notificaciones -->
+                    <div id="contenido-notificaciones" class="contenido-principal" style="display:none;">
+                        <h2>Notificaciones</h2>
+                        <p>Aquí puedes configurar tus notificaciones...</p>
+                    </div>
+
+                    <!-- Sección 4: Privacidad del Contenido -->
+                    <div id="contenido-privacidad" class="contenido-principal" style="display:none;">
+                        <h2>Privacidad del Contenido</h2>
+                        <p>Opciones de privacidad del contenido...</p>
+                    </div>
+                </div>
+            </div>
+
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const botones = [
+                { btn: 'btn-actividad', contenido: 'contenido-actividad' },
+                { btn: 'btn-config', contenido: 'contenido-config' },
+                { btn: 'btn-notificaciones', contenido: 'contenido-notificaciones' },
+                { btn: 'btn-privacidad', contenido: 'contenido-privacidad' }
+            ];
+
+            botones.forEach(({btn, contenido}) => {
+                document.getElementById(btn).addEventListener('click', function() {
+                    // Oculta todos los contenidos
+                    botones.forEach(({contenido}) => {
+                        document.getElementById(contenido).style.display = 'none';
+                    });
+                    // Muestra el contenido seleccionado
+                    document.getElementById(contenido).style.display = 'block';
+
+                    // Actualiza el botón activo
+                    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+                    this.classList.add('activo');
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

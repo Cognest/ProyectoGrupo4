@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil</title>
+</head>
+class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <div class="container-fluid mt-4">
+        <div class="row gx-5 d-lg-flex h-auto"> 
+
+            <!-- Columna izquierda -->
+            <div class="col-md-3">
+                <div class="text-center mb-3">
+                    <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="img-fluid rounded-circle" style="max-width: 150px;">
+                </div>
+
+                <div class="list-group mb-3">
+                    <a href="#" class="list-group-item list-group-item-light">Imágenes</a>
+                    <a href="#" class="list-group-item list-group-item-light">Sonidos</a>
+                    <a href="#" class="list-group-item list-group-item-light">Modelos 3D</a>
+                    <a href="#" class="list-group-item list-group-item-light">Videos</a>
+                </div>
+
+                <div class="fondoVerde text-white p-3 rounded">SUGERENCIAS DE CONTENIDOS SIMILARES</div>
+            </div>
+
+            <!-- Columna central -->
+            <div class="col-md-6">
+                <div class="perfil-box p-4 mb-3 rounded">
+                    <h4 class="nombre-usuario mb-2">Lio Messi</h4>
+                    <p class="descripcion-usuario mb-0">Leyenda del mundo futbolistico.</p>
+                </div>
+                <!-- Publicación -->
+                <div class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <!-- Foto de perfil (cambia src por tu ruta real) -->
+                        <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil me-3">
+
+                        <!-- Título y autor -->
+                        <div>
+                            <h5 class="mb-1 fw-bold">La Pelotita</h5>
+                            <small class="text-muted">Lio Messi</small>
+                        </div>
+                    </div>
+
+                    <!-- Previsualización del contenido -->
+                    <div class="previsualizacion mb-3">
+                        <img src="/uploads/contenido.jpg" alt="Contenido de la publicación" class="img-fluid rounded">
+                    </div>
+
+                    <!-- Botones de interacción -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-outline-secondary flex-fill me-2">👍 Me gusta</button>
+                        <button class="btn btn-outline-secondary flex-fill mx-2">🔗 Compartir</button>
+                        <button class="btn btn-outline-secondary flex-fill ms-2">💾 Guardar</button>
+                    </div>
+
+                    <!-- Caja de comentarios -->
+                    <div class="comentarios">
+                        <textarea class="form-control" rows="2" placeholder="Escribe un comentario..."></textarea>
+                        <button class="btn btn-success mt-2">Comentar</button>
+                    </div>
+                </div>
+            </div>
+                <!-- Columna derecha -->
+            <div class="col-md-3">
+                <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
+                <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
+                <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
+
+                <div class="chat-sidebar">
+                <button class="chat-toggle" onclick="toggleChat()">Chat</button>
+                <div id="chatUsers" class="chat-users">
+                    <button class="chat-user online">
+                        <img src="/assets/img/foto-perfil.png" alt="User 1">
+                        <span>Anto Rocusso</span>
+                    </button>
+                    <button class="chat-user">
+                        <img src="/assets/img/foto-perfil.png" alt="User 2">
+                        <span>Rodrigo de Paul</span>
+                    </button>
+                    <button class="chat-user online">
+                        <img src="/assets/img/foto-perfil.png" alt="User 3">
+                        <span>Dibu Martinez</span>
+                    </button>
+                    <!-- Puedes repetir más usuarios aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        function toggleChat() {
+            const chatUsers = document.getElementById('chatUsers');
+            chatUsers.classList.toggle('show');
+        }
+    </script>
+</div>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Reportes</title>
+</head>
+<div layout:fragment="contenido" >
+    <div class="container-fluid mt-4">
+        <div class="row gx-5 d-flex flex-wrap">
+        <!-- Columna izquierda -->
+            <div class="menu-lateral col-12 col-md-4 mb-3">
+                <nav class="menu-opciones">
+                    <button class="menu-btn"id="btn-actividad">Canal de Reportes</button>
+                    <button class="menu-btn"id="btn-config">Crear Reporte</button>
+                    <button class="menu-btn"id="btn-notificaciones">Estado de Reportes</button>
+                    <button class="menu-btn"id="btn-privacidad">Preguntas Frecuentes</button>
+                </nav>
+            </div>
+            <!-- Contenido principal -->
+            <div class="col-12 col-md-8">
+                <div class="fondo-rectangulo-verde p-4">
+                    <!-- Sección 1: Canal de Reportes -->
+                    <div id="contenido-canal" class="contenido-canal" style="display: block;">
+                        <h2>Canal de Reportes</h2>
+                        <div class="texto-legal-reportes">
+
+                            <h3>🛡️ Normativa legal aplicable a los reportes en esta plataforma (España)</h3>
+
+                            <p>
+                                En esta sección podrás reportar cualquier contenido o comportamiento que vulnere tus derechos o las normas de nuestra comunidad. A continuación, te explicamos las <strong>leyes españolas</strong> que se aplican en casos de <strong>robo de contenido, plagio, abusos y acoso</strong> dentro del entorno digital.
+                            </p>
+
+                            <br>
+
+                            <h4>📚 1. Derechos de Autor y Propiedad Intelectual</h4>
+
+                            <p>
+                                Todo contenido original creado por los usuarios (textos, imágenes, vídeos, código, etc.) está protegido por:
+                            </p>
+                            <ul>
+                                <li>La <strong>Ley de Propiedad Intelectual</strong> (Real Decreto Legislativo 1/1996).</li>
+                                <li>El <strong>Código Penal español</strong>, que contempla sanciones por el uso no autorizado de obras protegidas.</li>
+                            </ul>
+                            <p>
+                                🔒 <strong>Si alguien ha copiado, reutilizado o publicado tu contenido sin tu permiso</strong>, puedes reportarlo. Nuestro equipo moderador revisará el caso y tomará medidas, como retirar el contenido o sancionar al infractor.
+                            </p>
+
+                            <br>
+
+                            <h4>✍️ 2. Plagio</h4>
+
+                            <p>
+                                El plagio implica presentar como propio el trabajo de otra persona sin citarla correctamente. En España, el plagio puede constituir:
+                            </p>
+                            <ul>
+                                <li>Una <strong>infracción civil</strong> (por vulneración de derechos de autor).</li>
+                                <li>En ciertos casos, un <strong>delito penal</strong> (si se demuestra intención de lucro o daño).</li>
+                            </ul>
+                            <p>
+                                🚫 Esto aplica no solo a textos, sino también a diseños, fragmentos de código, imágenes y cualquier obra creativa.
+                            </p>
+
+                            <br>
+
+                            <h4>🚨 3. Abuso, Amenazas y Acoso Digital</h4>
+
+                            <p>
+                                La legislación española contempla medidas frente a conductas abusivas o acosadoras en línea, conforme a:
+                            </p>
+                            <ul>
+                                <li>El <strong>Código Penal</strong> (Art. 172 ter) respecto al acoso o amenazas mediante tecnologías.</li>
+                                <li>La <strong>Ley Orgánica 1/1982</strong> de protección civil del honor, la intimidad y la propia imagen.</li>
+                                <li>La <strong>Ley de Servicios de la Sociedad de la Información (LSSI)</strong>, que regula el uso de servicios digitales.</li>
+                            </ul>
+
+                            <p>
+                                ✅ En nuestra plataforma, no se permite:
+                            </p>
+                            <ul>
+                                <li>Acoso reiterado.</li>
+                                <li>Insultos, amenazas o incitación al odio.</li>
+                                <li>Publicación de contenido ofensivo o discriminatorio.</li>
+                            </ul>
+                            <p>
+                                Todos los reportes por estos motivos son revisados con máxima prioridad.
+                            </p>
+
+                            <br>
+
+                            <h4>🔎 ¿Qué pasa cuando envías un reporte?</h4>
+
+                            <ol>
+                                <li>El equipo de moderación analiza el caso con base en las pruebas proporcionadas.</li>
+                                <li>Si se confirma la infracción, se aplican sanciones correspondientes (eliminación de contenido, advertencia o suspensión del usuario).</li>
+                                <li>En casos graves, podemos colaborar con las autoridades competentes.</li>
+                            </ol>
+
+                            <br>
+
+                            <h4>⚠️ Nota legal</h4>
+
+                            <p>
+                                El uso de esta plataforma de reportes <strong>no sustituye una denuncia oficial</strong>. Si lo consideras necesario, puedes acudir a:
+                            </p>
+                            <ul>
+                                <li><strong>Policía Nacional</strong> (Brigada de Investigación Tecnológica).</li>
+                                <li><strong>Guardia Civil</strong> (Grupo de Delitos Telemáticos).</li>
+                                <li><strong>Agencia Española de Protección de Datos (AEPD)</strong>, si se vulneran datos personales.</li>
+                            </ul>
+
+                            <br>
+
+                            <h4>🤝 Gracias por contribuir a un entorno seguro</h4>
+
+                            <p>
+                                Tu colaboración es fundamental para mantener esta comunidad segura, justa y respetuosa.
+                            </p>
+
+                        </div>
+
+                    </div>
+                    <!-- Sección 2: Crear reporte -->
+                    <div id="crear-reporte" class="crear-reporte" style="display: none;">
+                        <!-- Contenedor del formulario oculto inicialmente -->
+                        <div id="formulario-reporte" style="margin-top: 20px;">
+                        <h4>Formulario de Reporte</h4>
+                            <p>Por favor, rellena los siguientes datos para enviar tu reporte.</p>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="tipoReporte" class="form-label">Tipo de reporte:</label>
+                                    <select id="tipoReporte" class="form-select" required>
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="robo">Robo de contenido</option>
+                                        <option value="plagio">Plagio</option>
+                                        <option value="acoso">Acoso o abuso</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">Descripción del caso:</label>
+                                    <textarea id="descripcion" class="form-control" rows="5" placeholder="Describe qué ocurrió..." required></textarea>
+                                </div>
+
+                                <form enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="pruebasLink" class="form-label">Enlace (opcional):</label>
+                                        <input type="url" id="pruebasLink" name="pruebasLink" class="form-control" placeholder="https://ejemplo.com/prueba">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pruebasArchivo" class="form-label">Subir archivo: </label>
+                                        <input type="file" id="pruebasArchivo" name="pruebasArchivo" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Enviar Reporte</button>
+                                </form>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Sección 3: Estado de Reporte -->
+                    <div id="estado-reporte" class="estado-reporte" style="display: none;">
+                        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto;">
+                            <h3>Reporte #12345 || Problema con contenido duplicado</h3>
+                            <p><strong>Estado:</strong> En revisión</p>
+
+                            <div style="margin-top: 20px;">
+                                <button class="btn btn-warning" onclick="alert('Función para reportar un problema próximamente')">Reportar un problema</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Sección 4: Preguntas Frecuentes -->
+                    <div id="preguntas-frecuentes" class="preguntas-frecuentes" style="display: none;">
+                        <h3>Preguntas Frecuentes</h3>
+
+                        <div class="faq-item mb-3">
+                            <button class="config-btn-blanco" onclick="toggleRespuesta('r1')">¿Cómo hacer un reporte?</button>
+                            <div id="r1" class="respuesta-faq card mt-2 p-3 shadow-sm fade-in" style="display: none;">
+                                <p class="mb-0">Para hacer un reporte, ve a la sección "Crear Reporte" y completa el formulario con los datos solicitados.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item mb-3">
+                            <button class="config-btn-blanco" onclick="toggleRespuesta('r2')">¿Cuánto tarda la revisión de mi Reporte?</button>
+                            <div id="r2" class="respuesta-faq card mt-2 p-3 shadow-sm fade-in" style="display: none;">
+                                <p class="mb-0">La revisión suele tardar entre 24 y 72 horas hábiles, dependiendo del tipo de caso.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item mb-3">
+                            <button class="config-btn-blanco" onclick="toggleRespuesta('r3')">Finalizó mi reporte, ¿Ahora qué hago?</button>
+                            <div id="r3" class="respuesta-faq card mt-2 p-3 shadow-sm fade-in" style="display: none;">
+                                <p class="mb-0">Revisa el estado del reporte en la sección "Estado de Reportes". Si está completado, ya se ha tomado acción.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    <script>
+        // Mostrar / ocultar el formulario de reporte
+        function mostrarFormulario() {
+            const form = document.getElementById("formulario-reporte");
+            form.style.display = (form.style.display === "none") ? "block" : "none";
+        }
+
+        // Mostrar / ocultar respuestas de Preguntas Frecuentes
+        function toggleRespuesta(id) {
+            const div = document.getElementById(id);
+            div.style.display = (div.style.display === "none") ? "block" : "none";
+        }
+
+        // Mostrar solo una sección según el botón del menú lateral
+        document.addEventListener("DOMContentLoaded", function () {
+            const secciones = {
+                "btn-actividad": "contenido-canal",
+                "btn-config": "crear-reporte",
+                "btn-notificaciones": "estado-reporte",
+                "btn-privacidad": "preguntas-frecuentes"
+            };
+
+            for (let btnId in secciones) {
+                document.getElementById(btnId).addEventListener("click", function () {
+                    for (let id in secciones) {
+                        const seccionId = secciones[id];
+                        const seccion = document.getElementById(seccionId);
+                        seccion.style.display = (id === btnId) ? "block" : "none";
+                    }
+                });
+            }
+        });
+    </script>
+</div>

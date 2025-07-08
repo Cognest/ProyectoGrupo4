@@ -1914,6 +1914,335 @@ section,
 .buscador-form input {
   padding: 10px;
 }
+/*--------------------------------------------------------------
+#Vista Usuario
+--------------------------------------------------------------*/
+.fondoVerde{
+  background-color: var(--accent-color);
+}
+/*--------------------------------------------------------------
+#Configuracion de Usuario
+--------------------------------------------------------------*/
+.configuracion-cuenta-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 40px auto;
+  gap: 30px;
+}
+
+.menu-lateral {
+  width: 280px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.foto-perfil-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.foto-perfil {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.btn-editar-foto {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.menu-opciones .menu-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-btn.activo {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.contenido-principal {
+  flex: 1;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.opciones-configuracion .config-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fafafa;
+  cursor: pointer;
+  text-align: left;
+}
+/* Título principal */
+.titulo-configuracion {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+}
+
+/* Contenedor del bloque verde */
+.bloque-verde {
+  background-color: var(--accent-color);
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Botones uniformes */
+.config-btn {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: var(--accent-color);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.config-btn:hover {
+  background-color: #e8f5e9;
+}
+
+/* INTENTO DE BOTONES */
+.fondo-rectangulo-verde {
+  background-color: #5FCF80FF; /* Verde Bootstrap */
+  border-radius: 10px;
+  margin-left: 20px; /* Espacio entre menú lateral y este bloque */
+  margin-right: 20px; /* Espacio derecho */
+  padding: 30px;
+  /* display: flex; y gap eliminados, ya que ahora van en .botones-configuracion */
+}
+
+/* Nuevo: Estilos flex para el contenedor de botones */
+.botones-configuracion {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.config-btn-blanco {
+  background-color: white;
+  color: #5FCF80FF;
+  border: none;
+  padding: 12px 20px;
+  text-align: left;
+  border-radius: 5px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.config-btn-blanco:hover {
+  background-color: #f1f1f1;
+}
+/* CHAT */
+.user-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.online-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background-color: #5FCF80FF; /* verde */
+  border: 2px solid white;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.list-group-item {
+  background-color: white;
+  border: none;
+  padding: 10px 15px;
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+.menu-btn.activo {
+  background-color: #5FCF80FF;
+  color: #fff;
+}
+/* Prueba de chat  */
+ .chat-sidebar {
+   background-color: #5FCF80FF; /* verde */
+   padding: 1rem;
+   border-radius: 10px;
+   color: white;
+   position: relative;
+ }
+
+.chat-toggle {
+  background-color: white;
+  color: #5FCF80FF;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-user {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.chat-user:last-child {
+  margin-bottom: 0;
+}
+
+.chat-user:hover {
+  background-color: #f0f0f0;
+}
+
+.chat-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid transparent;
+}
+
+.chat-user.online img {
+  border-color: #5FCF80FF;
+}
+
+.chat-user span {
+  color: black;
+  font-weight: 500;
+}
+/* Responsive para el chat */
+@media (max-width: 768px) {
+  .chat-sidebar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    border-radius: 0;
+  }
+
+  .chat-toggle {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .chat-users {
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #5FCF80FF;
+    padding: 0.5rem;
+  }
+
+  .chat-user {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .chat-user img {
+    width: 35px;
+    height: 35px;
+  }
+}
+/*media queries en CSS te permiten cambiar estilos según el tamaño de la pantalla*/
+@media (max-width: 768px) {
+  .menu {
+    flex-direction: column;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+/*Flexbox y Grid facilitan la creación de layouts adaptables.*/
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.item {
+  flex: 1 1 100%;
+}
+@media (min-width: 600px) {
+  .item {
+    flex: 1 1 48%;
+  }
+}
+.fade-in {
+  transition: all 0.3s ease;
+  border-left: 4px solid #28a745;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+.perfil-box {
+  background-color: #28a745; /* verde */
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.nombre-usuario {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.descripcion-usuario {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
 /*-----------------------------------------------
 PANTALLA CHAT
 -------------------------------------------------*/
