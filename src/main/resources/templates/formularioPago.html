@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagar</title>
+    <style>
+        .payment-card {
+            max-width: 500px;
+            margin: 50px auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        .payment-card .card-header {
+            background-color: var(--accent-color);
+            color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            transition: 0.3s ease;
+        }
+        .card-input {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .input-group-text {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <div class="card payment-card">
+        <div class="card-header text-center">
+            <h4 class="mb-0">Pago - <span th:text="${plan.nombre}">Plan</span></h4>
+            <small th:text="${plan.precio} + '€ - ' + ${plan.tokens} + ' tokens'"></small>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/procesar-pago}" method="post" id="pagoForm" novalidate>
+                <input type="hidden" name="planId" th:value="${plan.id}"/>
+
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <div class="mb-3">
+                    <label for="nombreTitular" class="form-label">Nombre del Titular</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                        <input type="text" class="form-control" id="nombreTitular" name="nombreTitular"
+                               placeholder="Juan Pérez" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="numeroTarjeta" class="form-label">Número de Tarjeta</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                        <input type="text" maxlength="16" pattern="\d{16}" class="form-control card-input"
+                               id="numeroTarjeta" name="numeroTarjeta" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="text-end mt-2">
+                        <img id="tipoTarjetaImg" alt="Tipo de tarjeta" style="height: 32px; display: none;">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="exp" class="form-label">Expiración (MM/AA)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                            <input type="text" maxlength="5" pattern="\d{2}/\d{2}" class="form-control" id="exp"
+                                   name="exp" placeholder="08/25" required>
+                        </div>
+                        <div class="invalid-feedback" id="expError" style="display:none;">Fecha de expiración no válida</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="cvv" class="form-label">CVV</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+                            <input type="text" maxlength="3" pattern="\d{3}" class="form-control" id="cvv"
+                                   name="cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-lock-fill me-1"></i> Confirmar Pago
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const numeroTarjetaInput = document.getElementById("numeroTarjeta");
+        const tipoTarjetaImg = document.getElementById("tipoTarjetaImg");
+
+        const logos = {
+            visa: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg",
+            mastercard: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg",
+            amex: "https://cdn-icons-png.flaticon.com/512/179/179431.png"
+        };
+
+        numeroTarjetaInput.addEventListener("input", () => {
+            const num = numeroTarjetaInput.value.replace(/\s+/g, '');
+            let tipo = null;
+
+            if (/^4/.test(num)) tipo = "visa";
+            else if (/^5[1-5]/.test(num)) tipo = "mastercard";
+            else if (/^3[47]/.test(num)) tipo = "amex";
+
+            if (tipo) {
+                tipoTarjetaImg.src = logos[tipo];
+                tipoTarjetaImg.style.display = "inline-block";
+            } else {
+                tipoTarjetaImg.style.display = "none";
+            }
+        });
+
+        // Validación de expiración (no permitir fechas pasadas)
+        const form = document.getElementById("pagoForm");
+        const expInput = document.getElementById("exp");
+        const expError = document.getElementById("expError");
+
+        form.addEventListener("submit", function (e) {
+            const exp = expInput.value;
+            const match = exp.match(/^(\d{2})\/(\d{2})$/);
+            if (match) {
+                const inputMonth = parseInt(match[1], 10);
+                const inputYear = 2000 + parseInt(match[2], 10);
+
+                const now = new Date();
+                const thisMonth = now.getMonth() + 1;
+                const thisYear = now.getFullYear();
+
+                const isExpired = inputYear < thisYear || (inputYear === thisYear && inputMonth < thisMonth);
+                if (isExpired || inputMonth > 12 || inputMonth < 1) {
+                    e.preventDefault();
+                    expError.style.display = "block";
+                    expInput.classList.add("is-invalid");
+                } else {
+                    expError.style.display = "none";
+                    expInput.classList.remove("is-invalid");
+                }
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

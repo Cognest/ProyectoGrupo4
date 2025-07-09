@@ -10,9 +10,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.servlet.http.HttpServletRequest;
 
+
+import java.io.File;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.util.Map;
 
 /**
  * Controlador encargado de manejar las solicitudes relacionadas con la entidad principal.
@@ -42,6 +53,13 @@ public class DefaultController {
 
     private final EntidadHijaService entidadHijaService;
     private final EntidadPadreService entidadPadreService;
+    private final String uploadDir = "/uploads"; // Ruta DENTRO del contenedor
+    private final List<Map<String, Object>> planes = List.of(
+            Map.of("id", 1, "nombre", "Principiante", "precio", 9.99, "tokens", 1000),
+            Map.of("id", 2, "nombre", "Más vendido", "precio", 24.99, "tokens", 2800),
+            Map.of("id", 3, "nombre", "Avanzado", "precio", 39.99, "tokens", 5000),
+            Map.of("id", 4, "nombre", "Experto", "precio", 99.99, "tokens", 13500)
+    );
 
     /**
      * Constructor de la clase DefaultController.
@@ -172,17 +190,6 @@ public class DefaultController {
     public String pantallaModelosPrueba(Model model) {
         return "modelosPrueba";
     }
-    @GetMapping("/iniciar-sesion")
-    public String mostrarLogin(Model model)
-    {
-        return "login"; // View name
-    }
-
-    @GetMapping("/registrarse")
-    public String mostrarSignin(Model model)
-    {
-        return "signin"; // View name
-    }
 
     @GetMapping("/imagenes/{id}")
     public String mostrarImagen(@PathVariable("id") String id, ModelMap interfazConPantalla){
@@ -213,14 +220,86 @@ public class DefaultController {
     @GetMapping("/planes")
     public String mostrarPlanPrecios(Model model)
     {
+        model.addAttribute("planes", planes);
         return "planPrecios"; // View name
     }
+
+    @GetMapping("/pagar")
+    public String formularioPago(@RequestParam int planId, Model model) {
+        Map<String, Object> plan = planes.stream()
+                .filter(p -> (int) p.get("id") == planId)
+                .findFirst()
+                .orElse(null);
+
+        if (plan == null) return "redirect:/planes";
+
+        model.addAttribute("plan", plan);
+        return "formularioPago";
+    }
+
+    @PostMapping("/procesar-pago")
+    public String procesarPago(@RequestParam int planId,
+                               @RequestParam String numeroTarjeta,
+                               @RequestParam String nombreTitular,
+                               @RequestParam String cvv,
+                               @RequestParam String exp,
+                               Model model/*,
+                               Principal principal*/) {
+
+        Map<String, Object> plan = planes.stream()
+                .filter(p -> (int) p.get("id") == planId)
+                .findFirst()
+                .orElse(null);
+
+        if (plan == null) return "redirect:/planes";
+
+        // Validación básica
+        if (!numeroTarjeta.matches("\\d{16}") || !cvv.matches("\\d{3}") || !exp.matches("\\d{2}/\\d{2}")) {
+            model.addAttribute("plan", plan);
+            model.addAttribute("error", "Datos de tarjeta inválidos");
+            return "formularioPago";
+        }
+
+        int tokens = (int) plan.get("tokens");
+
+        // Aquí actualizarías los tokens del usuario
+        // Ejemplo:
+//        User user = userService.findByUsername(principal.getName());
+//        user.setTokens(user.getTokens() + tokens);
+//        userService.save(user);
+
+        model.addAttribute("mensaje", "Pago exitoso. Recibiste " + tokens + " tokens.");
+        return "pagoExitoso";
+    }
+
 
     @GetMapping("/subir-contenido")
     public String mostrarSubidaContenido(Model model)
     {
         return "subirContenido"; // View name
     }
+
+    @PostMapping("/subir-contenido")
+    public String subirContenido(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        try {
+            // Asegura que el directorio exista
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Guarda el archivo
+            Path filepath = Paths.get(uploadDir, file.getOriginalFilename());
+            Files.write(filepath, file.getBytes());
+
+            redirectAttributes.addFlashAttribute("success", "Archivo subido exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al subir el archivo: " + e.getMessage());
+        }
+
+        return "redirect:/subir-contenido"; // Volvemos a la página del formulario
+    }
+
 
     @GetMapping("/usuarios-bloqueados")
     public String mostrarUsuariosBloqueados(Model model)

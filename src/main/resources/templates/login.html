@@ -26,10 +26,13 @@
     <section id="contact" class="contact section">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
             <div>
-                <form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                <form class="emailForm" data-aos="fade-up" data-aos-delay="200" th:action="@{/login}" method="post">
+                    <div th:if="${param.registroExitoso}" class="alert alert-success">¡Registro exitoso! Por favor, inicia sesión.</div>
+                    <div th:if="${param.error}" class="alert alert-danger">Usuario o contraseña incorrecta</div>
+                    <div th:if="${param.logout}" class="alert alert-success">Has cerrado sesión correctamente.</div>
                     <div class="row gy-4">
                         <div>
-                            <input type="email" class="form-control" name="email" placeholder="Email" required="">
+                            <input type="text" class="form-control" name="username" placeholder="Email o Nickname" required="">
                         </div>
 
                         <div>

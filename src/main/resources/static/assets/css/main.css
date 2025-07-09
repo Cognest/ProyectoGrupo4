@@ -89,7 +89,7 @@ h6 {
 
 /* PHP Email Form Messages
 ------------------------------*/
-.php-email-form .error-message {
+.emailForm .error-message {
   display: none;
   background: #df1529;
   color: #ffffff;
@@ -99,7 +99,7 @@ h6 {
   font-weight: 600;
 }
 
-.php-email-form .sent-message {
+.emailForm .sent-message {
   display: none;
   color: #ffffff;
   background: #059652;
@@ -109,7 +109,7 @@ h6 {
   font-weight: 600;
 }
 
-.php-email-form .loading {
+.emailForm .loading {
   display: none;
   background: var(--surface-color);
   text-align: center;
@@ -117,7 +117,7 @@ h6 {
   margin-bottom: 24px;
 }
 
-.php-email-form .loading:before {
+.emailForm .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -126,10 +126,10 @@ h6 {
   margin: 0 10px -6px 0;
   border: 3px solid var(--accent-color);
   border-top-color: var(--surface-color);
-  animation: php-email-form-loading 1s linear infinite;
+  animation: emailForm-loading 1s linear infinite;
 }
 
-@keyframes php-email-form-loading {
+@keyframes emailForm-loading {
   0% {
     transform: rotate(0deg);
   }
@@ -1842,7 +1842,7 @@ section,
   font-size: 14px;
 }
 
-.contact .php-email-form {
+.contact .emailForm {
   height: 100%;
   margin-top: 50px;
   border: 1px solid grey;
@@ -1852,10 +1852,10 @@ section,
   background-color: white;
 }
 
-.contact .php-email-form input[type=text],
-.contact .php-email-form input[type=email],
-.contact .php-email-form input[type=password],
-.contact .php-email-form textarea {
+.contact .emailForm input[type=text],
+.contact .emailForm input[type=email],
+.contact .emailForm input[type=password],
+.contact .emailForm textarea {
   font-size: 14px;
   padding: 10px 15px;
   box-shadow: none;
@@ -1865,21 +1865,21 @@ section,
   border-color: color-mix(in srgb, var(--default-color), transparent 80%);
 }
 
-.contact .php-email-form input[type=text]:focus,
-.contact .php-email-form input[type=email]:focus,
-.contact .php-email-form input[type=password]:focus,
-.contact .php-email-form textarea:focus {
+.contact .emailForm input[type=text]:focus,
+.contact .emailForm input[type=email]:focus,
+.contact .emailForm input[type=password]:focus,
+.contact .emailForm textarea:focus {
   border-color: var(--accent-color);
 }
 
-.contact .php-email-form input[type=text]::placeholder,
-.contact .php-email-form input[type=email]::placeholder,
-.contact .php-email-form input[type=password]::placeholder,
-.contact .php-email-form textarea::placeholder {
+.contact .emailForm input[type=text]::placeholder,
+.contact .emailForm input[type=email]::placeholder,
+.contact .emailForm input[type=password]::placeholder,
+.contact .emailForm textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 70%);
 }
 
-.contact .php-email-form button[type=submit] {
+.contact .emailForm button[type=submit] {
   color: var(--contrast-color);
   background: var(--accent-color);
   border: 0;
@@ -1888,7 +1888,7 @@ section,
   border-radius: 50px;
 }
 
-.contact .php-email-form button[type=submit]:hover {
+.contact .emailForm button[type=submit]:hover {
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
@@ -1975,10 +1975,10 @@ section,
   cursor: pointer;
 }
 
-.menu-btn.activo {
-  background-color: var(--accent-color);
-  color: white;
-}
+/*.menu-btn.activo {*/
+/*  background-color: var(--accent-color);*/
+/*  color: white;*/
+/*}*/
 
 .contenido-principal {
   flex: 1;
@@ -2093,155 +2093,155 @@ section,
   z-index: 10;
 }
 
-.list-group-item {
-  background-color: white;
-  border: none;
-  padding: 10px 15px;
-  transition: background-color 0.2s ease;
-}
+/*.list-group-item {*/
+/*  background-color: white;*/
+/*  border: none;*/
+/*  padding: 10px 15px;*/
+/*  transition: background-color 0.2s ease;*/
+/*}*/
 
-.list-group-item:hover {
-  background-color: #f0f0f0;
-  cursor: pointer;
-}
-.menu-btn.activo {
-  background-color: #5FCF80FF;
-  color: #fff;
-}
-/* Prueba de chat  */
- .chat-sidebar {
-   background-color: #5FCF80FF; /* verde */
-   padding: 1rem;
-   border-radius: 10px;
-   color: white;
-   position: relative;
- }
+/*.list-group-item:hover {*/
+/*  background-color: #f0f0f0;*/
+/*  cursor: pointer;*/
+/*}*/
+/*.menu-btn.activo {*/
+/*  background-color: #5FCF80FF;*/
+/*  color: #fff;*/
+/*}*/
+/*!* Prueba de chat  *!*/
+/* .chat-sidebar {*/
+/*   background-color: #5FCF80FF; !* verde *!*/
+/*   padding: 1rem;*/
+/*   border-radius: 10px;*/
+/*   color: white;*/
+/*   position: relative;*/
+/* }*/
 
-.chat-toggle {
-  background-color: white;
-  color: #5FCF80FF;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/*.chat-toggle {*/
+/*  background-color: white;*/
+/*  color: #5FCF80FF;*/
+/*  border: none;*/
+/*  padding: 0.5rem 1rem;*/
+/*  margin-bottom: 1rem;*/
+/*  font-weight: bold;*/
+/*  border-radius: 5px;*/
+/*  cursor: pointer;*/
+/*}*/
 
-.chat-user {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 0.5rem;
-  cursor: pointer;
-  text-align: left;
-  width: 100%;
-  margin-bottom: 10px;
-}
+/*.chat-user {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  background-color: white;*/
+/*  border: none;*/
+/*  border-radius: 10px;*/
+/*  padding: 0.5rem;*/
+/*  cursor: pointer;*/
+/*  text-align: left;*/
+/*  width: 100%;*/
+/*  margin-bottom: 10px;*/
+/*}*/
 
-.chat-user:last-child {
-  margin-bottom: 0;
-}
+/*.chat-user:last-child {*/
+/*  margin-bottom: 0;*/
+/*}*/
 
-.chat-user:hover {
-  background-color: #f0f0f0;
-}
+/*.chat-user:hover {*/
+/*  background-color: #f0f0f0;*/
+/*}*/
 
-.chat-user img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid transparent;
-}
+/*.chat-user img {*/
+/*  width: 40px;*/
+/*  height: 40px;*/
+/*  border-radius: 50%;*/
+/*  margin-right: 10px;*/
+/*  border: 2px solid transparent;*/
+/*}*/
 
-.chat-user.online img {
-  border-color: #5FCF80FF;
-}
+/*.chat-user.online img {*/
+/*  border-color: #5FCF80FF;*/
+/*}*/
 
-.chat-user span {
-  color: black;
-  font-weight: 500;
-}
-/* Responsive para el chat */
-@media (max-width: 768px) {
-  .chat-sidebar {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    border-radius: 0;
-  }
+/*.chat-user span {*/
+/*  color: black;*/
+/*  font-weight: 500;*/
+/*}*/
+/*!* Responsive para el chat *!*/
+/*@media (max-width: 768px) {*/
+/*  .chat-sidebar {*/
+/*    position: fixed;*/
+/*    bottom: 0;*/
+/*    right: 0;*/
+/*    width: 100%;*/
+/*    z-index: 1000;*/
+/*    border-radius: 0;*/
+/*  }*/
 
-  .chat-toggle {
-    width: 100%;
-    border-radius: 0;
-  }
+/*  .chat-toggle {*/
+/*    width: 100%;*/
+/*    border-radius: 0;*/
+/*  }*/
 
-  .chat-users {
-    flex-direction: column;
-    max-height: 300px;
-    overflow-y: auto;
-    background-color: #5FCF80FF;
-    padding: 0.5rem;
-  }
+/*  .chat-users {*/
+/*    flex-direction: column;*/
+/*    max-height: 300px;*/
+/*    overflow-y: auto;*/
+/*    background-color: #5FCF80FF;*/
+/*    padding: 0.5rem;*/
+/*  }*/
 
-  .chat-user {
-    width: 100%;
-    margin-bottom: 8px;
-  }
+/*  .chat-user {*/
+/*    width: 100%;*/
+/*    margin-bottom: 8px;*/
+/*  }*/
 
-  .chat-user img {
-    width: 35px;
-    height: 35px;
-  }
-}
-/*media queries en CSS te permiten cambiar estilos según el tamaño de la pantalla*/
-@media (max-width: 768px) {
-  .menu {
-    flex-direction: column;
-  }
-  .sidebar {
-    display: none;
-  }
-}
-/*Flexbox y Grid facilitan la creación de layouts adaptables.*/
-.container {
-  display: flex;
-  flex-wrap: wrap;
-}
-.item {
-  flex: 1 1 100%;
-}
-@media (min-width: 600px) {
-  .item {
-    flex: 1 1 48%;
-  }
-}
-.fade-in {
-  transition: all 0.3s ease;
-  border-left: 4px solid #28a745;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-.perfil-box {
-  background-color: #28a745; /* verde */
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+/*  .chat-user img {*/
+/*    width: 35px;*/
+/*    height: 35px;*/
+/*  }*/
+/*}*/
+/*!*media queries en CSS te permiten cambiar estilos según el tamaño de la pantalla*!*/
+/*@media (max-width: 768px) {*/
+/*  .menu {*/
+/*    flex-direction: column;*/
+/*  }*/
+/*  .sidebar {*/
+/*    display: none;*/
+/*  }*/
+/*}*/
+/*!*Flexbox y Grid facilitan la creación de layouts adaptables.*!*/
+/*.container {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*}*/
+/*.item {*/
+/*  flex: 1 1 100%;*/
+/*}*/
+/*@media (min-width: 600px) {*/
+/*  .item {*/
+/*    flex: 1 1 48%;*/
+/*  }*/
+/*}*/
+/*.fade-in {*/
+/*  transition: all 0.3s ease;*/
+/*  border-left: 4px solid #28a745;*/
+/*  background-color: #f8f9fa;*/
+/*  border-radius: 8px;*/
+/*}*/
+/*.perfil-box {*/
+/*  background-color: #28a745; !* verde *!*/
+/*  color: white;*/
+/*  box-shadow: 0 4px 10px rgba(0,0,0,0.1);*/
+/*}*/
 
-.nombre-usuario {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
+/*.nombre-usuario {*/
+/*  font-size: 1.5rem;*/
+/*  font-weight: bold;*/
+/*}*/
 
-.descripcion-usuario {
-  font-size: 1rem;
-  opacity: 0.85;
-}
+/*.descripcion-usuario {*/
+/*  font-size: 1rem;*/
+/*  opacity: 0.85;*/
+/*}*/
 
 /*-----------------------------------------------
 PANTALLA CHAT

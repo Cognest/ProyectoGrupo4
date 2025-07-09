@@ -1,21 +1,26 @@
-# Este archivo se utiliza para configurar los servicios de contenedores en un entorno de desarrollo, como la base de datos PostgreSQL que interactúa con una aplicación Spring Boot.
 name: local
+version: '3.8'
+
 services:
-  db:
-    # Imagen de Docker que se utilizará, en este caso PostgreSQL
-    image: postgres:latest
-    # Indica que el contenedor se reiniciará automáticamente si falla
-    restart: always
-    environment:
-      # Nombre de la base de datos que se creará al iniciar el contenedor
-      POSTGRES_DB: 'localdb'
-      # Usuario que se creará para acceder a la base de datos
-      POSTGRES_USER: 'localuser'
-      # Contraseña del usuario creado
-      POSTGRES_PASSWORD: 'password123'
+  app:
+    build: .
     ports:
-      # Mapea el puerto 5432 del contenedor al puerto 5432 del anfitrión
+      - "8080:8080"
+    volumes:
+      - /c/UploadsExternos:/uploads
+
+  db:
+    image: postgres:15
+    container_name: proyecto4-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: proyecto4
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
       - '5433:5432'
-    expose:
-      # Expone el puerto 5432 dentro del contenedor para comunicación con otros servicios
-      - '5433'
+    volumes:
+      - proyecto4_data:/var/lib/postgresql/data
+
+volumes:
+  proyecto4_data:

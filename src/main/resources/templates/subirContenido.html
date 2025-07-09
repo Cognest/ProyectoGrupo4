@@ -19,7 +19,20 @@
                 <p class="text-muted">Completa los datos para compartir tu contenido con otros usuarios.</p>
             </div>
 
-            <form>
+            <!-- Alerta de éxito -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Alerta de error -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+
+            <form method="post" enctype="multipart/form-data" action="/subir-contenido">
                 <!-- Sección: Información del archivo -->
                 <h5 class="section-title-publish fw-bold">Información del archivo</h5>
 
@@ -70,7 +83,7 @@
                     <label class="form-label fw-bold">Selecciona un archivo</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-upload"></i></span>
-                        <input class="form-control" type="file" required>
+                        <input class="form-control" type="file" name="file" required>
                     </div>
                 </div>
 

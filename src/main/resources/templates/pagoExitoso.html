@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago Exitoso</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido">
+  <div class="container py-5 text-center">
+    <div class="alert alert-success">
+      <h4 class="alert-heading">¡Pago exitoso!</h4>
+      <p th:text="${mensaje}"></p>
+    </div>
+    <a href="/planes" class="btn btn-primary mt-3">Volver a los planes</a>
+  </div>
+</div>
+
+</body>
+</html>

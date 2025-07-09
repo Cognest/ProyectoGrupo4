@@ -1,5 +1,6 @@
 package com.atm.buenas_practicas_java.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -30,11 +32,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 
-    private final Environment environment;
-
-    public SecurityConfig(Environment environment) {
-        this.environment = environment;
-    }
+//    private final Environment environment;
+//
+//    public SecurityConfig(Environment environment) {
+//        this.environment = environment;
+//    }
 
 
     /**
@@ -50,18 +52,18 @@ public class SecurityConfig {
      *
      * @Author No se especificó autor.
      */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        String name = environment.getProperty("spring.security.user.name", "user");
-        String password = environment.getProperty("spring.security.user.password", "password");
-
-        var user = User.withUsername(name)
-                .password("{noop}" + password) // {noop} indica que no se usa encoder para simplificar (solo pruebas)
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        String name = environment.getProperty("spring.security.user.name", "user");
+//        String password = environment.getProperty("spring.security.user.password", "password");
+//
+//        var user = User.withUsername(name)
+//                .password("{noop}" + password) // {noop} indica que no se usa encoder para simplificar (solo pruebas)
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user);
+//    }
 
     /**
      * Configura una cadena de filtros de seguridad para gestionar la seguridad HTTP de la aplicación.
@@ -85,20 +87,39 @@ public class SecurityConfig {
      *
      * @Author No se especificó autor.
      */
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(Customizer.withDefaults()) // deshabilitado para pruebas o APIs
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/entities").permitAll()
-                        .requestMatchers("/entities/*").permitAll()
-                        .requestMatchers("/css/*").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/entidades/deleteHija/*").authenticated()
+    /*          .csrf(csrf -> csrf.disable()) // Desactivar CSRF solo si es necesario
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/", "/subir-contenido", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/upload").permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+                .httpBasic(Customizer.withDefaults());
+    }*/
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                    .loginPage("/iniciar-sesion") // tu endpoint personalizado
+                    .loginProcessingUrl("/login") // Spring procesa esta URL
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/iniciar-sesion?logout")
+                    .permitAll()
+            ).userDetailsService(userDetailsService);
         return http.build();
     }
 
@@ -123,6 +144,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

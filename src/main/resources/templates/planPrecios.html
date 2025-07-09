@@ -29,8 +29,20 @@
         <div class="container">
 
             <div class="row gy-3">
+                <div class="col-xl-3 col-lg-6" data-aos="fade-up" th:each="plan, iterStat : ${planes}" th:attr="data-aos-delay=${iterStat.index * 100}">
+                    <div class="pricing-item" th:classappend="${iterStat.index == 1} ? ' featured'">
+                        <span th:if="${iterStat.index == 2}" class="advanced">25% dto.</span>
+                        <span th:if="${iterStat.index == 3}" class="advanced">35% dto.</span>
+                        <h3 th:text="${plan.nombre}"></h3>
+                        <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
+                        <h4><strong class="fs-2" th:text="${plan.tokens}"></strong><sup>Tk</sup><span> / <span th:text="${plan.precio}"></span> €</span></h4>
+                        <div class="btn-wrap">
+                            <a th:href="@{/pagar(planId=${plan.id})}" class="btn-buy">Comprar ahora</a>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                <!--<div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="pricing-item">
                         <h3>Principiante</h3>
                         <img class="w-100" alt="Plan Principiante" src="https://media.istockphoto.com/id/611772524/es/vector/emblema-de-la-l%C3%ADnea-vectorial-con-paisaje-de-monta%C3%B1a-bosque-mar-y-nubes.jpg?s=612x612&w=0&k=20&c=3uQCcXaJ9_ve6Y793rSy6MbKmqia2HQsUKIOsKkbUg8=">
@@ -39,7 +51,7 @@
                             <a href="#" class="btn-buy">Comprar ahora</a>
                         </div>
                     </div>
-                </div><!-- End Pricing Item -->
+                </div>
 
                 <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="pricing-item featured">
@@ -50,7 +62,7 @@
                             <a href="#" class="btn-buy">Comprar ahora</a>
                         </div>
                     </div>
-                </div><!-- End Pricing Item -->
+                </div>
 
                 <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="pricing-item">
@@ -62,7 +74,7 @@
                             <a href="#" class="btn-buy">Comprar ahora</a>
                         </div>
                     </div>
-                </div><!-- End Pricing Item -->
+                </div>
 
                 <div class="col-xl-3 col-lg-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="pricing-item">
@@ -74,7 +86,7 @@
                             <a href="#" class="btn-buy">Comprar ahora</a>
                         </div>
                     </div>
-                </div><!-- End Pricing Item -->
+                </div>-->
 
             </div>
 

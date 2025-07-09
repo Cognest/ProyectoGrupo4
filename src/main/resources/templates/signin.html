@@ -26,22 +26,27 @@
   <section id="contact" class="contact section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div>
-        <form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+        <form class="emailForm" data-aos="fade-up" data-aos-delay="200" th:action="@{/registrarse}" method="post" th:object="${usuario}">
+          <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
           <div class="row gy-4">
 
             <div class="col-md-6">
-              <input type="text" class="form-control" name="nombre" placeholder="Nombre" required="">
+              <input type="text" class="form-control" name="nombre" th:field="*{nombre}" placeholder="Nombre" required="">
             </div>
             <div class="col-md-6">
-              <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required="">
+              <input type="text" class="form-control" name="apellidos" th:field="*{apellidos}" placeholder="Apellidos" required="">
+            </div>
+
+            <div class="col-md-6">
+              <input type="email" class="form-control" name="email" th:field="*{email}" placeholder="Email" required="">
+            </div>
+
+            <div class="col-md-6">
+              <input type="text" class="form-control" name="nickname" th:field="*{nickname}" placeholder="Nickname" required="">
             </div>
 
             <div>
-              <input type="email" class="form-control" name="email" placeholder="Email" required="">
-            </div>
-
-            <div>
-              <input type="password" class="form-control" name="password" placeholder="Contraseña" required="">
+              <input type="password" class="form-control" name="password" th:field="*{password}" placeholder="Contraseña" required="">
             </div>
 
             <div>

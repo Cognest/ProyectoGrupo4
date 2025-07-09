@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
@@ -107,7 +108,21 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a class="btn-getstarted" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+        <!-- Si no está autenticado -->
+        <div sec:authorize="isAnonymous()">
+            <a class="btn-getstarted" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+        </div>
+
+        <!-- Si está autenticado -->
+        <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
+            <span class="btn-getstarted">
+                <i class="bi bi-person-circle me-1"></i>
+                <span th:text="${#authentication.name}">Usuario</span>
+            </span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-link">Cerrar sesión</button>
+            </form>
+        </div>
 
     </div>
 </header>
