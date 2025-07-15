@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Perfil</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!--<h1>Configuración de Cuenta</h1> -->
+    <div class="configuracion-cuenta-container row">
+        <h1>Configuración de Perfil</h1>
+        <!-- Menú lateral -->
+        <div class="menu-lateral col-4">
+            <div class="foto-perfil-container">
+                <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+            </div>
+            <nav class="menu-opciones">
+                <button class="menu-btn" id="btn-foto">Editar Foto</button>
+                <button class="menu-btn" id="btn-seguridad">Contraseña y Seguridad</button>
+                <button class="menu-btn" id="btn-datosPerso">Datos Personales</button>
+                <button class="menu-btn" id="btn-bloqueados">Perfiles Bloqueados</button>
+                <button class="menu-btn" id="btn-notificaciones">Notificaciones</button>
+            </nav>
+        </div>
+        <!-- Contenido principal -->
+        <div class="col-8">
+            <div class="fondo-rectangulo-verde p-4">
+                <!-- Editar Foto -->
+                <section id="contenido-fotoPerfil" class="contenido-principal">
+                    <p> Editar foto </p>
+                </section>
+
+                <!-- Contraseña y Seguridad -->
+                <section id="contenido-contraSeguridad" class="contenido-principal" style="display:none;">
+                    <p> Contraseã y Seguridad </p>
+                </section>
+
+                <!-- Datos personales -->
+                <section id="contenido-datosPersonales" class="contenido-principal" style="display:none;">
+                    <p> Datos Personales </p>
+                </section>
+
+                <!-- Perfiles Bloqueados -->
+                <section id="contenido-perfilesBloqueados" class="contenido-principal" style="display:none;">
+                    <p> Perfiles bloqueados</p>
+                </section>
+
+                <!-- Notificaciones -->
+                <section id="contenido-notificaciones" class="contenido-principal" style="display:none;">
+                    <p> Notificaciones </p>
+                </section>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const botones = [
+                { btn: 'btn-foto', contenido: 'contenido-fotoPerfil' },
+                { btn: 'btn-seguridad', contenido: 'contenido-contraSeguridad' },
+                { btn: 'btn-datosPerso', contenido: 'contenido-datosPersonales' },
+                { btn: 'btn-bloqueados', contenido: 'contenido-perfilesBloqueados' },
+                { btn: 'btn-notificaciones', contenido: 'contenido-notificaciones' },
+            ];
+
+            botones.forEach(({btn, contenido}) => {
+                document.getElementById(btn).addEventListener('click', function() {
+                    // Oculta todos los contenidos
+                    botones.forEach(({contenido}) => {
+                        document.getElementById(contenido).style.display = 'none';
+                    });
+                    // Muestra el contenido seleccionado
+                    document.getElementById(contenido).style.display = 'block';
+
+                    // Actualiza el botón activo
+                    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+                    this.classList.add('activo');
+                });
+            });
+            document.getElementById('btn-foto').click();
+        });
+    </script>
+</div>
+</body>
+</html>

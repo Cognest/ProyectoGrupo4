@@ -316,4 +316,19 @@ public class DefaultController {
         model.addAttribute("imagenes", imagenes);
         return "usuariosBloqueados"; // View name
     }
+    @GetMapping("/actividad")
+    public String tuActividad(Model model) {
+        return "tuActividad"; // View name
+    }
+    @GetMapping("/config-perfil")
+    public String configPerfil(Model model)
+    {
+        return "configPerfil"; // View name
+    }
+
+    @GetMapping("/conocenos")
+    public String conocenos(Model model)
+    {
+        return "conocenos"; // View name
+    }
 }

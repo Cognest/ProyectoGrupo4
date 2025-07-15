@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/main.css">
+  <title>Conócenos</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+  <!--<h1>Configuración de Cuenta</h1> -->
+  <div class="configuracion-cuenta-container row">
+    <h1>Conócenos</h1>
+    <!-- Menú lateral -->
+    <div class="menu-lateral col-4">
+      <div class="foto-perfil-container">
+        <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+      </div>
+      <nav class="menu-opciones">
+        <button class="menu-btn" id="btn-preguntasFrec">Preguntas Frecuentes</button>
+        <button class="menu-btn" id="btn-acercaDe">Acerca de Nosotros</button>
+        <button class="menu-btn" id="btn-licenciaContenido">Licencia de Contenido</button>
+        <button class="menu-btn" id="btn-politicasPriv">Políticas de Privacidad</button>
+        <button class="menu-btn" id="btn-politicasCookies">Políticas de Cookies</button>
+        <button class="menu-btn" id="btn-leyServicios">Ley de Servicios Digitales</button>
+      </nav>
+    </div>
+    <!-- Contenido principal -->
+    <div class="col-8">
+      <div class="fondo-rectangulo-verde p-4">
+        <!-- Preguntas Frecuentes -->
+        <section id="contenido-preguntasFrec" class="contenido-principal">
+          <p> Preguntas Frecuentes </p>
+        </section>
+
+        <!-- Acerca de Nosotros -->
+        <section id="contenido-acercaDe" class="contenido-principal" style="display:none;">
+          <p> Acerca de Nosotros </p>
+        </section>
+
+        <!-- Licencia de Contenido -->
+        <section id="contenido-licenciaContenido" class="contenido-principal" style="display:none;">
+          <p> Licencia de Contenido </p>
+        </section>
+
+        <!-- Politicas de Privacidad -->
+        <section id="contenido-politicasPriv" class="contenido-principal" style="display:none;">
+          <p> Politicas de priv </p>
+        </section>
+
+        <!-- Politicas de Cookies-->
+        <section id="contenido-politicasCookies" class="contenido-principal" style="display:none;">
+          <p> Politicas de Cookies </p>
+        </section>
+
+        <!-- Ley de Servicios Digitales -->
+        <section id="contenido-leyServicios" class="contenido-principal" style="display:none;">
+          <p> Servicios Digitales ley </p>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const botones = [
+        { btn: 'btn-preguntasFrec', contenido: 'contenido-preguntasFrec' },
+        { btn: 'btn-acercaDe', contenido: 'contenido-acercaDe' },
+        { btn: 'btn-licenciaContenido', contenido: 'contenido-licenciaContenido' },
+        { btn: 'btn-politicasPriv', contenido: 'contenido-politicasPriv' },
+        { btn: 'btn-politicasCookies', contenido: 'contenido-politicasCookies' },
+        { btn: 'btn-leyServicios', contenido: 'contenido-leyServicios' }
+      ];
+
+      botones.forEach(({btn, contenido}) => {
+        document.getElementById(btn).addEventListener('click', function() {
+          // Oculta todos los contenidos
+          botones.forEach(({contenido}) => {
+            document.getElementById(contenido).style.display = 'none';
+          });
+          // Muestra el contenido seleccionado
+          document.getElementById(contenido).style.display = 'block';
+
+          // Actualiza el botón activo
+          document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+          this.classList.add('activo');
+        });
+      });
+      document.getElementById('btn-preguntasFrec').click();
+    });
+  </script>
+</div>
+</body>
+</html>
