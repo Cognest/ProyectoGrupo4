@@ -18,9 +18,10 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
-      - '5433:5432'
+      - '5432:5432'
     volumes:
       - proyecto4_data:/var/lib/postgresql/data
+      - ./cargadatos/datos.sql:/docker-entrypoint-initdb.d/datos.sql
 
 volumes:
   proyecto4_data:
