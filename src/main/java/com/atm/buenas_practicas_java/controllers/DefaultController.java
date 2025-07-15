@@ -1,9 +1,12 @@
 package com.atm.buenas_practicas_java.controllers;
 
 
+import com.atm.buenas_practicas_java.config.CustomUserDetails;
 import com.atm.buenas_practicas_java.entities.Prueba;
+import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.services.EntidadHijaService;
 import com.atm.buenas_practicas_java.services.EntidadPadreService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -53,7 +56,6 @@ public class DefaultController {
 
     private final EntidadHijaService entidadHijaService;
     private final EntidadPadreService entidadPadreService;
-    private final String uploadDir = "/uploads"; // Ruta DENTRO del contenedor
     private final List<Map<String, Object>> planes = List.of(
             Map.of("id", 1, "nombre", "Principiante", "precio", 9.99, "tokens", 1000),
             Map.of("id", 2, "nombre", "Más vendido", "precio", 24.99, "tokens", 2800),
@@ -280,16 +282,27 @@ public class DefaultController {
     }
 
     @PostMapping("/subir-contenido")
-    public String subirContenido(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    public String subirContenido(@RequestParam("file") MultipartFile file,
+                                 @RequestParam("tipo") String tipo,
+                                 @AuthenticationPrincipal CustomUserDetails usuarioAutenticado,
+                                 RedirectAttributes redirectAttributes) {
         try {
+            String filename = file.getOriginalFilename();
+            if (filename == null || !esExtensionPermitida(filename, tipo)) {
+                redirectAttributes.addFlashAttribute("error", "Tipo de archivo no permitido para el tipo seleccionado.");
+                return "redirect:/subir-contenido";
+            }
+
             // Asegura que el directorio exista
-            File directory = new File(uploadDir);
+            String nickname = usuarioAutenticado.getUsername();
+            String basePath = "/uploads/" + tipo + "/" + nickname;
+            File directory = new File(basePath);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
 
             // Guarda el archivo
-            Path filepath = Paths.get(uploadDir, file.getOriginalFilename());
+            Path filepath = Paths.get(basePath, file.getOriginalFilename());
             Files.write(filepath, file.getBytes());
 
             redirectAttributes.addFlashAttribute("success", "Archivo subido exitosamente.");
@@ -298,6 +311,23 @@ public class DefaultController {
         }
 
         return "redirect:/subir-contenido"; // Volvemos a la página del formulario
+    }
+
+    private boolean esExtensionPermitida(String filename, String tipo) {
+        if (filename == null || !filename.contains(".")) return false;
+
+        String extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        tipo = tipo.toLowerCase().trim();
+
+        System.out.println("🧪 Validando archivo: " + filename + " | tipo: " + tipo + " | extensión: " + extension);
+
+        return switch (tipo) {
+            case "imagenes" -> List.of("jpg", "jpeg", "png", "gif").contains(extension);
+            case "videos" -> List.of("mp4", "mov").contains(extension);
+            case "audios" -> List.of("mp3", "wav").contains(extension);
+            case "modelos3d", "modelos", "3d" -> List.of("glb").contains(extension);
+            default -> false;
+        };
     }
 
 

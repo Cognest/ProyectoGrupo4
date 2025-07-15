@@ -2,6 +2,7 @@ package com.atm.buenas_practicas_java.services;
 
 import com.atm.buenas_practicas_java.dtos.UsuarioDto;
 import com.atm.buenas_practicas_java.dtos.UsuarioRegistroDto;
+import com.atm.buenas_practicas_java.entities.UserRol;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import com.atm.buenas_practicas_java.services.mapper.UsuarioMapper;
@@ -39,6 +40,8 @@ public class UsuarioService extends AbstractBusinessService<Usuario, Integer, Us
     @Transactional
     public void registrarUsuario(UsuarioRegistroDto dto) {
         Usuario usuario = usuarioMapper.toEntity(dto);
+        //se pone el rol por defecto
+        usuario.setRol(UserRol.valueOf("USUARIO"));
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setToken(0); // si es necesario
         System.out.println("🧪 Usuario antes de guardar: " + usuario);

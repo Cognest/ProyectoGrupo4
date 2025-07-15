@@ -37,6 +37,11 @@ public class Usuario {
     @Column(nullable = false)
     private Integer token;
 
+    // Rol
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRol rol;
+
     // Relaciones bidireccionales
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioContenido> usuarioContenidos;
