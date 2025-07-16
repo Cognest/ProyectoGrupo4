@@ -1,28 +1,36 @@
 <!DOCTYPE html>
-<html lang="es"
+<html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/plantilla}">
+<title>Interfaz de Guardados</title>
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lista de reproductores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <style>
-        /* RESET Y CONFIGURACION GENERAL */
+        .filterDiv {
+            display: none;
+        }
+
+        .filterDiv.show {
+            display: block;
+        }
+
+        .btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
         *:focus {
             outline: none;
         }
         html {
             background: #f2f2f2;
         }
-        body {
-            margin: 0;
-            font-family: "Raleway", sans-serif;
-            padding: 20px;
-            box-sizing: border-box;
-        }
 
         /* CONTENEDOR PRINCIPAL */
+
         .container {
             width: 100%;
             max-width: 1200px;
@@ -38,8 +46,8 @@
         .music-player {
             width: 300px;
             background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
-            box-shadow: 1px 10px 20px 5px #222;
-            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-radius: 6px;
             margin-bottom: 30px;
             padding: 15px 20px 30px;
             color: white;
@@ -58,8 +66,8 @@
             top: 8%;
             left: 14%;
             width: 70%;
-            border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            border-radius: 6px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* TITULOS */
@@ -93,7 +101,7 @@
         .volume-toggle {
             background: transparent;
             border: none;
-            color: #5bbb95;
+            color: var(--accent-color);
             font-family: FontAwesome;
             cursor: pointer;
         }
@@ -160,7 +168,7 @@
             width: 100%;
             height: 3px;
             transform: translateY(-50%);
-            background: linear-gradient(to right, #5bbb95 var(--vol, 100%), rgba(255, 255, 255, 0.15) var(--vol, 100%));
+            background: linear-gradient(to right, var(--accent-color) var(--vol, 100%), rgba(255, 255, 255, 0.15) var(--vol, 100%));
             border-radius: 50px;
             pointer-events: none;
             z-index: 0;
@@ -177,7 +185,7 @@
             position: relative;
         }
         .progress {
-            background: #5bbb95;
+            background: var(--accent-color);
             height: 8px;
             border-radius: 50px;
             width: 0%;
@@ -218,109 +226,780 @@
             }
         }
 
+        /*Modelos 3D*/
+
+        .contenedor-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .visor3d {
+            background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+        }
+
+        .visor3d-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            flex: 0 0 auto;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Estilos básicos para el overlay */
+        .hover-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+
+        .hover-container .image {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 6px; /* el mismo valor que en .image */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+
+        }
+        .hover-container .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+        .hover-container:hover .overlay {
+            opacity: 1;
+        }
+        .hover-container:hover .image {
+            transform: scale(1.02);
+        }
+        .overlay-actions {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Botones transparentes */
+        .action-btn {
+            background: transparent;
+            border: none;
+            padding: 4px;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        /* Animacion iconos mg y guardados */
+        .action-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* Contenedor superior (botones + título) */
+        .overlay-top {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* espacio entre botones y título */
+        }
+
+        /* Contenedor de botones */
+        .overlay-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Título */
+        .overlay-title {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            max-width: calc(100% - 100px); /* Deja margen para los botones */
+            transform: none;
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: right;
+            padding: 4px 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        /* Contenedor del botón abajo a la izquierda */
+        .overlay-user {
+            position: absolute;
+            bottom: 8px;
+            left: 16px;
+        }
+
+        /* Botón mínimo transparente */
+        .user-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none !important;  /* Asegura que no haya fondo */
+            border: none !important;      /* Asegura que no haya bordes */
+            padding: 0 !important;
+            margin: 0 !important;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* Al pasar el ratón, solo agranda */
+        .user-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Imagen de usuario redonda y tamaño fijo */
+        .user-avatar {
+            width: 24px !important;
+            height: 24px !important;
+            min-width: 24px !important;
+            min-height: 24px !important;
+            max-width: 24px !important;
+            max-height: 24px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            display: block;
+        }
+
+        /* Texto alineado a la derecha */
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .watermarked-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            /* Importante: el canvas va sobre la imagen */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none; /* para que los clics pasen al enlace */
+        }
+
+        .video-normal {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .video-preview {
+            width: 300px;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.02);
+        }
+
+        .hover-container.video::before {
+            background-image: none !important;
+        }
+
+        /* Al pasar el ratón puede crecer si quieres */
+        .hover-container.video:hover::after {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+
+
+        /* Contenedor fijo de ancho */
+        .masonry-item.video {
+            width: 300px;
+            margin-bottom: 30px; /* si quieres separarlos, o pon 0 */
+        }
+
+        .masonry-item.video video {
+            margin: 0;
+        }
+
+
+        /* Ajuste del tamaño del video e imagen de preview */
+        .masonry-item.video .image,
+        .masonry-item.video video {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 0;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: none; /* Sin fondo */
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5; /* más alto que el overlay */
+            color: white;
+            font-size: 36px;
+            transition: transform 0.5s;
+        }
+        .hover-container:hover .play-button {
+            opacity: 0;
+        }
+
+        .music-player .actions-aud {
+            display: flex;
+            justify-content: center;  /* centra horizontalmente */
+            gap: 1.5rem;              /* separación entre botones */
+            margin-top: 0.5rem;
+        }
+
+
+        .music-player .actions-aud button {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            display: inline-flex; /* importante para centrar bien el icono */
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .music-player .actions-aud button i {
+            pointer-events: none;
+            transition: transform 0.2s, color 0.2s;
+            display: inline-block; /* hace que el scale no empuje */
+        }
+
+        .music-player .actions-aud button i.filled {
+            opacity: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .music-player .actions-aud button:hover {
+            transform: scale(1.15);
+            color:var(--accent-color); /* o cualquier tono de verde que prefieras */
+        }
+
+        .music-player .actions-aud button:hover i.outline {
+            opacity: 0;
+        }
+
+        .music-player .actions-aud button:hover i.filled {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .preview-3D .masonry-item {
+            width: 300px;
+        }
+
+        .masonry-item {
+            width: 300px;
+        }
+
+        .hover-container .image {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+            border-radius: 6px; /* o el que tú uses */
+            object-fit: cover; /* importante si tu imagen no es del tamaño perfecto */
+        }
+
+        .hover-container:hover .image {
+            transform: scale(1.05);
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px !important; /* o el tamaño que uses */
+            height: auto;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .music-player .actions-aud button i.filled,
+        .hover-container .action-btn i.filled {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .music-player .actions-aud button i.outline,
+        .hover-container .action-btn i.outline {
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+
+        .music-player .actions-aud button.active i.outline,
+        .hover-container .action-btn.active i.outline {
+            opacity: 0;
+        }
+
+        .music-player .actions-aud button.active i.filled,
+        .hover-container .action-btn.active i.filled {
+            opacity: 1;
+        }
+
+
+
+
     </style>
-    <!-- Carga FontAwesome para iconos -->
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-            rel="stylesheet"
-    />
 </head>
 <body>
-<div layout:fragment="contenido" >
-    <div class="container">
+<div layout:fragment="contenido">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar izquierda -->
+            <div class="col-md-3 sidebar-guardados">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+                <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
+                <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
+                <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
+            </div>
 
-        <!-- Primer reproductor -->
-        <div class="music-player" data-index="0">
-            <div class="cover">
-                <img src="https://pbs.twimg.com/media/FL6DkQAXIAMfAqM.jpg" alt="Mi canastera - Canelita" />
-            </div>
-            <div class="titre">
-                <h3>Canelita</h3>
-                <h1>Mi canastera</h1>
-            </div>
-            <audio preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-            <div class="controls">
-                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
-                <div class="volume-container">
-                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
-                    <button class="volume-toggle" aria-label="Mute/Unmute">
-                        <i class="fa fa-volume-up"></i>
-                    </button>
+            <!-- Contenido central -->
+            <div class="col-md-9">
+                <div class="topbar">GUARDADO</div>
+
+                <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center gap-3 mt-3">
+                    <button class="btn custom-tab-nav w-75 active" data-filter="all">TODO</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-img">IMAGENES</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-vid">VIDEOS</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-aud">AUDIO</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-tres-d">3D</button>
                 </div>
 
-            </div>
+                <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3 d-flex justify-content-center gap-3 flex-wrap">
 
 
-            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
-                <div class="progress"></div>
-            </div>
-            <div class="time">
-                <span class="current-time">0:00</span>
-                <span class="duration">0:00</span>
+                    <!-- AUDIOS -->
+                    <div class="filterDiv select-aud">
+                        <div class="music-player" data-index="0">
+                            <div class="cover">
+                                <img src="https://pbs.twimg.com/media/FL6DkQAXIAMfAqM.jpg" alt="Mi canastera - Canelita" />
+                            </div>
+                            <div class="titre">
+                                <h3>Canelita</h3>
+                                <h1>Mi canastera</h1>
+                            </div>
+                            <audio preload="metadata" src="/archivos/audios/javier/latus.mp3"></audio>
+                            <div class="controls">
+                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                <div class="volume-container">
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                            <div class="actions-aud">
+                                <button class="like-button">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <button class="save-button">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filterDiv select-aud">
+                        <div class="music-player" data-index="0">
+                            <div class="cover">
+                                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
+                            </div>
+                            <div class="titre">
+                                <h3>La Puñalada De Carmen</h3>
+                                <h1>Desidia</h1>
+                            </div>
+                            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
+                            <div class="controls">
+                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                <div class="volume-container">
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                    <button class="volume-toggle" aria-label="Mute/Unmute">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                                <div class="actions-aud">
+                                    <button class="like-button">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+                                    <button class="save-button">
+                                        <i class="bi bi-bookmark"></i>
+                                    </button>
+                                </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <!-- MODELOS 3D (sacados de su contenedor-flex y puestos directamente aquí) -->
+
+                    <div class="filterDiv select-tres-d preview-item preview-3D"
+                         data-type="3d"
+                         data-src="/assets/img/preview/previewKnight.png"
+                         data-model="/assets/models/Knight.glb"
+                         data-title="Modelo Knight"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/44.jpg">
+                    </div>
+
+                    <div class="filterDiv select-tres-d preview-item preview-3D"
+                         data-type="3d"
+                         data-src="/assets/img/preview/previewCow.png"
+                         data-model="/assets/models/Cow.glb"
+                         data-title="Modelo Cow"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/44.jpg">
+                    </div>
+
+<!--                    <div class="visor3d-container filterDiv select-tres-d">-->
+<!--                        <img src="/assets/img/preview/previewHospital.png" alt="Preview Hospital" class="preview-img" data-model="/assets/models/Hospital.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">-->
+<!--                        <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>-->
+<!--                    </div>-->
+
+                    <!--                VÍDEOS-->
+                    <div class="filterDiv select-vid preview-item"
+                         data-type="video"
+                         data-src="/assets/img/videos/carretera.mp4"
+                         data-title="Carretera"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+
+                    <div class="filterDiv select-vid preview-item"
+                         data-type="video"
+                         data-src="/assets/img/videos/olas.mp4"
+                         data-title="Olas de la mar"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+                    <!--                IMAGENES-->
+
+                    <div class="filterDiv select-img preview-item"
+                         data-type="image"
+                         data-src="/assets/img/Faro.jpg"
+                         data-title="Faro"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+                    <div class="filterDiv select-img preview-item"
+                         data-type="image"
+                         data-src=file:///D:/uploads/taco.png
+                         data-title="Arbol"
+                         data-user="@usuario"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <!-- Segundo reproductor -->
-        <div class="music-player" data-index="0">
-            <div class="cover">
-                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
-            </div>
-            <div class="titre">
-                <h3>La Puñalada De Carmen</h3>
-                <h1>Desidia</h1>
-            </div>
-            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
-            <div class="controls">
-                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
-                <div class="volume-container">
-                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
-                    <button class="volume-toggle" aria-label="Mute/Unmute">
-                        <i class="fa fa-volume-up"></i>
-                    </button>
-                </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const items = document.querySelectorAll(".preview-item[data-type='video']");
+                let pending = items.length;
 
-            </div>
+                if (pending === 0) {
+                    // No hay vídeos, inicializa directamente
+                    initPreviews();
+                } else {
+                    items.forEach(item => {
+                        const src = item.dataset.src;
 
+                        const video = document.createElement("video");
+                        video.src = src;
+                        video.crossOrigin = "anonymous";
+                        video.preload = "metadata";
+                        video.muted = true;
+                        video.playsInline = true;
 
-            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
-                <div class="progress"></div>
-            </div>
-            <div class="time">
-                <span class="current-time">0:00</span>
-                <span class="duration">0:00</span>
-            </div>
-        </div>
+                        video.addEventListener("loadeddata", () => {
+                            video.currentTime = 0.1;
+                        });
 
-        <!-- Tercer reproductor -->
-        <div class="music-player" data-index="0">
-            <div class="cover">
-                <img src="https://i0.wp.com/a33revoluciones.com/wp-content/uploads/2015/10/2-Mayhem.jpg?resize=600%2C589" alt="Mayhem-Deathcrush" />
-            </div>
-            <div class="titre">
-                <h3>Mayhem</h3>
-                <h1>Deathcrush</h1>
-            </div>
-            <audio preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-            <div class="controls">
-                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
-                <div class="volume-container">
-                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
-                    <button class="volume-toggle" aria-label="Mute/Unmute">
-                        <i class="fa fa-volume-up"></i>
-                    </button>
-                </div>
+                        video.addEventListener("seeked", () => {
+                            const canvas = document.createElement("canvas");
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            const ctx = canvas.getContext("2d");
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataURL = canvas.toDataURL("image/png");
 
-            </div>
+                            // Sustituye data-poster por base64
+                            item.dataset.poster = dataURL;
+
+                            pending--;
+                            if (pending === 0) {
+                                // Cuando terminen todos, inicializa
+                                initPreviews();
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
 
 
-            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
-                <div class="progress"></div>
-            </div>
-            <div class="time">
-                <span class="current-time">0:00</span>
-                <span class="duration">0:00</span>
-            </div>
-        </div>
+        <script>
+            function initPreviews() {
+                const items = document.querySelectorAll(".preview-item");
+
+                items.forEach(item => {
+                    const type = item.dataset.type;
+                    const src = item.dataset.src;
+                    const poster = item.dataset.poster;
+                    const title = item.dataset.title;
+                    const user = item.dataset.user;
+                    const avatar = item.dataset.avatar;
+                    const model = item.dataset.model;
+
+                    const container = document.createElement("div");
+                    container.className = "masonry-item hover-container";
+                    if (type === "video") {
+                        container.classList.add("video");
+                    }
+                    if (type === "3d") {
+                        container.classList.add("tresd");
+                    }
+
+                    const img = document.createElement("img");
+                    img.className = "image";
+                    img.alt = title || "";
+                    img.src = (type === "video" && poster) ? poster : src;
+
+                    let watermark = null;
+                    if (type === "image" || type === "video") {
+                        watermark = document.createElement("img");
+                        watermark.className = "watermark";
+                        watermark.src = "/assets/img/logos/logoBlanco.png";
+                        watermark.alt = "Marca de agua";
+                    }
+
+
+                    let playButton = null;
+                    if (type === "video") {
+                        playButton = document.createElement("button");
+                        playButton.className = "play-button";
+                        playButton.innerHTML = '<i class="fa fa-play"></i>';
+                        playButton.onclick = function() {
+                        };
+                    }
+
+                    if (type === "3d") {
+                        img.style.cursor = "pointer";
+                        img.addEventListener("click", function() {
+                            alert("Aquí se cargará el modelo 3D: " + model);
+                        });
+                    }
+
+                    const overlay = document.createElement("div");
+                    overlay.className = "overlay";
+                    const actions = document.createElement("div");
+                    actions.className = "overlay-actions";
+                    actions.innerHTML = `
+      <button class="action-btn"><i class="bi bi-heart"></i></button>
+      <button class="action-btn"><i class="bi bi-bookmark"></i></button>
+    `;
+                    const overlayTitle = document.createElement("div");
+                    overlayTitle.className = "overlay-title";
+                    overlayTitle.textContent = title || "";
+
+                    const userDiv = document.createElement("div");
+                    userDiv.className = "overlay-user";
+                    userDiv.innerHTML = `
+      <button class="user-btn">
+        <img src="${avatar}" alt="Foto usuario" class="user-avatar">
+        <span class="user-name">${user}</span>
+      </button>
+    `;
+
+                    overlay.appendChild(actions);
+                    overlay.appendChild(userDiv);
+                    overlay.appendChild(overlayTitle);
+
+                    let video = null;
+                    if (type === "video") {
+                        video = document.createElement("video");
+                        video.muted = true;
+                        video.playsInline = true;
+                        video.loop = true;
+                        video.preload = "metadata";
+                        video.controls = false; // nunca mostrar controles
+                        video.className = "image";
+                        video.style.position = "absolute";
+                        video.style.top = "0";
+                        video.style.left = "0";
+                        video.style.width = "100%";
+                        video.style.height = "100%";
+                        video.style.borderRadius = "6px";
+                        video.style.opacity = "0";
+                        video.style.pointerEvents = "none";
+                        video.style.transition = "opacity 0.2s ease";
+
+                        const source = document.createElement("source");
+                        source.src = src;
+                        source.type = "video/mp4";
+                        video.appendChild(source);
+
+                        container.addEventListener("mouseenter", function() {
+                            video.style.opacity = "1";
+                            video.play();
+                        });
+
+                        container.addEventListener("mouseleave", function() {
+                            video.pause();
+                            video.currentTime = 0;
+                            video.style.opacity = "0";
+                        });
+
+                        container.style.position = "relative";
+                    }
+
+                    container.appendChild(img);
+                    if (watermark) container.appendChild(watermark);
+                    if (video) container.appendChild(video);
+                    if (playButton) container.appendChild(playButton);
+                    container.appendChild(overlay);
+
+                    item.appendChild(container);
+                });
+
+                initButtonListeners();
+            }
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                function filterSelection(category) {
+                    const items = document.getElementsByClassName("filterDiv");
+                    for (let i = 0; i < items.length; i++) {
+                        items[i].classList.remove("show");
+                        if (category === "all" || items[i].classList.contains(category)) {
+                            items[i].classList.add("show");
+                        }
+                    }
+                }
+                filterSelection("all");
+                const buttons = document.querySelectorAll("#myBtnContainer .btn");
+                buttons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        const filter = this.getAttribute("data-filter");
+                        filterSelection(filter);
+                        document.querySelectorAll("#myBtnContainer .btn.active").forEach(b => b.classList.remove("active"));
+                        this.classList.add("active");
+                    });
+                });
+            });
+        </script>
+
+<!--        Script para botones mg y guardados-->
+        <script>
+            function initButtonListeners() {
+                const allButtons = document.querySelectorAll(
+                    ".music-player .actions-aud button, .hover-container .action-btn"
+                );
+
+                allButtons.forEach(button => {
+                    button.addEventListener("click", function(event) {
+                        // Evita propagación en overlays
+                        if (button.closest(".hover-container")) {
+                            event.stopPropagation();
+                        }
+
+                        const icon = this.querySelector("i");
+                        if (!icon) return;
+
+                        if (icon.classList.contains("bi-heart")) {
+                            icon.classList.remove("bi-heart");
+                            icon.classList.add("bi-heart-fill");
+                        } else if (icon.classList.contains("bi-heart-fill")) {
+                            icon.classList.remove("bi-heart-fill");
+                            icon.classList.add("bi-heart");
+                        } else if (icon.classList.contains("bi-bookmark")) {
+                            icon.classList.remove("bi-bookmark");
+                            icon.classList.add("bi-bookmark-fill");
+                        } else if (icon.classList.contains("bi-bookmark-fill")) {
+                            icon.classList.remove("bi-bookmark-fill");
+                            icon.classList.add("bi-bookmark");
+                        }
+                    });
+                });
+            }
+        </script>
+        <script type="module" src="/assets/js/modelos.js" defer></script>
     </div>
 </div>
 </body>

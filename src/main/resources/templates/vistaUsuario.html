@@ -12,22 +12,14 @@ class="bg-gradient-primary">
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
     <div class="container-fluid mt-4">
-        <div class="row gx-5 d-lg-flex h-auto"> 
+        <div class="row gx-5 d-lg-flex h-auto">
 
-            <!-- Columna izquierda -->
-            <div class="col-md-3">
-                <div class="text-center mb-3">
-                    <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="img-fluid rounded-circle" style="max-width: 150px;">
-                </div>
-
-                <div class="list-group mb-3">
-                    <a href="#" class="list-group-item list-group-item-light">Imágenes</a>
-                    <a href="#" class="list-group-item list-group-item-light">Sonidos</a>
-                    <a href="#" class="list-group-item list-group-item-light">Modelos 3D</a>
-                    <a href="#" class="list-group-item list-group-item-light">Videos</a>
-                </div>
-
-                <div class="fondoVerde text-white p-3 rounded">SUGERENCIAS DE CONTENIDOS SIMILARES</div>
+            <!-- Sidebar izquierda -->
+            <div class="col-md-3 sidebar-guardados">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+                <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
+                <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
+                <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
             </div>
 
             <!-- Columna central -->
@@ -74,23 +66,6 @@ class="bg-gradient-primary">
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
 
-                <div class="chat-sidebar">
-                <button class="chat-toggle" onclick="toggleChat()">Chat</button>
-                <div id="chatUsers" class="chat-users">
-                    <button class="chat-user online">
-                        <img src="/assets/img/foto-perfil.png" alt="User 1">
-                        <span>Anto Rocusso</span>
-                    </button>
-                    <button class="chat-user">
-                        <img src="/assets/img/foto-perfil.png" alt="User 2">
-                        <span>Rodrigo de Paul</span>
-                    </button>
-                    <button class="chat-user online">
-                        <img src="/assets/img/foto-perfil.png" alt="User 3">
-                        <span>Dibu Martinez</span>
-                    </button>
-                    <!-- Puedes repetir más usuarios aquí -->
-                </div>
             </div>
         </div>
     </div>

@@ -9,7 +9,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
     <style>
         .filterDiv {
             display: none;
@@ -37,6 +36,7 @@
         }
 
         /* CONTENEDOR PRINCIPAL */
+
         .container {
             width: 100%;
             max-width: 1200px;
@@ -232,17 +232,314 @@
             }
         }
 
-    </style>
+        /*Modelos 3D*/
 
+        .contenedor-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .visor3d {
+            background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+        }
+
+        .visor3d-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            flex: 0 0 auto;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+             /* Estilos básicos para el overlay */
+         .hover-container {
+             position: relative;
+             display: inline-block;
+             overflow: hidden;
+             border-radius: 8px;
+             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+         }
+
+        /* Nueva capa de zoom de fondo */
+        .hover-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+
+        /* Cuando pasas el mouse, hace el zoom */
+        .hover-container:hover::before {
+            transform: scale(1.05);
+        }
+
+        .hover-container .image {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+
+        }
+        .hover-container .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+        .hover-container:hover .overlay {
+            opacity: 1;
+        }
+        .hover-container:hover .image {
+            transform: scale(1.02);
+        }
+        .overlay-actions {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Botones transparentes */
+        .action-btn {
+            background: transparent;
+            border: none;
+            padding: 4px;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        /* Animacion iconos mg y guardados */
+        .action-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* Contenedor superior (botones + título) */
+        .overlay-top {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* espacio entre botones y título */
+        }
+
+        /* Contenedor de botones */
+        .overlay-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Título */
+        .overlay-title {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            max-width: calc(100% - 100px); /* Deja margen para los botones */
+            transform: none;
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: right;
+            padding: 4px 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        /* Contenedor del botón abajo a la izquierda */
+        .overlay-user {
+            position: absolute;
+            bottom: 8px;
+            left: 16px;
+        }
+
+        /* Botón mínimo transparente */
+        .user-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none !important;  /* Asegura que no haya fondo */
+            border: none !important;      /* Asegura que no haya bordes */
+            padding: 0 !important;
+            margin: 0 !important;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* Al pasar el ratón, solo agranda */
+        .user-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Imagen de usuario redonda y tamaño fijo */
+        .user-avatar {
+            width: 24px !important;
+            height: 24px !important;
+            min-width: 24px !important;
+            min-height: 24px !important;
+            max-width: 24px !important;
+            max-height: 24px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            display: block;
+        }
+
+        /* Texto alineado a la derecha */
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .watermarked-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            /* Importante: el canvas va sobre la imagen */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none; /* para que los clics pasen al enlace */
+        }
+
+        .video-normal {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .video-preview {
+            width: 300px;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.02);
+        }
+
+        /* Icono de play central solo en los vídeos */
+        .hover-container.video::after {
+            content: "\f04b";
+            font-family: FontAwesome;
+            font-size: 36px;
+            color: rgba(255,255,255,0.85);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* No bloquea clicks */
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0.85;
+        }
+
+        .hover-container.video::before {
+            background-image: none !important;
+        }
+
+        /* Al pasar el ratón puede crecer si quieres */
+        .hover-container.video:hover::after {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* SÓLO para las imágenes se pinta el fondo */
+        .hover-container:not(.video)::before {
+            background-image: var(--bg);
+        }
+
+        /* Contenedor fijo de ancho */
+        .masonry-item.video {
+            width: 300px;
+            margin-bottom: 30px; /* si quieres separarlos, o pon 0 */
+        }
+
+        .masonry-item.video video {
+            margin: 0;
+        }
+
+
+        /* Ajuste del tamaño del video e imagen de preview */
+        .masonry-item.video .image,
+        .masonry-item.video video {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 0;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: none; /* Sin fondo */
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5; /* más alto que el overlay */
+            color: white;
+            font-size: 36px;
+            transition: transform 0.2s;
+        }
+        .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+
+    </style>
 </head>
 <body>
-<div layout:fragment="contenido" >
+<div layout:fragment="contenido">
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar izquierda -->
             <div class="col-md-3 sidebar-guardados">
                 <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
-
                 <a href="#" class="nav-link-guardados mt-4">Tu actividad</a>
                 <a href="#" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
                 <a href="#" class="nav-link-guardados mt-4">Conócenos</a>
@@ -254,15 +551,15 @@
 
                 <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center gap-3 mt-3">
                     <button class="btn custom-tab-nav w-75 active" data-filter="all">TODO</button>
-                    <button class="btn custom-tab-nav w-75" data-filter="select-img"> IMAGENES</button>
-                    <button class="btn custom-tab-nav w-75" data-filter="select-vid"> VIDEOS</button>
-                    <button class="btn custom-tab-nav w-75" data-filter="select-aud"> AUDIO</button>
-                    <button class="btn custom-tab-nav w-75" data-filter="select-tres-d"> 3D</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-img">IMAGENES</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-vid">VIDEOS</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-aud">AUDIO</button>
+                    <button class="btn custom-tab-nav w-75" data-filter="select-tres-d">3D</button>
                 </div>
 
-                <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3 d-flex justify-content-center gap-3 ">
+                <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3 d-flex justify-content-center gap-3 flex-wrap">
 
-<!--                    Primer reproductor-->
+                    <!-- AUDIOS -->
                     <div class="filterDiv select-aud">
                         <div class="music-player" data-index="0">
                             <div class="cover">
@@ -281,11 +578,8 @@
                                         <i class="fa fa-volume-up"></i>
                                     </button>
                                 </div>
-
                             </div>
-
-
-                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                            <div class="progress-container">
                                 <div class="progress"></div>
                             </div>
                             <div class="time">
@@ -294,7 +588,7 @@
                             </div>
                         </div>
                     </div>
-<!--                    Segundo reproductor-->
+
                     <div class="filterDiv select-aud">
                         <div class="music-player" data-index="0">
                             <div class="cover">
@@ -313,11 +607,8 @@
                                         <i class="fa fa-volume-up"></i>
                                     </button>
                                 </div>
-
                             </div>
-
-
-                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
+                            <div class="progress-container">
                                 <div class="progress"></div>
                             </div>
                             <div class="time">
@@ -327,73 +618,165 @@
                         </div>
                     </div>
 
-<!--                    tercer reproductor-->
-                    <div class="filterDiv select-aud">
-                        <div class="music-player" data-index="0">
-                            <div class="cover">
-                                <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
-                            </div>
-                            <div class="titre">
-                                <h3>La Puñalada De Carmen</h3>
-                                <h1>Desidia</h1>
-                            </div>
-                            <audio preload="metadata" th:src="@{/assets/img/virgenLuna.mp3}"></audio>
-                            <div class="controls">
-                                <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
-                                <div class="volume-container">
-                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
-                                    <button class="volume-toggle" aria-label="Mute/Unmute">
-                                        <i class="fa fa-volume-up"></i>
+                    <!-- MODELOS 3D (sacados de su contenedor-flex y puestos directamente aquí) -->
+
+                    <div class="visor3d-container filterDiv select-tres-d">
+                        <img src="/assets/img/preview/previewKnight.png" alt="Preview Knight" class="preview-img" data-model="/archivos/modelos3d/javier/knight.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
+                        <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
+                    </div>
+
+                    <div class="visor3d-container filterDiv select-tres-d">
+                        <img src="/assets/img/preview/previewCow.png" alt="Preview Cow" class="preview-img" data-model="/assets/models/Cow.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
+                        <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
+                    </div>
+
+                    <div class="visor3d-container filterDiv select-tres-d">
+                        <img src="/assets/img/preview/previewHospital.png" alt="Preview Hospital" class="preview-img" data-model="/assets/models/Hospital.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
+                        <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
+                    </div>
+
+<!--                VÍDEOS-->
+                    <div class="filterDiv select-vid video-item"
+                         data-src="/assets/img/videos/carretera.mp4"
+                         data-poster="/assets/img/preview/previewCarretera.png"
+                         data-title="Título del vídeo super largo para ver como queda no vaya a ser que haga algo raro"
+                         data-user="@usuario1"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+                    <div class="filterDiv select-vid video-item"
+                         data-src="/assets/img/videos/olas.mp4"
+                         data-poster="/assets/img/preview/previewOlas.png"
+                         data-title="Título del vídeo"
+                         data-user="@usuario1"
+                         data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
+                    </div>
+
+                    <!--                IMAGENES-->
+
+                <div class="masonry filterDiv select-img">
+                    <!-- GALERIA CON OVERLAY -->
+                    <div class="masonry-item hover-container"
+                         th:each="imagen, iterStat : ${imagenes}"
+                         data-aos="fade-up"
+                         th:attr="style='--bg:url(' + ${imagen} + ')'">
+
+                        <a th:href="'/imagenes/' + ${iterStat.index}">
+                            <img th:src="${imagen}" alt="Imagen dinámica" class="image" />
+
+
+                            <div class="overlay">
+                                <!-- Botones arriba -->
+                                <div class="overlay-actions">
+                                    <button class="action-btn"><i class="bi bi-heart"></i></button>
+                                    <button class="action-btn"><i class="bi bi-bookmark"></i></button>
+                                </div>
+
+                                <!-- Usuario abajo -->
+                                <div class="overlay-user">
+                                    <button class="user-btn">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto usuario" class="user-avatar">
+                                        <span class="user-name">@Usuario.creador</span>
                                     </button>
                                 </div>
 
+                                <!-- Título centrado -->
+                                <div class="overlay-title">
+                                    Título de la imagen super largo para ver que no haga nada raro si me paso con las letras
+                                </div>
                             </div>
-
-
-                            <div class="progress-container" tabindex="0" role="progressbar" aria-label="Barra de progreso">
-                                <div class="progress"></div>
-                            </div>
-                            <div class="time">
-                                <span class="current-time">0:00</span>
-                                <span class="duration">0:00</span>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-
-                    <button class="btn-chat-user filterDiv select-img mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy una imagen</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-img mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy una imagen</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-vid mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy un video</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-vid mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy un video</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-vid mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy un video</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-tres-d mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy un 3D</span>
-                    </button>
-                    <button class="btn-chat-user filterDiv select-tres-d mb-4">
-                        <div class="archivo"></div>
-                        <span class="username">Hola soy un 3D</span>
-                    </button>
+                    <!-- /GALERIA CON OVERLAY -->
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const videoItems = document.querySelectorAll(".video-item");
+
+                videoItems.forEach(item => {
+                    const src = item.dataset.src;
+                    const poster = item.dataset.poster;
+                    const title = item.dataset.title;
+                    const user = item.dataset.user;
+                    const avatar = item.dataset.avatar;
+
+                    // Crea contenedor principal
+                    const container = document.createElement("div");
+                    container.className = "masonry-item hover-container video";
+                    container.style.position = "relative";
+
+                    // Imagen de preview
+                    const img = document.createElement("img");
+                    img.src = poster;
+                    img.alt = title;
+                    img.className = "image";
+                    img.dataset.src = src;
+
+                    // Botón Play SIEMPRE visible
+                    const playButton = document.createElement("button");
+                    playButton.className = "play-button";
+                    playButton.innerHTML = '<i class="fa fa-play"></i>';
+                    playButton.onclick = function() {
+                        const video = document.createElement("video");
+                        video.setAttribute("controls", "controls");
+                        video.setAttribute("preload", "metadata");
+                        video.setAttribute("autoplay", "autoplay");
+                        video.className = "image";
+                        const source = document.createElement("source");
+                        source.src = src;
+                        source.type = "video/mp4";
+                        video.appendChild(source);
+                        container.replaceChild(video, img);
+                        playButton.remove(); // quita el botón al reproducir
+                    };
+
+                    // Overlay
+                    const overlay = document.createElement("div");
+                    overlay.className = "overlay";
+
+                    // Botones de acción
+                    const actions = document.createElement("div");
+                    actions.className = "overlay-actions";
+                    actions.innerHTML = `
+            <button class="action-btn"><i class="bi bi-heart"></i></button>
+            <button class="action-btn"><i class="bi bi-bookmark"></i></button>
+        `;
+
+                    // Título arriba derecha
+                    const overlayTitle = document.createElement("div");
+                    overlayTitle.className = "overlay-title";
+                    overlayTitle.textContent = title;
+
+                    // Usuario abajo izquierda
+                    const userDiv = document.createElement("div");
+                    userDiv.className = "overlay-user";
+                    userDiv.innerHTML = `
+            <button class="user-btn">
+                <img src="${avatar}" alt="Foto usuario" class="user-avatar">
+                <span class="user-name">${user}</span>
+            </button>
+        `;
+
+                    // Montar todo
+                    overlay.appendChild(actions);
+                    overlay.appendChild(userDiv);
+                    overlay.appendChild(overlayTitle);
+
+                    container.appendChild(img);
+                    container.appendChild(playButton);
+                    container.appendChild(overlay);
+
+                    // Insertar en el div video-item
+                    item.appendChild(container);
+                });
+            });
+        </script>
+
+        <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filterSelection(category) {
                 const items = document.getElementsByClassName("filterDiv");
@@ -404,9 +787,7 @@
                     }
                 }
             }
-
             filterSelection("all");
-
             const buttons = document.querySelectorAll("#myBtnContainer .btn");
             buttons.forEach(button => {
                 button.addEventListener("click", function () {
@@ -418,6 +799,8 @@
             });
         });
     </script>
+    <script type="module" src="/assets/js/modelos.js" defer></script>
+</div>
 </div>
 </body>
 </html>

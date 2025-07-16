@@ -72,7 +72,7 @@
             <span class="fw-bold ms-2">@Usuario 1</span>
           </div>
           <div class="d-flex align-items-center gap-3">
-            <button class="btn-icon"><i class="bi bi-star-fill fs-4"></i> </button>
+            <button class="btn-icon"><i class="bi bi-star fs-4"></i> </button>
             <button class="btn-icon"><i class="bi bi-three-dots-vertical fs-4"></i> </button>
           </div>
         </div>
@@ -85,8 +85,8 @@
           <div class="message sent">como mínimo</div>
           <div class="message">Solo estoy interesado en 3...</div>
           <div class="message sent">Lo siento, no me sale a cuenta hacer rebaja por debajo de cinco</div>
-          <div class="message">Pues por el culo te la hinco</div>
-          <div class="message">Espabila chaval, te falta via apia</div>
+          <div class="message">Pues ya sabes que rima con cinco</div>
+          <div class="message sent">Quedas reportado amigo</div>
         </div>
 
         <div class="message-input">
@@ -131,6 +131,30 @@
       });
     });
   </script>
+
+  <script>
+
+      document.addEventListener("DOMContentLoaded", function() {
+      // Busca todas las estrellas dentro de .btn-icon
+      const starButtons = document.querySelectorAll(".btn-icon i.bi-star, .btn-icon i.bi-star-fill");
+
+      starButtons.forEach(icon => {
+      icon.parentElement.addEventListener("click", function(event) {
+      // Si está rellena, cambia a vacía
+      if (icon.classList.contains("bi-star-fill")) {
+      icon.classList.remove("bi-star-fill");
+      icon.classList.add("bi-star");
+    }
+      // Si está vacía, cambia a rellena
+      else if (icon.classList.contains("bi-star")) {
+      icon.classList.remove("bi-star");
+      icon.classList.add("bi-star-fill");
+    }
+    });
+    });
+    });
+  </script>
+
 </div>
 </body>
 </html>

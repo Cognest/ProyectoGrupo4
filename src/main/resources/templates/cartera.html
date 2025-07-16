@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<title>Interfaz de Guardados</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <style>
+        .scrollable-history {
+            max-height: 350px; /* ajusta esta altura según el tamaño de tus ítems */
+            overflow-y: auto;
+            border: 1px solid #ddd; /* opcional, para que quede delimitado */
+            border-radius: 4px;
+        }
+
+        .saldo-actual {
+            color: var(--accent-color); /* Ejemplo: verde Bootstrap */
+            font-weight: bold;
+        }
+
+        .btn-saldo {
+            background-color: var(--accent-color);
+            color: #fff ;
+            border: none ;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-saldo:hover {
+            background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+            color: #fff ;
+        }
+
+    </style>
+</head>
+
+<body>
+<div layout:fragment="contenido">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar izquierda -->
+            <div class="col-md-3 sidebar-guardados">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+                <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
+                <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
+                <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
+            </div>
+
+            <!-- Contenido central -->
+            <div class="col-md-9">
+                <div class="p-4">
+                    <!-- Saldo actual y botones -->
+                    <div class="d-flex flex-wrap align-items-center mb-4">
+                        <h2 class="mb-0 me-5 saldo-actual">SALDO ACTUAL: <span>1000 Tk</span></h2>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a th:href="@{/planes}"> <button class="btn btn-saldo">Recargar</button> </a>
+                            <button class="btn btn-saldo">Retirar</button>
+                        </div>
+                    </div>
+
+                    <!-- Historial -->
+                    <!-- Historial -->
+                    <h4 class="mb-3 fw-bold">Historial</h4>
+                    <div class="scrollable-history">
+                        <div class="list-group">
+                            <div class="list-group">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">15/07/2025</span>
+                                        <span>Realizaste una compra por un total de: -900 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1000 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">15/07/2025</span>
+                                        <span>Realizaste una venta por un total de: +900 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1900 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">14/07/2025</span>
+                                        <span>Ingresaste un total de: +1000 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1000 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">12/07/2025</span>
+                                        <span>Retiraste un total de: -1000 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 0 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">12/07/2025</span>
+                                        <span>Realizaste una compra por un total de: -800 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1000 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">11/07/2025</span>
+                                        <span>Realizaste una venta por un total de: +200 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1800 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">07/07/2025</span>
+                                        <span>Realizaste una compra por un total de: -300 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1600 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">07/07/2025</span>
+                                        <span>Ingresaste un total de: +1000 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1900 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">06/07/2025</span>
+                                        <span>Realizaste una compra por un total de: -100 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 900 Tk</strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex gap-2">
+                                        <span class="small fst-italic text-muted">05/07/2025</span>
+                                        <span>ingresaste un total de: +1000 Tk</span>
+                                    </div>
+                                    <strong>Saldo: 1000 Tk</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

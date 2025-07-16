@@ -3,60 +3,232 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/plantilla}">
 <head>
-
   <title>home</title>
+  <!-- Importa Bootstrap Icons si aún no lo tienes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    /* Estilos básicos para el overlay */
+    .hover-container {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 
+    /* Nueva capa de zoom de fondo */
+    .hover-container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 0;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+      background-image: var(--bg);
+    }
+
+    /* Cuando pasas el mouse, hace el zoom */
+    .hover-container:hover::before {
+      transform: scale(1.05);
+    }
+
+    .hover-container .image {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: transform 0.3s ease;
+
+    }
+    .hover-container .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    .hover-container:hover .overlay {
+      opacity: 1;
+    }
+    .hover-container:hover .image {
+      transform: scale(1.02);
+    }
+    .overlay-actions {
+      position: absolute;
+      top: 8px;
+      left: 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Botones transparentes */
+    .action-btn {
+      background: transparent;
+      border: none;
+      padding: 4px;
+      font-size: 1.1rem;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    /* Animacion iconos mg y guardados */
+    .action-btn:hover {
+      transform: scale(1.15);
+    }
+
+    /* Contenedor superior (botones + título) */
+    .overlay-top {
+      position: absolute;
+      top: 8px;
+      left: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px; /* espacio entre botones y título */
+    }
+
+    /* Contenedor de botones */
+    .overlay-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Título */
+    .overlay-title {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      left: auto;
+      transform: none;
+      color: rgba(255,255,255,0.8); /* Blanco semi-transparente */
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: right;
+      padding: 4px 8px;
+    }
+
+    /* Contenedor del botón abajo a la izquierda */
+    .overlay-user {
+      position: absolute;
+      bottom: 8px;
+      left: 16px;
+    }
+
+    /* Botón mínimo transparente */
+    .user-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none !important;  /* Asegura que no haya fondo */
+      border: none !important;      /* Asegura que no haya bordes */
+      padding: 0 !important;
+      margin: 0 !important;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    /* Al pasar el ratón, solo agranda */
+    .user-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Imagen de usuario redonda y tamaño fijo */
+    .user-avatar {
+      width: 24px !important;
+      height: 24px !important;
+      min-width: 24px !important;
+      min-height: 24px !important;
+      max-width: 24px !important;
+      max-height: 24px !important;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+      display: block;
+    }
+
+    /* Texto alineado a la derecha */
+    .user-name {
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .watermarked-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      /* Importante: el canvas va sobre la imagen */
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none; /* para que los clics pasen al enlace */
+    }
+
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px !important;
+      height: auto;
+      opacity: 0.3; /* nivel de transparencia */
+      pointer-events: none; /* para que no bloquee clics */
+      z-index: 1; /* debajo del overlay, encima de la imagen */
+    }
+
+
+
+  </style>
 </head>
 
 <body class="bg-gradient-primary">
 
-<!-- Aqui vamos a escribir el contenido de los bloques  -->
-<div layout:fragment="contenido" >
+<div layout:fragment="contenido">
 
   <!-- Busqueda Section -->
   <section id="busqueda" class="busqueda features section">
     <div class="container">
-
       <div class="row gy-4">
-
-        <div class="col-lg-1"></div>
-
+        <div class="col-lg-2"></div>
         <div class="col-lg-2 col-md-4" data-aos="fade-up" data-aos-delay="100">
           <div class="features-item">
             <i class="bi bi-camera" style="color: #ffbb2c;"></i>
             <h3><a href="" class="stretched-link">Imágenes</a></h3>
           </div>
-        </div><!-- End Feature Item -->
-
+        </div>
         <div class="col-lg-2 col-md-4" data-aos="fade-up" data-aos-delay="200">
           <div class="features-item">
             <i class="bi bi-camera-video" style="color: #5578ff;"></i>
             <h3><a href="" class="stretched-link">Videos</a></h3>
           </div>
-        </div><!-- End Feature Item -->
-
+        </div>
         <div class="col-lg-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
           <div class="features-item">
             <i class="bi bi-music-note-beamed" style="color: #e80368;"></i>
             <h3><a href="" class="stretched-link">Audios</a></h3>
           </div>
-        </div><!-- End Feature Item -->
-
-        <div class="col-lg-2 col-md-4" data-aos="fade-up" data-aos-delay="400">
-          <div class="features-item">
-            <i class="bi bi-card-image" style="color: #e361ff;"></i>
-            <h3><a href="" class="stretched-link">Vectores</a></h3>
-          </div>
-        </div><!-- End Feature Item -->
-
+        </div>
         <div class="col-lg-2 col-md-4" data-aos="fade-up" data-aos-delay="500">
           <div class="features-item">
             <i class="bi bi-box" style="color: #47aeff;"></i>
             <h3><a href="" class="stretched-link">Modelos 3D</a></h3>
           </div>
-        </div><!-- End Feature Item -->
-
-        <div class="col-lg-1"></div>
+        </div>
+        <div class="col-lg-2"></div>
       </div>
     </div>
 
@@ -70,7 +242,6 @@
           <div class="col-lg-1"></div>
         </div>
       </form>
-
     </div>
   </section><!-- /Busqueda Section -->
 
@@ -84,25 +255,44 @@
     </div><!-- End Section Title -->
 
     <div class="container">
-
       <div class="masonry">
-        <div
-                class="masonry-item"
-                th:each="imagen, iterStat : ${imagenes}"
-                data-aos="fade-up"
-                th:attr="data-aos-delay=${iterStat.index * 100}"
-        >
-          <a th:href="'/imagenes/imagen' + ${iterStat.index}">
-            <img th:src="${imagen}" alt="Imagen dinámica" />
-          </a>
+        <!-- GALERIA CON OVERLAY -->
+        <div class="masonry-item hover-container"
+             th:each="imagen, iterStat : ${imagenes}"
+             data-aos="fade-up"
+             th:attr="data-aos-delay=${iterStat.index * 100}, style='--bg:url(' + ${imagen} + ')'">
+
+        <a th:href="'/imagenes/' + ${iterStat.index}">
+            <img th:src="${imagen}" alt="Imagen dinámica" class="image" />
+          <img src="/assets/img/logos/logoBlanco.png" alt="Marca de agua" class="watermark">
+
+
+          <div class="overlay">
+            <!-- Botones arriba -->
+            <div class="overlay-actions">
+              <button class="action-btn"><i class="bi bi-heart"></i></button>
+              <button class="action-btn"><i class="bi bi-bookmark"></i></button>
+            </div>
+
+            <!-- Usuario abajo -->
+            <div class="overlay-user">
+              <button class="user-btn">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto usuario" class="user-avatar">
+                <span class="user-name">@Usuario.creador</span>
+              </button>
+            </div>
+
+            <!-- Título centrado -->
+            <div class="overlay-title">
+              Título de la imagen
+            </div>
+          </div>
+        </a>
         </div>
+        <!-- /GALERIA CON OVERLAY -->
       </div>
-
     </div>
-
   </section><!-- /Courses Section -->
 </div>
-<!-- Fin ventanas que rellena java-->
 </body>
-
 </html>

@@ -180,6 +180,18 @@ public class DefaultController {
 
     @GetMapping("/guardados")
     public String pantallaGuardados(Model model) {
+        List<String> imagenes = List.of(
+                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
+                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+        );
+
+        model.addAttribute("imagenes", imagenes);
         return "guardados";
     }
 
@@ -360,5 +372,10 @@ public class DefaultController {
     public String conocenos(Model model)
     {
         return "conocenos"; // View name
+    }
+
+    @GetMapping("/cartera")
+    public String pantallaCartera(Model model) {
+        return "cartera";
     }
 }

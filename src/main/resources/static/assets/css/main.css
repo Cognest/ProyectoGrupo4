@@ -224,19 +224,21 @@ h6 {
 .header {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 15px 0;
+  padding: 1rem;
   transition: all 0.5s;
   z-index: 1000;
-  position: relative;
+
 }
 
 .header .logo {
   line-height: 1;
+  margin-left: -20px;
+  margin-right: -20px;
 }
 
 .header .logo img {
-  max-height: 36px;
-  margin-right: 8px;
+  max-height: 110px;
+  margin-right: 4px;
 }
 
 .header .logo h1 {
@@ -253,7 +255,7 @@ h6 {
   color: var(--contrast-color);
   background: var(--accent-color);
   font-size: 14px;
-  padding: 8px 25px;
+  padding: 8px 15px;
   margin: 0 0 0 30px;
   border-radius: 50px;
   transition: 0.3s;
@@ -293,233 +295,243 @@ h6 {
   .navmenu {
     padding: 0;
   }
-
   .navmenu ul {
+    display: flex;
     margin: 0;
     padding: 0;
-    display: flex;
     list-style: none;
     align-items: center;
   }
-
   .navmenu li {
-    position: relative;
+    flex-shrink: 0;
   }
-
   .navmenu a,
   .navmenu a:focus {
-    color: var(--nav-color);
-    padding: 18px 15px;
-    font-size: 16px;
-    font-family: var(--nav-font);
-    font-weight: 400;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 18px 15px;
+    font: 400 16px var(--nav-font);
+    color: var(--nav-color);
     white-space: nowrap;
-    transition: 0.3s;
   }
-
-  .navmenu a i,
-  .navmenu a:focus i {
+  .navmenu a i {
     font-size: 12px;
-    line-height: 0;
     margin-left: 5px;
-    transition: 0.3s;
+    line-height: 0;
   }
-
   .navmenu li:last-child a {
     padding-right: 0;
   }
-
-  .navmenu li:hover>a,
+  .navmenu li:hover > a,
   .navmenu .active,
   .navmenu .active:focus {
     color: var(--nav-hover-color);
   }
-
   .navmenu .dropdown ul {
+    display: block;
+    position: absolute;
+    top: 130%;
+    left: 14px;
+    visibility: hidden;
+    opacity: 0;
     margin: 0;
     padding: 10px 0;
     background: var(--nav-dropdown-background-color);
-    display: block;
-    position: absolute;
-    visibility: hidden;
-    left: 14px;
-    top: 130%;
-    opacity: 0;
-    transition: 0.3s;
     border-radius: 4px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
     z-index: 99;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
   }
-
+  .navmenu .dropdown:hover > ul {
+    top: 100%;
+    opacity: 1;
+    visibility: visible;
+  }
   .navmenu .dropdown ul li {
     min-width: 200px;
   }
-
   .navmenu .dropdown ul a {
     padding: 10px 20px;
     font-size: 15px;
-    text-transform: none;
     color: var(--nav-dropdown-color);
   }
-
-  .navmenu .dropdown ul a i {
-    font-size: 12px;
-  }
-
   .navmenu .dropdown ul a:hover,
-  .navmenu .dropdown ul .active:hover,
-  .navmenu .dropdown ul li:hover>a {
+  .navmenu .dropdown ul li:hover > a {
     color: var(--nav-dropdown-hover-color);
   }
-
-  .navmenu .dropdown:hover>ul {
-    opacity: 1;
-    top: 100%;
-    visibility: visible;
-  }
-
   .navmenu .dropdown .dropdown ul {
+    display: block;
+    position: absolute;
     top: 0;
     left: -90%;
     visibility: hidden;
   }
-
-  .navmenu .dropdown .dropdown:hover>ul {
-    opacity: 1;
-    top: 0;
+  .navmenu .dropdown .dropdown:hover > ul {
     left: -100%;
+    opacity: 1;
     visibility: visible;
   }
 }
 
 /* Navmenu - Mobile */
 @media (max-width: 1199px) {
+  /* Botón hamburguesa */
   .mobile-nav-toggle {
     color: var(--nav-color);
     font-size: 28px;
-    line-height: 0;
     margin-right: 10px;
     cursor: pointer;
-    transition: color 0.3s;
   }
 
+  /* Contenedor navmenu */
   .navmenu {
     padding: 0;
     z-index: 9997;
   }
 
+  /* Ul principal, cerrado por defecto */
   .navmenu ul {
     display: none;
-    list-style: none;
     position: absolute;
-    inset: 60px 20px 20px 20px;
-    padding: 10px 0;
+    inset: 60px 20px 20px;
     margin: 0;
-    border-radius: 6px;
-    background-color: var(--nav-mobile-background-color);
+    padding: 10px 0;
+    list-style: none;
+    background: var(--nav-mobile-background-color);
     border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-    box-shadow: none;
+    border-radius: 6px;
     overflow-y: auto;
-    transition: 0.3s;
     z-index: 9998;
   }
 
-  .navmenu a,
-  .navmenu a:focus {
+  /* Cuando se abre el menú */
+  .mobile-nav-active .navmenu > ul {
+    display: block;
+  }
+
+  /* Enlaces dentro del menú */
+  .mobile-nav-active .navmenu ul li a,
+  .mobile-nav-active .navmenu ul li a:focus {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 12px 20px;
+    font: 500 17px var(--nav-font);
     color: var(--nav-dropdown-color);
-    padding: 10px 20px;
-    font-family: var(--nav-font);
-    font-size: 17px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     white-space: nowrap;
-    transition: 0.3s;
   }
 
-  .navmenu a i,
-  .navmenu a:focus i {
-    font-size: 12px;
-    line-height: 0;
-    margin-left: 5px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: 0.3s;
-    background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  /* Iconos */
+  .mobile-nav-active .navmenu ul li a i {
+    margin-right: 0.6rem;
+    margin-left: 0;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    font-size: 1.2rem;
+    display: inline-block;
   }
 
-  .navmenu a i:hover,
-  .navmenu a:focus i:hover {
-    background-color: var(--accent-color);
-    color: var(--contrast-color);
-  }
-
-  .navmenu a:hover,
-  .navmenu .active,
-  .navmenu .active:focus {
-    color: var(--nav-dropdown-hover-color);
-  }
-
-  .navmenu .active i,
-  .navmenu .active:focus i {
-    background-color: var(--accent-color);
-    color: var(--contrast-color);
-    transform: rotate(180deg);
-  }
-
+  /* Submenús internos */
   .navmenu .dropdown ul {
-    position: static;
     display: none;
-    z-index: 99;
-    padding: 10px 0;
+    position: static;
     margin: 10px 20px;
-    background-color: var(--nav-dropdown-background-color);
-    transition: all 0.5s ease-in-out;
+    padding: 10px 0;
+    background: var(--nav-dropdown-background-color);
   }
 
   .navmenu .dropdown ul ul {
-    background-color: rgba(33, 37, 41, 0.1);
+    background: rgba(33,37,41,0.1);
   }
 
-  .navmenu .dropdown>.dropdown-active {
+  .navmenu .dropdown > .dropdown-active {
     display: block;
-    background-color: rgba(33, 37, 41, 0.03);
+    background: rgba(33,37,41,0.03);
   }
 
-  .mobile-nav-active {
-    overflow: hidden;
-  }
-
+  /* Botón hamburguesa activo */
   .mobile-nav-active .mobile-nav-toggle {
-    color: #fff;
     position: absolute;
-    font-size: 32px;
     top: 15px;
     right: 15px;
-    margin-right: 0;
-    z-index: 9999;
+    font-size: 32px;
+    color: #fff;
+    margin: 0;
   }
 
+  /* Fondo del navmenu abierto */
   .mobile-nav-active .navmenu {
     position: fixed;
-    overflow: hidden;
     inset: 0;
-    background: rgba(33, 37, 41, 0.8);
-    transition: 0.3s;
+    background: rgba(33,37,41,0.8);
   }
 
-  .mobile-nav-active .navmenu>ul {
-    display: block;
+  .mobile-nav-active .navmenu ul li form {
+    padding: 12px 20px;
   }
 }
+
+
+/* Reset estilos de nav-buttons */
+.navmenu .nav-buttons > a,
+.navmenu .nav-buttons > form {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+.navmenu .nav-buttons > a:hover,
+.navmenu .nav-buttons > form:hover {
+  color: inherit;
+  background: none;
+}
+.navmenu .nav-buttons > a i {
+  background: none;
+  margin-left: 0;
+}
+
+/* Estilo específico para icono wallet */
+.navmenu a i.bi-wallet2 {
+  font-size: 18px;
+  color: var(--accent-color);
+  margin-left: 1rem;
+  line-height: 1;
+}
+
+/* Desactiva cualquier transformación en wallet-button */
+.navmenu .wallet-button,
+.navmenu .wallet-button *,
+.navmenu .wallet-button:hover,
+.navmenu .wallet-button:focus {
+  transform: none !important;
+}
+
+/* Animación de hundimiento al hacer click */
+.header .navmenu a:active,
+.header .navmenu button:active,
+.header .navmenu form:active,
+.header .navmenu .wallet-button:active,
+.header .navmenu .wallet-button *:active {
+  transform: scale(0.98);
+  transform-origin: center center;
+}
+
+/* Transición suave */
+.header .navmenu a,
+.header .navmenu button,
+.header .navmenu form,
+.header .navmenu .wallet-button,
+.header .navmenu .wallet-button * {
+  transition: transform 0.1s ease;
+}
+
+
+
 
 /*--------------------------------------------------------------
 # Global Footer
@@ -2584,6 +2596,7 @@ PANTALLA GUARDADOS
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: flex-start;
   margin: 2rem auto; /* centrado horizontal + margen vertical */
 }
 
@@ -2764,3 +2777,32 @@ PANTALLA GUARDADOS
 .masonry-item img:hover {
   transform: scale(1.02);
 }
+
+/*Acceso directo chat button*/
+
+.go-chat {
+  position: fixed;
+  left: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background-color: var(--accent-color);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50px;
+  transition: all 0.4s;
+}
+
+
+.go-chat:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  color: var(--contrast-color);
+}
+
+.go-chat.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
