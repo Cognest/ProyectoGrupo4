@@ -16,7 +16,7 @@ class="bg-gradient-primary">
 
             <!-- Sidebar izquierda -->
             <div class="col-md-3 sidebar-guardados">
-                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+                <img th:src="${usuario.avatar}" alt="Foto de perfil">
                 <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
                 <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
                 <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
@@ -25,39 +25,17 @@ class="bg-gradient-primary">
             <!-- Columna central -->
             <div class="col-md-6">
                 <div class="perfil-box p-4 mb-3 rounded">
-                    <h4 class="nombre-usuario mb-2">Lio Messi</h4>
-                    <p class="descripcion-usuario mb-0">Leyenda del mundo futbolistico.</p>
+                    <h4 class="nombre-usuario mb-2" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></h4>
+                    <p class="descripcion-usuario mb-0" th:text="${'@'+usuario.nickname}"></p>
                 </div>
                 <!-- Publicación -->
                 <div class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
-                    <div class="d-flex align-items-center mb-3">
-                        <!-- Foto de perfil (cambia src por tu ruta real) -->
-                        <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil me-3">
-
-                        <!-- Título y autor -->
-                        <div>
-                            <h5 class="mb-1 fw-bold">La Pelotita</h5>
-                            <small class="text-muted">Lio Messi</small>
-                        </div>
-                    </div>
-
                     <!-- Previsualización del contenido -->
                     <div class="previsualizacion mb-3">
                         <img src="/uploads/contenido.jpg" alt="Contenido de la publicación" class="img-fluid rounded">
                     </div>
 
-                    <!-- Botones de interacción -->
-                    <div class="d-flex justify-content-between mb-3">
-                        <button class="btn btn-outline-secondary flex-fill me-2">👍 Me gusta</button>
-                        <button class="btn btn-outline-secondary flex-fill mx-2">🔗 Compartir</button>
-                        <button class="btn btn-outline-secondary flex-fill ms-2">💾 Guardar</button>
-                    </div>
 
-                    <!-- Caja de comentarios -->
-                    <div class="comentarios">
-                        <textarea class="form-control" rows="2" placeholder="Escribe un comentario..."></textarea>
-                        <button class="btn btn-success mt-2">Comentar</button>
-                    </div>
                 </div>
             </div>
                 <!-- Columna derecha -->

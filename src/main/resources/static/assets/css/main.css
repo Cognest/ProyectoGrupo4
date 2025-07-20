@@ -2105,155 +2105,22 @@ section,
   z-index: 10;
 }
 
-/*.list-group-item {*/
-/*  background-color: white;*/
-/*  border: none;*/
-/*  padding: 10px 15px;*/
-/*  transition: background-color 0.2s ease;*/
-/*}*/
+.perfil-box {
+  background-color: #5fcf80; /* verde */
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-/*.list-group-item:hover {*/
-/*  background-color: #f0f0f0;*/
-/*  cursor: pointer;*/
-/*}*/
-/*.menu-btn.activo {*/
-/*  background-color: #5FCF80FF;*/
-/*  color: #fff;*/
-/*}*/
-/*!* Prueba de chat  *!*/
-/* .chat-sidebar {*/
-/*   background-color: #5FCF80FF; !* verde *!*/
-/*   padding: 1rem;*/
-/*   border-radius: 10px;*/
-/*   color: white;*/
-/*   position: relative;*/
-/* }*/
+.nombre-usuario {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
 
-/*.chat-toggle {*/
-/*  background-color: white;*/
-/*  color: #5FCF80FF;*/
-/*  border: none;*/
-/*  padding: 0.5rem 1rem;*/
-/*  margin-bottom: 1rem;*/
-/*  font-weight: bold;*/
-/*  border-radius: 5px;*/
-/*  cursor: pointer;*/
-/*}*/
-
-/*.chat-user {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  background-color: white;*/
-/*  border: none;*/
-/*  border-radius: 10px;*/
-/*  padding: 0.5rem;*/
-/*  cursor: pointer;*/
-/*  text-align: left;*/
-/*  width: 100%;*/
-/*  margin-bottom: 10px;*/
-/*}*/
-
-/*.chat-user:last-child {*/
-/*  margin-bottom: 0;*/
-/*}*/
-
-/*.chat-user:hover {*/
-/*  background-color: #f0f0f0;*/
-/*}*/
-
-/*.chat-user img {*/
-/*  width: 40px;*/
-/*  height: 40px;*/
-/*  border-radius: 50%;*/
-/*  margin-right: 10px;*/
-/*  border: 2px solid transparent;*/
-/*}*/
-
-/*.chat-user.online img {*/
-/*  border-color: #5FCF80FF;*/
-/*}*/
-
-/*.chat-user span {*/
-/*  color: black;*/
-/*  font-weight: 500;*/
-/*}*/
-/*!* Responsive para el chat *!*/
-/*@media (max-width: 768px) {*/
-/*  .chat-sidebar {*/
-/*    position: fixed;*/
-/*    bottom: 0;*/
-/*    right: 0;*/
-/*    width: 100%;*/
-/*    z-index: 1000;*/
-/*    border-radius: 0;*/
-/*  }*/
-
-/*  .chat-toggle {*/
-/*    width: 100%;*/
-/*    border-radius: 0;*/
-/*  }*/
-
-/*  .chat-users {*/
-/*    flex-direction: column;*/
-/*    max-height: 300px;*/
-/*    overflow-y: auto;*/
-/*    background-color: #5FCF80FF;*/
-/*    padding: 0.5rem;*/
-/*  }*/
-
-/*  .chat-user {*/
-/*    width: 100%;*/
-/*    margin-bottom: 8px;*/
-/*  }*/
-
-/*  .chat-user img {*/
-/*    width: 35px;*/
-/*    height: 35px;*/
-/*  }*/
-/*}*/
-/*!*media queries en CSS te permiten cambiar estilos según el tamaño de la pantalla*!*/
-/*@media (max-width: 768px) {*/
-/*  .menu {*/
-/*    flex-direction: column;*/
-/*  }*/
-/*  .sidebar {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-/*!*Flexbox y Grid facilitan la creación de layouts adaptables.*!*/
-/*.container {*/
-/*  display: flex;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-/*.item {*/
-/*  flex: 1 1 100%;*/
-/*}*/
-/*@media (min-width: 600px) {*/
-/*  .item {*/
-/*    flex: 1 1 48%;*/
-/*  }*/
-/*}*/
-/*.fade-in {*/
-/*  transition: all 0.3s ease;*/
-/*  border-left: 4px solid #28a745;*/
-/*  background-color: #f8f9fa;*/
-/*  border-radius: 8px;*/
-/*}*/
-/*.perfil-box {*/
-/*  background-color: #28a745; !* verde *!*/
-/*  color: white;*/
-/*  box-shadow: 0 4px 10px rgba(0,0,0,0.1);*/
-/*}*/
-
-/*.nombre-usuario {*/
-/*  font-size: 1.5rem;*/
-/*  font-weight: bold;*/
-/*}*/
-
-/*.descripcion-usuario {*/
-/*  font-size: 1rem;*/
-/*  opacity: 0.85;*/
-/*}*/
+.descripcion-usuario {
+  font-size: 1rem;
+  opacity: 0.85;
+}
 
 /*-----------------------------------------------
 PANTALLA CHAT
@@ -2694,6 +2561,26 @@ PANTALLA GUARDADOS
     color: var(--accent-color);
 }
 
+.media-container {
+  width: 100%;
+  max-width: 100%;
+  height: 500px; /* Ajusta esto al tamaño deseado */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa; /* Color de fondo opcional */
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.media-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Esto hace que la imagen se adapte sin deformarse */
+}
+
 /*--------------------------------------------------------------
 # Subir Contenido Section
 --------------------------------------------------------------*/
@@ -2764,6 +2651,7 @@ PANTALLA GUARDADOS
 .masonry-item {
   break-inside: avoid;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .masonry-item img {
@@ -2804,5 +2692,511 @@ PANTALLA GUARDADOS
   opacity: 1;
 }
 
+/*--------------------------------------------
+---------------- AUDIOS ---------------------
+--------------------------------------------*/
+
+/* REPRODUCTOR INDIVIDUAL */
+.music-player {
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+  /*box-shadow: 1px 10px 20px 5px #222;*/
+  /*border-radius: 0 0 10px 10px;*/
+  /*margin-bottom: 30px;*/
+  padding: 15px 20px 30px;
+  color: white;
+  /*flex-shrink: 0;*/
+}
+
+/* PORTADA */
+.cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+  margin-bottom: 15px;
+}
+
+.cover a, .titre a {
+  position: relative;
+  z-index: 10;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: auto;
+}
+
+/* TITULOS */
+.titre {
+  margin-top: 10px;
+  padding: 0 10%;
+  text-align: center;
+}
+.titre h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ccc;
+}
+.titre h1 {
+  margin: 5px 0 0;
+  font-size: 33px;
+  color: #fff;
+}
+
+/* CONTROLES */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin: 15px 0 10px;
+}
+.controls button,
+.volume-toggle {
+  background: transparent;
+  border: none;
+  color: #5bbb95;
+  font-family: FontAwesome;
+  cursor: pointer;
+  z-index: 20;
+}
+.play:before {
+  content: "\f04b";
+}
+.pause:before {
+  content: "\f04c";
+}
+.btn-play {
+  font-size: 22px;
+}
+.volume-toggle {
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+
+/* SLIDER VOLUMEN */
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  width: auto;
+}
+.volume-slider {
+  height: 16px;
+  width: 120px;
+  background: transparent;
+  position: relative;
+  flex: 0 0 auto;
+  appearance: none;
+}
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  border: none;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  border: none;
+}
+
+.volume-slider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, #5bbb95 var(--vol, 100%), rgba(255, 255, 255, 0.15) var(--vol, 100%));
+  border-radius: 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* TIMELINE */
+.progress-container {
+  width: 80%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  margin: 0 auto 10px;
+  position: relative;
+}
+.progress {
+  background: #5bbb95;
+  height: 8px;
+  border-radius: 50px;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+.time {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10%;
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/*--------------------------------------------
+---------------- VIDEOS ---------------------
+--------------------------------------------*/
+
+/* Ajuste del tamaño del video e imagen de preview */
+.masonry-item.video .image,
+.masonry-item.video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none; /* Sin fondo */
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5; /* más alto que el overlay */
+  color: white;
+  font-size: 36px;
+  transition: transform 0.5s;
+}
+.hover-container:hover .play-button {
+  opacity: 0;
+}
+
+/*--------------------------------------------
+---------------- GALERIA ---------------------
+--------------------------------------------*/
+
+/* Estilos básicos para el overlay */
+.hover-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Nueva capa de zoom de fondo */
+.hover-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+  background-image: var(--bg);
+}
+
+/* Cuando pasas el mouse, hace el zoom */
+.hover-container:hover::before {
+  transform: scale(1.05);
+}
+
+.hover-container .image {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+
+}
+.hover-container .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  cursor: pointer;
+}
+.hover-container:hover .overlay {
+  opacity: 1;
+}
+.hover-container:hover .image {
+  transform: scale(1.02);
+}
+.overlay-actions {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Botones transparentes */
+.action-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  font-size: 1.1rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+/* Animacion iconos mg y guardados */
+.action-btn:hover {
+  transform: scale(1.15);
+}
+
+/* Contenedor de botones */
+.overlay-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Título */
+.overlay-title {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  left: auto;
+  transform: none;
+  color: rgba(255,255,255,0.8); /* Blanco semi-transparente */
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: right;
+  padding: 4px 8px;
+}
+
+/* Contenedor del botón abajo a la izquierda */
+.overlay-user-wrapper {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* para que no interfiera con hover si es necesario */
+}
+
+.hover-container:hover .overlay-user-wrapper {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Botón mínimo transparente */
+.user-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none !important;  /* Asegura que no haya fondo */
+  border: none !important;      /* Asegura que no haya bordes */
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* Al pasar el ratón, solo agranda */
+.user-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Imagen de usuario redonda y tamaño fijo */
+.user-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* Texto alineado a la derecha */
+.user-name {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px !important;
+  height: auto;
+  opacity: 0.3; /* nivel de transparencia */
+  pointer-events: none; /* para que no bloquee clics */
+  z-index: 2; /* debajo del overlay, encima de la imagen */
+}
+
+.preview-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.preview-item .image {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease;
+}
+
+.preview-item .hover-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.preview-item:hover .hover-video {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.preview-item .preview-img {
+  position: relative;
+  z-index: 0;
+}
+
+.preview-item .play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+}
+
+.preview-item:hover .play-button {
+  opacity: 0;
+}
+
+.preview-item .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease;
+}
+
+.preview-item:hover .overlay {
+  opacity: 1;
+}
+
+.music-player .actions-aud {
+  display: flex;
+  justify-content: center;  /* centra horizontalmente */
+  gap: 1.5rem;              /* separación entre botones */
+  margin-top: 0.5rem;
+}
 
 
+.music-player .actions-aud button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: var(--accent-color);
+  display: inline-flex; /* importante para centrar bien el icono */
+  align-items: center;
+  justify-content: center;
+
+}
+
+.music-player .actions-aud button i {
+  pointer-events: none;
+  transition: transform 0.2s, color 0.2s;
+  display: inline-block; /* hace que el scale no empuje */
+}
+
+.music-player .actions-aud button:hover {
+  transform: scale(1.15);
+  color:var(--accent-color); /* o cualquier tono de verde que prefieras */
+}
+
+/*--------------------------------------------
+---------------- MODELO 3D -------------------
+--------------------------------------------*/
+
+.visor3d {
+  background: linear-gradient(to bottom, rgba(10,11,31,0.9) 50%, rgb(10,11,31) 70%);
+}
+
+/*--------------------------------------------
+---------------- Comentarios -----------------
+--------------------------------------------*/
+
+.listaComentarios {
+  overflow-y: auto;
+  max-height: 400px;
+}

@@ -1,0 +1,21 @@
+package com.atm.buenas_practicas_java.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class ContenidoSubidoDTO {
+    private Integer id;
+    private String titulo;
+    private String formato;
+    private String url;
+    private String urlPortada;
+    private String nicknameCreador;
+    private String avatarCreador; // Si tienes avatar
+    private long totalLikes;
+}

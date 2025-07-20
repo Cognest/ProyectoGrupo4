@@ -456,75 +456,9 @@
             margin: 0;
         }
 
-
-        /* Ajuste del tamaño del video e imagen de preview */
-        .masonry-item.video .image,
-        .masonry-item.video video {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            margin: 0;
-        }
-
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: none; /* Sin fondo */
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 5; /* más alto que el overlay */
-            color: white;
-            font-size: 36px;
-            transition: transform 0.5s;
-        }
-        .hover-container:hover .play-button {
-            opacity: 0;
-        }
-
-        .music-player .actions-aud {
-            display: flex;
-            justify-content: center;  /* centra horizontalmente */
-            gap: 1.5rem;              /* separación entre botones */
-            margin-top: 0.5rem;
-        }
-
-
-        .music-player .actions-aud button {
-            position: relative;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.4rem;
-            color: var(--accent-color);
-            display: inline-flex; /* importante para centrar bien el icono */
-            align-items: center;
-            justify-content: center;
-
-        }
-
-        .music-player .actions-aud button i {
-            pointer-events: none;
-            transition: transform 0.2s, color 0.2s;
-            display: inline-block; /* hace que el scale no empuje */
-        }
-
         .music-player .actions-aud button i.filled {
             opacity: 0;
             transition: transform 0.2s ease;
-        }
-
-        .music-player .actions-aud button:hover {
-            transform: scale(1.15);
-            color:var(--accent-color); /* o cualquier tono de verde que prefieras */
         }
 
         .music-player .actions-aud button:hover i.outline {
@@ -729,7 +663,7 @@
                     <!--                VÍDEOS-->
                     <div class="filterDiv select-vid preview-item"
                          data-type="video"
-                         data-src="/assets/img/videos/carretera.mp4"
+                         data-src="https://cdn.pixabay.com/video/2025/06/03/283533_large.mp4"
                          data-title="Carretera"
                          data-user="@usuario"
                          data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
@@ -766,180 +700,9 @@
             </div>
         </div>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const items = document.querySelectorAll(".preview-item[data-type='video']");
-                let pending = items.length;
-
-                if (pending === 0) {
-                    // No hay vídeos, inicializa directamente
-                    initPreviews();
-                } else {
-                    items.forEach(item => {
-                        const src = item.dataset.src;
-
-                        const video = document.createElement("video");
-                        video.src = src;
-                        video.crossOrigin = "anonymous";
-                        video.preload = "metadata";
-                        video.muted = true;
-                        video.playsInline = true;
-
-                        video.addEventListener("loadeddata", () => {
-                            video.currentTime = 0.1;
-                        });
-
-                        video.addEventListener("seeked", () => {
-                            const canvas = document.createElement("canvas");
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            const ctx = canvas.getContext("2d");
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const dataURL = canvas.toDataURL("image/png");
-
-                            // Sustituye data-poster por base64
-                            item.dataset.poster = dataURL;
-
-                            pending--;
-                            if (pending === 0) {
-                                // Cuando terminen todos, inicializa
-                                initPreviews();
-                            }
-                        });
-                    });
-                }
-            });
-        </script>
 
 
-        <script>
-            function initPreviews() {
-                const items = document.querySelectorAll(".preview-item");
 
-                items.forEach(item => {
-                    const type = item.dataset.type;
-                    const src = item.dataset.src;
-                    const poster = item.dataset.poster;
-                    const title = item.dataset.title;
-                    const user = item.dataset.user;
-                    const avatar = item.dataset.avatar;
-                    const model = item.dataset.model;
-
-                    const container = document.createElement("div");
-                    container.className = "masonry-item hover-container";
-                    if (type === "video") {
-                        container.classList.add("video");
-                    }
-                    if (type === "3d") {
-                        container.classList.add("tresd");
-                    }
-
-                    const img = document.createElement("img");
-                    img.className = "image";
-                    img.alt = title || "";
-                    img.src = (type === "video" && poster) ? poster : src;
-
-                    let watermark = null;
-                    if (type === "image" || type === "video") {
-                        watermark = document.createElement("img");
-                        watermark.className = "watermark";
-                        watermark.src = "/assets/img/logos/logoBlanco.png";
-                        watermark.alt = "Marca de agua";
-                    }
-
-
-                    let playButton = null;
-                    if (type === "video") {
-                        playButton = document.createElement("button");
-                        playButton.className = "play-button";
-                        playButton.innerHTML = '<i class="fa fa-play"></i>';
-                        playButton.onclick = function() {
-                        };
-                    }
-
-                    if (type === "3d") {
-                        img.style.cursor = "pointer";
-                        img.addEventListener("click", function() {
-                            alert("Aquí se cargará el modelo 3D: " + model);
-                        });
-                    }
-
-                    const overlay = document.createElement("div");
-                    overlay.className = "overlay";
-                    const actions = document.createElement("div");
-                    actions.className = "overlay-actions";
-                    actions.innerHTML = `
-      <button class="action-btn"><i class="bi bi-heart"></i></button>
-      <button class="action-btn"><i class="bi bi-bookmark"></i></button>
-    `;
-                    const overlayTitle = document.createElement("div");
-                    overlayTitle.className = "overlay-title";
-                    overlayTitle.textContent = title || "";
-
-                    const userDiv = document.createElement("div");
-                    userDiv.className = "overlay-user";
-                    userDiv.innerHTML = `
-      <button class="user-btn">
-        <img src="${avatar}" alt="Foto usuario" class="user-avatar">
-        <span class="user-name">${user}</span>
-      </button>
-    `;
-
-                    overlay.appendChild(actions);
-                    overlay.appendChild(userDiv);
-                    overlay.appendChild(overlayTitle);
-
-                    let video = null;
-                    if (type === "video") {
-                        video = document.createElement("video");
-                        video.muted = true;
-                        video.playsInline = true;
-                        video.loop = true;
-                        video.preload = "metadata";
-                        video.controls = false; // nunca mostrar controles
-                        video.className = "image";
-                        video.style.position = "absolute";
-                        video.style.top = "0";
-                        video.style.left = "0";
-                        video.style.width = "100%";
-                        video.style.height = "100%";
-                        video.style.borderRadius = "6px";
-                        video.style.opacity = "0";
-                        video.style.pointerEvents = "none";
-                        video.style.transition = "opacity 0.2s ease";
-
-                        const source = document.createElement("source");
-                        source.src = src;
-                        source.type = "video/mp4";
-                        video.appendChild(source);
-
-                        container.addEventListener("mouseenter", function() {
-                            video.style.opacity = "1";
-                            video.play();
-                        });
-
-                        container.addEventListener("mouseleave", function() {
-                            video.pause();
-                            video.currentTime = 0;
-                            video.style.opacity = "0";
-                        });
-
-                        container.style.position = "relative";
-                    }
-
-                    container.appendChild(img);
-                    if (watermark) container.appendChild(watermark);
-                    if (video) container.appendChild(video);
-                    if (playButton) container.appendChild(playButton);
-                    container.appendChild(overlay);
-
-                    item.appendChild(container);
-                });
-
-                initButtonListeners();
-            }
-
-        </script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -965,40 +728,8 @@
             });
         </script>
 
-<!--        Script para botones mg y guardados-->
-        <script>
-            function initButtonListeners() {
-                const allButtons = document.querySelectorAll(
-                    ".music-player .actions-aud button, .hover-container .action-btn"
-                );
 
-                allButtons.forEach(button => {
-                    button.addEventListener("click", function(event) {
-                        // Evita propagación en overlays
-                        if (button.closest(".hover-container")) {
-                            event.stopPropagation();
-                        }
 
-                        const icon = this.querySelector("i");
-                        if (!icon) return;
-
-                        if (icon.classList.contains("bi-heart")) {
-                            icon.classList.remove("bi-heart");
-                            icon.classList.add("bi-heart-fill");
-                        } else if (icon.classList.contains("bi-heart-fill")) {
-                            icon.classList.remove("bi-heart-fill");
-                            icon.classList.add("bi-heart");
-                        } else if (icon.classList.contains("bi-bookmark")) {
-                            icon.classList.remove("bi-bookmark");
-                            icon.classList.add("bi-bookmark-fill");
-                        } else if (icon.classList.contains("bi-bookmark-fill")) {
-                            icon.classList.remove("bi-bookmark-fill");
-                            icon.classList.add("bi-bookmark");
-                        }
-                    });
-                });
-            }
-        </script>
         <script type="module" src="/assets/js/modelos.js" defer></script>
     </div>
 </div>

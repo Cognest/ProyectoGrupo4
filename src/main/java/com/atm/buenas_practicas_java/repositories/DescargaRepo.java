@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DescargaRepo extends JpaRepository<Descarga, Integer> {
+    Integer countByUsuarioContenidoContenidoId(Integer contenidoId);
 }

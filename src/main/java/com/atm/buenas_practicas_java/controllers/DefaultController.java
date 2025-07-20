@@ -2,18 +2,19 @@ package com.atm.buenas_practicas_java.controllers;
 
 
 import com.atm.buenas_practicas_java.config.CustomUserDetails;
-import com.atm.buenas_practicas_java.entities.Prueba;
-import com.atm.buenas_practicas_java.entities.Usuario;
-import com.atm.buenas_practicas_java.services.EntidadHijaService;
-import com.atm.buenas_practicas_java.services.EntidadPadreService;
+import com.atm.buenas_practicas_java.dtos.ContenidoDto;
+import com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO;
+import com.atm.buenas_practicas_java.entities.*;
+import com.atm.buenas_practicas_java.repositories.*;
+import com.atm.buenas_practicas_java.services.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,12 +22,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.File;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controlador encargado de manejar las solicitudes relacionadas con la entidad principal.
@@ -54,6 +57,33 @@ import java.util.Map;
 @Controller
 public class DefaultController {
 
+    @Autowired
+    private ContenidoRepo contenidoRepo;
+
+    @Autowired
+    private UsuarioRepo usuarioRepo;
+
+    @Autowired
+    private LikeRepo likeRepo;
+
+    @Autowired
+    private DescargaRepo descargaRepo;
+
+    @Autowired
+    private ComentarioRepo comentarioRepo;
+
+    @Autowired
+    private EtiquetaContenidoRepo etiquetaContenidoRepo;
+
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private GuardadoService guardadoService;
+
+    @Autowired
+    private GuardadoRepo guardadoRepo;
+
     private final EntidadHijaService entidadHijaService;
     private final EntidadPadreService entidadPadreService;
     private final List<Map<String, Object>> planes = List.of(
@@ -62,6 +92,8 @@ public class DefaultController {
             Map.of("id", 3, "nombre", "Avanzado", "precio", 39.99, "tokens", 5000),
             Map.of("id", 4, "nombre", "Experto", "precio", 99.99, "tokens", 13500)
     );
+    @Autowired
+    private CarteraRepo carteraRepo;
 
     /**
      * Constructor de la clase DefaultController.
@@ -136,20 +168,30 @@ public class DefaultController {
     }
 
     @GetMapping("/")
-    public String mostrarHome(Model model)
+    public String mostrarHome(Model model, Principal principal)
     {
-        List<String> imagenes = List.of(
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-        );
+        List<ContenidoSubidoDTO> contenidos = contenidoRepo.findAllOrderByLikes();
+        model.addAttribute("contenidos", contenidos);
 
-        model.addAttribute("imagenes", imagenes);
+        if (principal != null) {
+            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+
+            // IDs de contenido con like o guardado
+            Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
+                    .map(like -> like.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            Set<Integer> guardadosIds = guardadoRepo.findByUsuario(usuario).stream()
+                    .map(guardado -> guardado.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("likesIds", likesIds);
+            model.addAttribute("guardadosIds", guardadosIds);
+        } else {
+            model.addAttribute("likesIds", Set.of());
+            model.addAttribute("guardadosIds", Set.of());
+        }
+
         return "index"; // View name
     }
 
@@ -161,10 +203,11 @@ public class DefaultController {
     }
 
 
-    @GetMapping("/vista-usuario")
-    public String vistaUsuario(Model model) {
-        List<String> usuariosConectados = List.of("Juan", "María", "Lucas", "Ana");
-        model.addAttribute("usuariosConectados", usuariosConectados);
+    @GetMapping("/usuario/{nickname}")
+    public String vistaUsuario(@PathVariable String nickname, Model model) {
+        Usuario usuario = usuarioRepo.findByNickname(nickname).get();
+
+        model.addAttribute("usuario", usuario);
         return "vistaUsuario"; // nombre del HTML
     }
     @GetMapping("/reportes")
@@ -205,8 +248,8 @@ public class DefaultController {
         return "modelosPrueba";
     }
 
-    @GetMapping("/imagenes/{id}")
-    public String mostrarImagen(@PathVariable("id") String id, ModelMap interfazConPantalla){
+    @GetMapping("/contenido/{nickname}/{id}")
+    public String mostrarContenido(@PathVariable String nickname, @PathVariable("id") Integer id, Model interfazConPantalla, Principal principal){
         System.out.println("Entro en servicios con id");
         Prueba prueba = new Prueba();
         prueba.setId(1);
@@ -214,22 +257,124 @@ public class DefaultController {
         prueba.setNum_descargas(145);
         prueba.setNota(6);
 
-        List<String> imagenes = List.of(
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-        );
+        Contenido contenido = contenidoRepo.findById(id).get();
+        Usuario autor = usuarioRepo.findByNickname(nickname).get(); // Este es el dueño del contenido
+
+        // Likes
+        Integer numLikes = likeRepo.countByContenidoId(id);
+        // Descargas
+        Integer numDescargas = descargaRepo.countByUsuarioContenidoContenidoId(id);
+        // Comentarios
+        List<Comentario> comentarios = comentarioRepo.findByContenidoIdOrderByFechaAsc(id);
+        // Etiquetas
+        List<EtiquetaContenido> etiquetaContenidos = etiquetaContenidoRepo.findByContenidoId(id);
+        List<Etiqueta> etiquetas = etiquetaContenidos.stream()
+                .map(EtiquetaContenido::getEtiqueta)
+                .collect(Collectors.toList());
 
         interfazConPantalla.addAttribute("prueba", prueba);
-        interfazConPantalla.addAttribute("imagen",id);
-        interfazConPantalla.addAttribute("imagenes", imagenes);
+        interfazConPantalla.addAttribute("contenido", contenido);
+        interfazConPantalla.addAttribute("likes", numLikes);
+        interfazConPantalla.addAttribute("descargas", numDescargas);
+        interfazConPantalla.addAttribute("comentarios", comentarios);
+        interfazConPantalla.addAttribute("etiquetas", etiquetas);
+        interfazConPantalla.addAttribute("usuario", autor); // Se sigue usando como "autor del contenido"
+
+        List<ContenidoSubidoDTO> galeria = contenidoRepo.findAllOrderByLikesExcludingId(id);
+        interfazConPantalla.addAttribute("galeria", galeria);
+
+        if (principal != null) {
+            Usuario usuarioLogueado = usuarioRepo.findByNickname(principal.getName()).get();
+            boolean haDadoLike = likeService.usuarioHaDadoLike(contenido, usuarioLogueado);
+            boolean estaGuardado = guardadoService.estaGuardadoPorUsuario(contenido, usuarioLogueado);
+
+            // IDs de contenido con like o guardado
+            Set<Integer> likesIds = likeRepo.findByUsuario(usuarioLogueado).stream()
+                    .map(like -> like.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            Set<Integer> guardadosIds = guardadoRepo.findByUsuario(usuarioLogueado).stream()
+                    .map(guardado -> guardado.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            interfazConPantalla.addAttribute("likesIds", likesIds);
+            interfazConPantalla.addAttribute("guardadosIds", guardadosIds);
+            interfazConPantalla.addAttribute("estaGuardado", estaGuardado);
+            interfazConPantalla.addAttribute("haDadoLike", haDadoLike);
+            interfazConPantalla.addAttribute("usuarioLogueado", usuarioLogueado);
+        } else {
+            interfazConPantalla.addAttribute("haDadoLike", false);
+            interfazConPantalla.addAttribute("estaGuardado", false);
+            interfazConPantalla.addAttribute("likesIds", Set.of());
+            interfazConPantalla.addAttribute("guardadosIds", Set.of());
+        }
+
         return "detallesContenido";
     }
+
+    @PostMapping("/comentarios")
+    @ResponseBody
+    public ResponseEntity<?> guardarComentario(@RequestParam Integer contenidoId,
+                                               @RequestParam String mensaje,
+                                               Principal principal) {
+
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("El comentario no puede estar vacío.");
+        }
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get(); // o por username
+        Contenido contenido = contenidoRepo.findById(contenidoId).orElse(null);
+
+        Comentario comentario = new Comentario();
+        comentario.setUsuario(usuario);
+        comentario.setContenido(contenido);
+        comentario.setMensaje(mensaje);
+        comentario.setFecha(LocalDateTime.now());
+
+        comentarioRepo.save(comentario);
+
+        // Respuesta parcial con datos útiles
+        Map<String, Object> result = new HashMap<>();
+        result.put("nickname", usuario.getNickname());
+        result.put("avatar", usuario.getAvatar());
+        result.put("mensaje", mensaje);
+        result.put("fecha", LocalDateTime.now().toString());
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/like")
+    @ResponseBody
+    public ResponseEntity<?> likeContenido(@RequestParam Integer contenidoId, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        boolean nuevoLike = likeService.toggleLike(contenidoId, usuario);
+
+        int totalLikes = likeService.countLikes(contenidoId);
+
+        return ResponseEntity.ok(Map.of(
+                "liked", nuevoLike,
+                "totalLikes", totalLikes
+        ));
+    }
+
+    @PostMapping("/guardar")
+    @ResponseBody
+    public ResponseEntity<?> guardarContenido(@RequestParam Integer contenidoId, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        Contenido contenido = contenidoRepo.findById(contenidoId).orElse(null);
+        boolean guardado = guardadoService.toggleGuardar(contenido, usuario);
+
+        return ResponseEntity.ok(Map.of("guardado", guardado));
+    }
+
 
     @GetMapping("/planes")
     public String mostrarPlanPrecios(Model model)
@@ -257,8 +402,8 @@ public class DefaultController {
                                @RequestParam String nombreTitular,
                                @RequestParam String cvv,
                                @RequestParam String exp,
-                               Model model/*,
-                               Principal principal*/) {
+                               Model model,/*,
+                               Principal principal*/Principal principal) {
 
         Map<String, Object> plan = planes.stream()
                 .filter(p -> (int) p.get("id") == planId)
@@ -276,72 +421,37 @@ public class DefaultController {
 
         int tokens = (int) plan.get("tokens");
 
-        // Aquí actualizarías los tokens del usuario
-        // Ejemplo:
-//        User user = userService.findByUsername(principal.getName());
-//        user.setTokens(user.getTokens() + tokens);
-//        userService.save(user);
+        // Actualizar los tokens del usuario
+        Usuario user = usuarioRepo.findByNickname(principal.getName()).get();
+        System.out.println("Mis tokens: " + user.getToken());
+        user.setToken(user.getToken() + tokens);
+        System.out.println("Mis tokens actualizado: " + user.getToken());
+        usuarioRepo.save(user);
+
+        //Crear registro Cartera
+        Cartera cartera = new Cartera();
+        cartera.setCantidad(tokens);
+        cartera.setFecha(LocalDateTime.now());
+        cartera.setOperacion("ingreso");
+        cartera.setSaldoActual(user.getToken());
+        cartera.setUsuario(user);
+        carteraRepo.save(cartera);
 
         model.addAttribute("mensaje", "Pago exitoso. Recibiste " + tokens + " tokens.");
         return "pagoExitoso";
     }
 
-
-    @GetMapping("/subir-contenido")
-    public String mostrarSubidaContenido(Model model)
-    {
-        return "subirContenido"; // View name
-    }
-
-    @PostMapping("/subir-contenido")
-    public String subirContenido(@RequestParam("file") MultipartFile file,
-                                 @RequestParam("tipo") String tipo,
-                                 @AuthenticationPrincipal CustomUserDetails usuarioAutenticado,
-                                 RedirectAttributes redirectAttributes) {
-        try {
-            String filename = file.getOriginalFilename();
-            if (filename == null || !esExtensionPermitida(filename, tipo)) {
-                redirectAttributes.addFlashAttribute("error", "Tipo de archivo no permitido para el tipo seleccionado.");
-                return "redirect:/subir-contenido";
-            }
-
-            // Asegura que el directorio exista
-            String nickname = usuarioAutenticado.getUsername();
-            String basePath = "/uploads/" + tipo + "/" + nickname;
-            File directory = new File(basePath);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Guarda el archivo
-            Path filepath = Paths.get(basePath, file.getOriginalFilename());
-            Files.write(filepath, file.getBytes());
-
-            redirectAttributes.addFlashAttribute("success", "Archivo subido exitosamente.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al subir el archivo: " + e.getMessage());
+    @GetMapping("/api/tokens")
+    @ResponseBody
+    public ResponseEntity<Integer> getTokensUsuario(Principal principal) {
+        if (principal != null) {
+            int tokens = usuarioRepo.findByNickname(principal.getName())
+                    .map(Usuario::getToken)
+                    .orElse(0);
+            return ResponseEntity.ok(tokens);
         }
-
-        return "redirect:/subir-contenido"; // Volvemos a la página del formulario
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
-    private boolean esExtensionPermitida(String filename, String tipo) {
-        if (filename == null || !filename.contains(".")) return false;
-
-        String extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
-        tipo = tipo.toLowerCase().trim();
-
-        System.out.println("🧪 Validando archivo: " + filename + " | tipo: " + tipo + " | extensión: " + extension);
-
-        return switch (tipo) {
-            case "imagenes" -> List.of("jpg", "jpeg", "png", "gif").contains(extension);
-            case "videos" -> List.of("mp4", "mov").contains(extension);
-            case "audios" -> List.of("mp3", "wav").contains(extension);
-            case "modelos3d", "modelos", "3d" -> List.of("glb").contains(extension);
-            default -> false;
-        };
-    }
-
 
     @GetMapping("/usuarios-bloqueados")
     public String mostrarUsuariosBloqueados(Model model)
@@ -375,7 +485,14 @@ public class DefaultController {
     }
 
     @GetMapping("/cartera")
-    public String pantallaCartera(Model model) {
+    public String pantallaCartera(Model model, Principal principal) {
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        List<Cartera> carteras = carteraRepo.findAllByUsuarioOrderByFechaDesc(usuario);
+
+        model.addAttribute("carteras", carteras);
+        model.addAttribute("usuario", usuario);
+
         return "cartera";
     }
 }

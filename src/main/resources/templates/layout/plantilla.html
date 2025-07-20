@@ -30,6 +30,7 @@
 
     <!-- Main CSS File -->
     <link th:href="@{/assets/css/main.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <!-- =======================================================
     * Template Name: Mentor
@@ -107,7 +108,7 @@
                 <!-- Si está autenticado -->
                 <li class="nav-buttons" sec:authorize="isAuthenticated()">
                     <a th:href="@{/cartera}" class="wallet-button">
-                        <i class="bi bi-wallet2 fw-bold me-1"> 1000Tk</i>
+                        <i id="token-counter" class="bi bi-wallet2 fw-bold me-1" th:text="' ' + ${tokensUsuario + ' Tk'}">0Tk</i>
                     </a>
                 </li>
 
@@ -120,11 +121,11 @@
                     </a>
                 </li>
                 <li class="nav-buttons" sec:authorize="isAuthenticated()">
-                    <a th:href="@{/vista-usuario}">
-                <span class="btn-getstarted">
-                    <i class="bi bi-person-circle me-1"></i>
-                    <span th:text="${#authentication.name}">Usuario</span>
-                </span>
+                    <a th:href="@{'/usuario/' + ${#authentication.name}}">
+                        <span class="btn-getstarted">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span th:text="${#authentication.name}">Usuario</span>
+                        </span>
                     </a>
                 </li>
                 <li class="nav-buttons" sec:authorize="isAuthenticated()">
@@ -138,38 +139,6 @@
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
-
-        <!--        &lt;!&ndash; Si no está autenticado &ndash;&gt;-->
-        <!--        <div sec:authorize="isAnonymous()">-->
-        <!--            <a class="btn-getstarted" th:href="@{/iniciar-sesion}">Iniciar sesión</a>-->
-        <!--        </div>-->
-
-        <!--        &lt;!&ndash; Si está autenticado &ndash;&gt;-->
-        <!--        <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2 ms-5">-->
-
-        <!--            <a th:href="@{/cartera}">-->
-        <!--            <i class="bi bi-wallet2 fw-bold me-1"> 1000Tk</i>-->
-        <!--            </a>-->
-        <!--            <a th:href="@{/planes}">-->
-        <!--            <span class="btn-getstarted">-->
-        <!--                    <i class="bi bi-coin me-1"></i>-->
-        <!--                    <span>Recargar</span>-->
-        <!--                </span>-->
-        <!--            </a>-->
-
-        <!--            <a th:href="@{/vista-usuario}">-->
-        <!--                <span class="btn-getstarted">-->
-        <!--                    <i class="bi bi-person-circle me-1"></i>-->
-        <!--                    <span th:text="${#authentication.name}">Usuario</span>-->
-        <!--                </span>-->
-        <!--            </a>-->
-        <!--            <form th:action="@{/logout}" method="post" style="display:inline;">-->
-        <!--                <span class="btn-getstarted">-->
-        <!--                    <i class="bi bi-box-arrow-right me-1"></i>-->
-        <!--                </span>-->
-        <!--            </form>-->
-        <!--        </div>-->
-
     </div>
 </header>
 
@@ -212,6 +181,8 @@
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/js/audios.js}"></script>
 <script th:src="@{/assets/js/waterMark.js}"></script>
+<script th:src="@{/assets/js/videos.js}"></script>
+<script th:src="@{/assets/js/likesYGuardados.js}"></script>
 
 </body>
 

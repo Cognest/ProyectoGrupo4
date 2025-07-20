@@ -20,5 +20,4 @@ public class UsuarioContenidoDto {
     private String tipo;
     private boolean guardado;
     private Integer precio;
-    private LocalDate fecha_venta;
 }

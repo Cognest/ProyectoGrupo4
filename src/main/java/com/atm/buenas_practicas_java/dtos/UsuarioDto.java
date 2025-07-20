@@ -20,9 +20,11 @@ public class UsuarioDto {
     private String email;
     private String password;
     private Integer token;
+    private String avatar;
     private List<UsuarioContenido> usuarioContenidos;
     private List<Comentario> comentarios;
     private List<Like> likes;
+    private List<Guardado> guardados;
     private List<Reporte> reportes;
     private List<UsuarioBloqueado> bloqueados;
     private List<UsuarioBloqueado> bloqueadores;

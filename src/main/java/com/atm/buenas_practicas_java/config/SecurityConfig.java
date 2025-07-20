@@ -104,7 +104,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**").permitAll()
+                    .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**", "/archivos/**", "/contenido/**", "/usuario/*").permitAll()
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
                     .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
                     .anyRequest().authenticated()

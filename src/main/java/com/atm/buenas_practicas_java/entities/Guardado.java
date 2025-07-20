@@ -6,16 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "cartera")
-public class Cartera {
+@Table(name = "guardados")
+public class Guardado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,15 +21,7 @@ public class Cartera {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false)
-    private Integer cantidad;
-
-    @Column(name = "saldo_actual", nullable = false)
-    private Integer saldoActual;
-
-    @Column(nullable = false, length = 20)
-    private String operacion;
-
-    @Column(nullable = false)
-    private LocalDateTime fecha;
+    @ManyToOne
+    @JoinColumn(name = "id_contenido", nullable = false)
+    private Contenido contenido;
 }

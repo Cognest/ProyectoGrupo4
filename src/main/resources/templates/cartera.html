@@ -46,7 +46,7 @@
         <div class="row">
             <!-- Sidebar izquierda -->
             <div class="col-md-3 sidebar-guardados">
-                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto de perfil">
+                <img th:src="${usuario.avatar}" alt="Foto de perfil">
                 <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
                 <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
                 <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
@@ -57,7 +57,7 @@
                 <div class="p-4">
                     <!-- Saldo actual y botones -->
                     <div class="d-flex flex-wrap align-items-center mb-4">
-                        <h2 class="mb-0 me-5 saldo-actual">SALDO ACTUAL: <span>1000 Tk</span></h2>
+                        <h2 class="mb-0 me-5 saldo-actual">SALDO ACTUAL: <span th:text="${usuario.token + 'Tk'}">0 Tk</span></h2>
                         <div class="d-flex flex-wrap gap-3">
                             <a th:href="@{/planes}"> <button class="btn btn-saldo">Recargar</button> </a>
                             <button class="btn btn-saldo">Retirar</button>
@@ -65,81 +65,18 @@
                     </div>
 
                     <!-- Historial -->
-                    <!-- Historial -->
                     <h4 class="mb-3 fw-bold">Historial</h4>
                     <div class="scrollable-history">
-                        <div class="list-group">
-                            <div class="list-group">
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">15/07/2025</span>
-                                        <span>Realizaste una compra por un total de: -900 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1000 Tk</strong>
+                        <div class="list-group" th:each="cartera : ${carteras}">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-2" th:switch="${cartera.operacion}">
+                                    <span class="small fst-italic text-muted" th:text="${#temporals.format(cartera.fecha, 'dd/MM/yyyy, HH:mm:ss')}">15/07/2025</span>
+                                    <span th:case="compra" th:text="${'Realizaste una compra por un total de: -' + cartera.cantidad + 'Tk'}"></span>
+                                    <span th:case="venta" th:text="${'Realizaste una venta por un total de: +' + cartera.cantidad + 'Tk'}"></span>
+                                    <span th:case="ingreso" th:text="${'Ingresaste un total de: +' + cartera.cantidad + 'Tk'}"></span>
+                                    <span th:case="retirada" th:text="${'Retiraste un total de: -' + cartera.cantidad + 'Tk'}"></span>
                                 </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">15/07/2025</span>
-                                        <span>Realizaste una venta por un total de: +900 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1900 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">14/07/2025</span>
-                                        <span>Ingresaste un total de: +1000 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1000 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">12/07/2025</span>
-                                        <span>Retiraste un total de: -1000 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 0 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">12/07/2025</span>
-                                        <span>Realizaste una compra por un total de: -800 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1000 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">11/07/2025</span>
-                                        <span>Realizaste una venta por un total de: +200 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1800 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">07/07/2025</span>
-                                        <span>Realizaste una compra por un total de: -300 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1600 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">07/07/2025</span>
-                                        <span>Ingresaste un total de: +1000 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1900 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">06/07/2025</span>
-                                        <span>Realizaste una compra por un total de: -100 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 900 Tk</strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex gap-2">
-                                        <span class="small fst-italic text-muted">05/07/2025</span>
-                                        <span>ingresaste un total de: +1000 Tk</span>
-                                    </div>
-                                    <strong>Saldo: 1000 Tk</strong>
-                                </div>
+                                <strong th:text="${'Saldo: ' + cartera.saldoActual + 'Tk'}"></strong>
                             </div>
                         </div>
                     </div>

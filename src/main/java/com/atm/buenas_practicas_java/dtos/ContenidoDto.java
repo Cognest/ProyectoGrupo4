@@ -14,14 +14,17 @@ import java.util.List;
 @Setter
 public class ContenidoDto {
     private Integer id;
+    private String titulo;
     private String descripcion;
     private String formato;
     private Integer precio;
     private String ubicacion;
     private String url;
+    private String urlPortada;
     private List<UsuarioContenido> usuarioContenidos;
     private List<Comentario> comentarios;
     private List<Like> likes;
+    private List<Guardado> guardados;
     private List<Reporte> reportes;
-    private List<EtiquetaContenido> etiquetas;
+//    private List<EtiquetaContenido> etiquetas;
 }

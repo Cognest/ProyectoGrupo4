@@ -32,7 +32,7 @@
             </div>
 
 
-            <form method="post" enctype="multipart/form-data" action="/subir-contenido">
+            <form method="post" enctype="multipart/form-data" th:action="@{/subir-contenido}" th:object="${contenido}">
                 <!-- Sección: Información del archivo -->
                 <h5 class="section-title-publish fw-bold">Información del archivo</h5>
 
@@ -40,7 +40,7 @@
                     <label class="form-label fw-bold">Título del archivo</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
-                        <input type="text" class="form-control" placeholder="Introduce el título del archivo" required>
+                        <input type="text" name="titulo" th:field="*{titulo}" class="form-control" placeholder="Introduce el título del archivo" required>
                     </div>
                 </div>
 
@@ -48,7 +48,7 @@
                     <label class="form-label fw-bold">Descripción</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                        <textarea class="form-control" rows="3" placeholder="Agrega una breve descripción" required></textarea>
+                        <textarea name="descripcion" th:field="*{descripcion}" class="form-control" rows="3" placeholder="Agrega una breve descripción" required></textarea>
                     </div>
                 </div>
 
@@ -56,8 +56,9 @@
                     <label class="form-label fw-bold">Etiquetas</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-tags"></i></span>
-                        <input type="text" class="form-control" placeholder="Ej: proyecto, informe, pdf" required>
+                        <input type="text" name="etiquetas" class="form-control" placeholder="Ej: proyecto, informe, pdf" pattern="[a-zA-Z0-9_, -]+" required>
                     </div>
+                    <small>Usa letras, números, guiones. Separadas por comas.</small>
                 </div>
 
                 <!-- Sección: Datos adicionales -->
@@ -67,7 +68,7 @@
                     <label class="form-label fw-bold">Precio (€)</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
-                        <input type="number" class="form-control" placeholder="Introduce el precio" min="0" step="0.01" required>
+                        <input type="number" name="precio" th:field="*{precio}" class="form-control" placeholder="Introduce el precio" min="0" step="1" required>
                     </div>
                 </div>
 
@@ -83,13 +84,25 @@
                             <option value="modelos3d">Modelo 3D</option>
                         </select>
                     </div>
+                    <div id="ayuda-extensiones" class="form-text text-muted mt-1" style="display:none;">
+                        Extensiones permitidas:
+                    </div>
+                </div>
+
+                <div class="mb-3" id="portada-container" style="display: none;">
+                    <label class="form-label fw-bold">Imagen de portada</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-image"></i></span>
+                        <input class="form-control" type="file" name="portada" accept="image/*">
+                    </div>
+                    <small class="text-muted">Formatos permitidos: JPG, JPEG, PNG, GIF.</small>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Ubicación</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                        <input type="text" class="form-control" placeholder="Ej: Madrid, España" required>
+                        <input type="text" name="ubicacion" th:field="*{ubicacion}" class="form-control" placeholder="Ej: Madrid, España">
                     </div>
                 </div>
 
@@ -108,6 +121,35 @@
             </form>
         </div>
     </div>
+    <script>
+        const tipoSelect = document.querySelector("select[name='tipo']");
+        const ayudaDiv = document.getElementById("ayuda-extensiones");
+        const portadaContainer = document.getElementById("portada-container");
+
+        const extensionesPorTipo = {
+            imagenes: "jpg, jpeg, png, gif",
+            videos: "mp4, mov",
+            audios: "mp3, wav",
+            modelos3d: "glb"
+        };
+
+        tipoSelect.addEventListener("change", function () {
+            const tipoSeleccionado = tipoSelect.value;
+
+            if (["audios", "modelos3d"].includes(tipoSeleccionado)) {
+                portadaContainer.style.display = "block";
+            } else {
+                portadaContainer.style.display = "none";
+            }
+
+            if (extensionesPorTipo[tipoSeleccionado]) {
+                ayudaDiv.textContent = "Extensiones permitidas: " + extensionesPorTipo[tipoSeleccionado];
+                ayudaDiv.style.display = "block";
+            } else {
+                ayudaDiv.style.display = "none";
+            }
+        });
+    </script>
 </div>
 
 </body>

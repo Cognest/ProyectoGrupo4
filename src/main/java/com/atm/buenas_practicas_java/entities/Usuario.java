@@ -42,6 +42,9 @@ public class Usuario {
     @Column(nullable = false)
     private UserRol rol;
 
+    @Column(nullable = false)
+    private String avatar;
+
     // Relaciones bidireccionales
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioContenido> usuarioContenidos;
@@ -51,6 +54,9 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<Like> likes;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Guardado> guardados;
 
     @OneToMany(mappedBy = "usuario")
     private List<Reporte> reportes;
