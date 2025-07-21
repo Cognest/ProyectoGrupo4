@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,4 +20,5 @@ public class ContenidoSubidoDTO {
     private String nicknameCreador;
     private String avatarCreador; // Si tienes avatar
     private long totalLikes;
+    private LocalDateTime fecha;
 }

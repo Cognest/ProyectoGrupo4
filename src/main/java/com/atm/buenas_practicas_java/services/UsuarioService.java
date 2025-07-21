@@ -44,6 +44,7 @@ public class UsuarioService extends AbstractBusinessService<Usuario, Integer, Us
         usuario.setRol(UserRol.valueOf("USUARIO"));
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setToken(0); // si es necesario
+        usuario.setAvatar("/assets/img/foto-perfil.png");
         System.out.println("🧪 Usuario antes de guardar: " + usuario);
         Usuario usuarioGuardado = usuarioRepo.save(usuario);
         System.out.println("Usuario guardado con ID: {}" + usuarioGuardado.getId());

@@ -119,9 +119,8 @@ public class SubidaController {
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             String tipoRelacion = "Creador";
-            Boolean guardado = false;
 
-            usuarioContenidoService.vincularUsuarioContenido(usuario, contenido, tipoRelacion, guardado);
+            usuarioContenidoService.vincularUsuarioContenido(usuario, contenido, tipoRelacion);
 
             // Crear etiquetas y vincular al contenido
             etiquetaContenidoService.vincularEtiquetaContenido(contenido, etiquetas);

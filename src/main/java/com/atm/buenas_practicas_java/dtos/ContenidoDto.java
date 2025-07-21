@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class ContenidoDto {
     private String ubicacion;
     private String url;
     private String urlPortada;
+    private LocalDateTime fecha;
     private List<UsuarioContenido> usuarioContenidos;
     private List<Comentario> comentarios;
     private List<Like> likes;

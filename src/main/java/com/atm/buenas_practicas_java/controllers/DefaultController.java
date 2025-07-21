@@ -84,6 +84,9 @@ public class DefaultController {
     @Autowired
     private GuardadoRepo guardadoRepo;
 
+    @Autowired
+    private UsuarioContenidoRepo usuarioContenidoRepo;
+
     private final EntidadHijaService entidadHijaService;
     private final EntidadPadreService entidadPadreService;
     private final List<Map<String, Object>> planes = List.of(
@@ -204,10 +207,32 @@ public class DefaultController {
 
 
     @GetMapping("/usuario/{nickname}")
-    public String vistaUsuario(@PathVariable String nickname, Model model) {
-        Usuario usuario = usuarioRepo.findByNickname(nickname).get();
+    public String vistaUsuario(@PathVariable String nickname, Model model, Principal principal) {
+        Usuario autor = usuarioRepo.findByNickname(nickname).get();
 
-        model.addAttribute("usuario", usuario);
+        List<ContenidoSubidoDTO> galeria = usuarioContenidoRepo.findContenidosSubidosPorUsuario(autor);
+        model.addAttribute("galeria", galeria);
+
+        if (principal != null) {
+            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+
+            // IDs de contenido con like o guardado
+            Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
+                    .map(like -> like.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            Set<Integer> guardadosIds = guardadoRepo.findByUsuario(usuario).stream()
+                    .map(guardado -> guardado.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("likesIds", likesIds);
+            model.addAttribute("guardadosIds", guardadosIds);
+        } else {
+            model.addAttribute("likesIds", Set.of());
+            model.addAttribute("guardadosIds", Set.of());
+        }
+
+        model.addAttribute("usuario", autor);
         return "vistaUsuario"; // nombre del HTML
     }
     @GetMapping("/reportes")
@@ -287,6 +312,13 @@ public class DefaultController {
             Usuario usuarioLogueado = usuarioRepo.findByNickname(principal.getName()).get();
             boolean haDadoLike = likeService.usuarioHaDadoLike(contenido, usuarioLogueado);
             boolean estaGuardado = guardadoService.estaGuardadoPorUsuario(contenido, usuarioLogueado);
+            UsuarioContenido usuarioContenido = usuarioContenidoRepo.findByContenidoAndUsuario(contenido, usuarioLogueado);
+
+            String relacion = null;
+
+            if (usuarioContenido != null) {
+                relacion = usuarioContenido.getTipo();
+            }
 
             // IDs de contenido con like o guardado
             Set<Integer> likesIds = likeRepo.findByUsuario(usuarioLogueado).stream()
@@ -302,6 +334,7 @@ public class DefaultController {
             interfazConPantalla.addAttribute("estaGuardado", estaGuardado);
             interfazConPantalla.addAttribute("haDadoLike", haDadoLike);
             interfazConPantalla.addAttribute("usuarioLogueado", usuarioLogueado);
+            interfazConPantalla.addAttribute("relacion", relacion);
         } else {
             interfazConPantalla.addAttribute("haDadoLike", false);
             interfazConPantalla.addAttribute("estaGuardado", false);
@@ -494,5 +527,41 @@ public class DefaultController {
         model.addAttribute("usuario", usuario);
 
         return "cartera";
+    }
+
+    @GetMapping("/carrito")
+    public String pantallaCarrito(Model model, Principal principal) {
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        if (usuario == null) return "redirect:/iniciar-sesion";
+
+        List<UsuarioContenido> carrito = usuarioContenidoRepo.findAllByTipoAndUsuario("Pendiente", usuario);
+        model.addAttribute("carrito", carrito);
+
+        Integer total = carrito.stream()
+                .mapToInt(item -> item.getContenido().getPrecio())
+                .sum();
+
+        model.addAttribute("total", total);
+
+        return "carritoCompra";
+    }
+
+    @PostMapping("/carrito/anadir")
+    public String anadirAlCarrito(@RequestParam Integer contenidoId, Principal principal,
+                                  @RequestHeader(value = "referer", required = false) String referer) {
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        if (usuario == null) return "redirect:/iniciar-sesion";
+
+        Contenido contenido = contenidoRepo.findById(contenidoId).get();
+        UsuarioContenido usuarioContenido = new UsuarioContenido();
+        usuarioContenido.setUsuario(usuario);
+        usuarioContenido.setContenido(contenido);
+        usuarioContenido.setTipo("Pendiente");
+        usuarioContenido.setPrecio(contenido.getPrecio());
+        usuarioContenidoRepo.save(usuarioContenido);
+
+        return "redirect:" + (referer != null ? referer : "/");
     }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -39,6 +40,9 @@ public class Contenido {
 
     @Column(name = "url_portada")
     private String urlPortada;
+
+    @Column(name = "fecha_subida")
+    private LocalDateTime fecha;
 
     // Relaciones bidireccionales
     @OneToMany(mappedBy = "contenido")

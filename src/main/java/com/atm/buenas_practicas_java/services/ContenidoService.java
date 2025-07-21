@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ContenidoService extends AbstractBusinessService<Contenido, Integer, ContenidoDto,
         ContenidoRepo, ContenidoMapper> {
@@ -36,6 +38,7 @@ public class ContenidoService extends AbstractBusinessService<Contenido, Integer
         contenido.setUrl(url);
         contenido.setFormato(tipo);
         contenido.setUrlPortada(urlPortada);
+        contenido.setFecha(LocalDateTime.now());
         contenidoRepo.save(contenido);
 
         return contenido;

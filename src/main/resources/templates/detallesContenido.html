@@ -87,7 +87,22 @@
                 <img th:src="${usuario.avatar}" class="avatar me-3 mt-1">
                 <h3 class="fw-bold" th:text="${usuario.nickname}">user1_</h3>
               </div>
-              <h2 class="d-flex text-center"><a class="w-100 rounded btn-descargar" href="#">Descargar <i class="bi bi-download"></i></a></h2>
+              <th:block th:if="${relacion == null}">
+                <form th:action="@{/carrito/anadir}" method="post">
+                  <input type="hidden" th:name="contenidoId" th:value="${contenido.id}" />
+                  <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-cart-plus me-1"></i> Añadir al carrito
+                  </button>
+                </form>
+              </th:block>
+              <th:block th:if="${relacion == 'Pendiente'}">
+                <div class="alert alert-success mt-3" role="alert">
+                  <strong>✅ Añadido al carrito</strong>
+                </div>
+              </th:block>
+              <th:block th:if="${relacion == 'Adquirido' || relacion == 'Creador'}">
+                <h2 class="d-flex text-center"><a class="w-100 rounded btn-descargar" href="#">Descargar <i class="bi bi-download"></i></a></h2>
+              </th:block>
               <div class="d-flex justify-content-between my-1">
                 <h4>Nº de visitas: </h4>
                 <span class="h4 fw-bold" th:text="${prueba.num_visitas}"></span>

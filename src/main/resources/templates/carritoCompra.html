@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de la Compra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="bg-light">
+    <div layout:fragment="contenido">
+        <div class="container py-5">
+            <h2 class="mb-4 text-center">Carrito de la Compra</h2>
+
+            <div class="table-responsive shadow rounded">
+                <table class="table table-bordered align-middle bg-white">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Tipo de archivo</th>
+                        <th>Precio</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="itemCarrito : ${carrito}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-0" th:text="${itemCarrito.contenido.titulo}">Nombre producto</h6>
+                                    <small class="text-muted" th:text="${itemCarrito.contenido.descripcion}">Descripción</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${itemCarrito.contenido.formato}"></td>
+                        <td th:text="${itemCarrito.precio + ' Tk'}">0.00 Tk</td>
+                        <td>
+                            <form th:action="@{/carrito/eliminar}" method="post">
+                                <input type="hidden" th:name="contenidoId" th:value="${itemCarrito.contenido.id}">
+                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resumen -->
+            <div class="d-flex justify-content-end mt-4">
+                <div class="text-end">
+                    <h5>Total:</h5>
+                    <h4 class="text-primary" th:text="${total + ' Tk'}">0.00 Tk</h4>
+                    <a href="/checkout" class="btn btn-success mt-3">Finalizar Compra</a>
+                    <a href="/" class="btn btn-outline-primary mt-3 ms-2">Seguir Comprando</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

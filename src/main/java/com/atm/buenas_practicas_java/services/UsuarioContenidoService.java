@@ -23,13 +23,12 @@ public class UsuarioContenidoService extends AbstractBusinessService<UsuarioCont
     private UsuarioContenidoRepo usuarioContenidoRepo;
 
     @Transactional
-    public void vincularUsuarioContenido(Usuario usuario, Contenido contenido, String tipo, Boolean guardado) {
+    public void vincularUsuarioContenido(Usuario usuario, Contenido contenido, String tipo) {
         // Crear relación UsuarioContenido
         UsuarioContenido relacion = new UsuarioContenido();
         relacion.setUsuario(usuario);
         relacion.setContenido(contenido);
         relacion.setTipo(tipo);
-        relacion.setGuardado(guardado);
         relacion.setPrecio(contenido.getPrecio());
 
         usuarioContenidoRepo.save(relacion);

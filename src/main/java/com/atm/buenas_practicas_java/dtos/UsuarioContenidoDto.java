@@ -18,6 +18,5 @@ public class UsuarioContenidoDto {
     private Usuario usuario;
     private Contenido contenido;
     private String tipo;
-    private boolean guardado;
     private Integer precio;
 }

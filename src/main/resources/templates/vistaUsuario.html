@@ -12,10 +12,10 @@ class="bg-gradient-primary">
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
     <div class="container-fluid mt-4">
-        <div class="row gx-5 d-lg-flex h-auto">
+        <div class="row h-auto">
 
             <!-- Sidebar izquierda -->
-            <div class="col-md-3 sidebar-guardados">
+            <div class="col-md-3">
                 <img th:src="${usuario.avatar}" alt="Foto de perfil">
                 <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
                 <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
@@ -31,11 +31,166 @@ class="bg-gradient-primary">
                 <!-- Publicación -->
                 <div class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
                     <!-- Previsualización del contenido -->
-                    <div class="previsualizacion mb-3">
-                        <img src="/uploads/contenido.jpg" alt="Contenido de la publicación" class="img-fluid rounded">
+                    <div class="masonry">
+                        <div th:each="itemGaleria, iterStat : ${galeria}" data-aos="fade-up" th:attr="data-aos-delay=${iterStat.index * 100}">
+                            <div class="masonry-item hover-container" th:switch="${itemGaleria.formato}">
+
+                                <!-- IMAGEN -->
+                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${itemGaleria.url} + ')'">
+                                    <a th:href="@{'/contenido/' + ${itemGaleria.nicknameCreador} + '/' + ${itemGaleria.id}}">
+                                        <img th:src="${itemGaleria.url}" class="image" />
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark">
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${likesIds.contains(itemGaleria.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${guardadosIds.contains(itemGaleria.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${itemGaleria.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${itemGaleria.nicknameCreador}}">
+                                            <img th:src="${itemGaleria.avatarCreador}" class="user-avatar" />
+                                            <span class="user-name" th:text="${'@' + itemGaleria.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- VIDEO -->
+                                <div th:case="'videos'" class="filterDiv select-vid preview-item hover-container"
+                                     th:attr="data-type='video',
+                                      data-src=${itemGaleria.url},
+                                      data-id=${itemGaleria.id},
+                                      data-title=${itemGaleria.titulo},
+                                      data-user=${'@' + itemGaleria.nicknameCreador},
+                                      data-avatar=${itemGaleria.avatarCreador},
+                                      data-nickname=${itemGaleria.nicknameCreador}">
+
+                                    <!-- Enlace al contenido -->
+                                    <a class="video-link" th:href="@{'/contenido/' + ${itemGaleria.nicknameCreador} + '/' + ${itemGaleria.id}}">
+                                        <!-- Imagen de preview (poster generado por JS) -->
+                                        <img class="image preview-img" alt="Preview" />
+
+                                        <!-- Marca de agua -->
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark" />
+
+                                        <!-- Video (oculto por defecto) -->
+                                        <video class="image hover-video" muted playsinline loop preload="metadata">
+                                            <source th:src="${itemGaleria.url}" type="video/mp4" />
+                                        </video>
+
+                                        <!-- Botón de play -->
+                                        <span class="play-button"><i class="fa fa-play"></i></span>
+
+                                        <!-- Overlay de info -->
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${likesIds.contains(itemGaleria.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${guardadosIds.contains(itemGaleria.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${itemGaleria.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${itemGaleria.nicknameCreador}}">
+                                            <img th:src="${itemGaleria.avatarCreador}" class="user-avatar" />
+                                            <span class="user-name" th:text="${'@' + itemGaleria.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- AUDIO -->
+                                <div th:case="'audios'" class="filterDiv select-aud">
+                                    <div class="music-player">
+                                        <div class="cover">
+                                            <a th:href="@{'/contenido/' + ${itemGaleria.nicknameCreador} + '/' + ${itemGaleria.id}}">
+                                                <img th:src="${itemGaleria.urlPortada}" alt="Portada"/>
+                                            </a>
+                                        </div>
+                                        <div class="titre">
+                                            <a th:href="@{'/usuario/' + ${itemGaleria.nicknameCreador}}">
+                                                <h3 th:text="${itemGaleria.nicknameCreador}"></h3>
+                                            </a>
+                                            <a th:href="@{'/contenido/' + ${itemGaleria.nicknameCreador} + '/' + ${itemGaleria.id}}">
+                                                <h1 th:text="${itemGaleria.titulo}"></h1>
+                                            </a>
+                                        </div>
+                                        <audio th:src="${itemGaleria.url}" preload="metadata"></audio>
+
+                                        <div class="controls">
+                                            <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                            <div class="volume-container">
+                                                <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                                <button class="volume-toggle" aria-label="Mute/Unmute">
+                                                    <i class="fa fa-volume-up"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="progress-container">
+                                            <div class="progress"></div>
+                                        </div>
+                                        <div class="time">
+                                            <span class="current-time">0:00</span>
+                                            <span class="duration">0:00</span>
+                                        </div>
+                                        <div class="actions-aud">
+                                            <!-- LIKE -->
+                                            <button class="action-btn like-btn" th:attr="data-id=${itemGaleria.id}">
+                                                <i th:class="${likesIds.contains(itemGaleria.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                            </button>
+
+                                            <!-- GUARDAR -->
+                                            <button class="action-btn guardar-btn" th:attr="data-id=${itemGaleria.id}">
+                                                <i th:class="${guardadosIds.contains(itemGaleria.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MODELO 3D -->
+                                <div th:case="'modelos3d'">
+                                    <a th:href="@{'/contenido/' + ${itemGaleria.nicknameCreador} + '/' + ${itemGaleria.id}}">
+                                        <img th:src="${itemGaleria.urlPortada}" class="image" />
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark">
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${likesIds.contains(itemGaleria.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${itemGaleria.id}">
+                                                    <i th:class="${guardadosIds.contains(itemGaleria.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${itemGaleria.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${itemGaleria.nicknameCreador}}">
+                                            <img th:src="${itemGaleria.avatarCreador}" class="user-avatar" />
+                                            <span class="user-name" th:text="${'@' + itemGaleria.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
                 <!-- Columna derecha -->

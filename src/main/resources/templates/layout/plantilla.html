@@ -113,6 +113,12 @@
                 </li>
 
                 <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/carrito}" class="d-flex align-items-center">
+                        <i class="bi bi-cart-plus ms-3 fs-4"></i>
+                    </a>
+                </li>
+
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
                     <a th:href="@{/subir-contenido}">
                     <span class="btn-getstarted">
                         <i class="bi bi-cloud-upload-fill"></i>

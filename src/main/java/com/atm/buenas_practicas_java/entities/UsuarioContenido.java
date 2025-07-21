@@ -30,7 +30,5 @@ public class UsuarioContenido {
     @Column(nullable = false, length = 20)
     private String tipo;
 
-    private boolean guardado;
-
     private Integer precio;
 }
