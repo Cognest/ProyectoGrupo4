@@ -8,19 +8,24 @@ import com.atm.buenas_practicas_java.entities.*;
 import com.atm.buenas_practicas_java.repositories.*;
 import com.atm.buenas_practicas_java.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -564,4 +569,122 @@ public class DefaultController {
 
         return "redirect:" + (referer != null ? referer : "/");
     }
+
+    @PostMapping("/carrito/eliminar")
+    @Transactional
+    public String eliminarContenidoCarrito(@RequestParam Integer contenidoId, Principal principal,
+                                           @RequestHeader(value = "referer", required = false) String referer){
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        if (usuario == null) return "redirect:/iniciar-sesion";
+
+        Contenido contenido = contenidoRepo.findById(contenidoId).get();
+        usuarioContenidoRepo.deleteUsuarioContenidoByContenidoAndUsuario(contenido, usuario);
+
+        return "redirect:" + (referer != null ? referer : "/");
+    }
+
+    @PostMapping("/carrito/finalizar")
+    @Transactional
+    public String finalizarCompra(@RequestParam List<Integer> contenidoIds, @RequestParam Integer totalCompra, Principal principal) {
+
+        Usuario comprador = usuarioRepo.findByNickname(principal.getName()).orElse(null);
+        if (comprador == null) return "redirect:/iniciar-sesion";
+
+        // Validar si tiene suficientes tokens
+        if (comprador.getToken() < totalCompra) {
+            return "redirect:/carrito?errorTokens=true";
+        }
+
+        List<UsuarioContenido> relaciones = usuarioContenidoRepo
+                .findAllByUsuarioAndContenidoIdInAndTipo(comprador, contenidoIds, "Pendiente");
+
+
+        for (UsuarioContenido uc : relaciones) {
+            Contenido contenido = uc.getContenido();
+            Integer precio = contenido.getPrecio();
+            LocalDateTime now = LocalDateTime.now();
+
+            // Buscar relación del creador de este contenido
+            UsuarioContenido relacionCreador = usuarioContenidoRepo
+                    .findByContenidoAndTipo(contenido, "Creador");
+
+            if (relacionCreador == null) continue; // Seguridad
+
+            Usuario vendedor = relacionCreador.getUsuario();
+
+            // Cambiar tipo a Adquirido
+            uc.setTipo("Adquirido");
+
+            // Transferencia de tokens
+            comprador.setToken(comprador.getToken() - precio);
+            vendedor.setToken(vendedor.getToken() + precio);
+
+            // Movimiento cartera - compra
+            Cartera compra = new Cartera();
+            compra.setUsuario(comprador);
+            compra.setCantidad(precio);
+            compra.setSaldoActual(comprador.getToken());
+            compra.setOperacion("compra");
+            compra.setFecha(now);
+            carteraRepo.save(compra);
+
+            // Movimiento cartera - venta
+            Cartera venta = new Cartera();
+            venta.setUsuario(vendedor);
+            venta.setCantidad(precio);
+            venta.setSaldoActual(vendedor.getToken());
+            venta.setOperacion("venta");
+            venta.setFecha(now);
+            carteraRepo.save(venta);
+        }
+
+        // Guardar cambios
+        usuarioContenidoRepo.saveAll(relaciones);
+        usuarioRepo.save(comprador);
+
+        // Guardar vendedores únicos
+        List<Usuario> vendedores = relaciones.stream()
+                .map(uc -> usuarioContenidoRepo
+                        .findByContenidoAndTipo(uc.getContenido(), "Creador")
+                        .getUsuario())
+                .distinct()
+                .toList();
+        usuarioRepo.saveAll(vendedores);
+
+        return "redirect:/?compraExitosa=true";
+    }
+
+    @GetMapping("/contenido/{id}/descargar")
+    public ResponseEntity<Resource> descargarContenido(@PathVariable Integer id, Principal principal) throws IOException {
+        // Obtener usuario logueado
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
+        Contenido contenido = contenidoRepo.findById(id).orElse(null);
+
+        if (usuario == null || contenido == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Comprobar si el usuario es creador o adquirente
+        UsuarioContenido relacion = usuarioContenidoRepo.findByContenidoAndUsuario(contenido, usuario);
+        if (relacion == null || (!relacion.getTipo().equals("Adquirido") && !relacion.getTipo().equals("Creador"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Obtener ruta del archivo desde contenido.getUrl()
+        Path path = Paths.get("C:" + contenido.getUrl().replaceFirst("/archivos/", "/uploads/"));
+        System.out.println("C:" + contenido.getUrl().replaceFirst("/archivos/", "/uploads/"));
+
+        if (!Files.exists(path)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path.getFileName() + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
+
 }

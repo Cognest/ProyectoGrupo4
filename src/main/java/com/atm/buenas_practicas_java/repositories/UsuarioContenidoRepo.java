@@ -36,4 +36,11 @@ public interface UsuarioContenidoRepo extends JpaRepository<UsuarioContenido, In
     List<UsuarioContenido> findAllByTipoAndUsuario(String tipo, Usuario usuario);
 
     UsuarioContenido findByContenidoAndUsuario(Contenido contenido, Usuario usuario);
+
+    void deleteUsuarioContenidoByContenidoAndUsuario(Contenido contenido, Usuario usuario);
+
+    List<UsuarioContenido> findAllByUsuarioAndContenidoIdInAndTipo(Usuario usuario, List<Integer> contenidoIds, String tipo);
+
+    // Buscar la relación del creador de un contenido
+    UsuarioContenido findByContenidoAndTipo(Contenido contenido, String tipo);
 }

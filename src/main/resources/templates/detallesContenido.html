@@ -101,7 +101,13 @@
                 </div>
               </th:block>
               <th:block th:if="${relacion == 'Adquirido' || relacion == 'Creador'}">
-                <h2 class="d-flex text-center"><a class="w-100 rounded btn-descargar" href="#">Descargar <i class="bi bi-download"></i></a></h2>
+                <h2 class="d-flex text-center">
+                  <a class="w-100 rounded btn-descargar"
+                     th:href="@{'/contenido/' + ${contenido.id} + '/descargar'}"
+                     download>
+                    Descargar <i class="bi bi-download"></i>
+                  </a>
+                </h2>
               </th:block>
               <div class="d-flex justify-content-between my-1">
                 <h4>Nº de visitas: </h4>
