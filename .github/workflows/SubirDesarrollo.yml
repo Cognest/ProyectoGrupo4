@@ -3,7 +3,7 @@ name: Subida a Desarrollo
 
 on:
   push:
-    branches: [ "desarrolloData" ]
+    branches: [ "desarrollo" ]
 
 jobs:
 
