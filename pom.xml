@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.atm.java6</groupId>
-    <artifactId>buenaspracticas</artifactId>
+    <artifactId>cognest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>buenaspracticas</name>
-    <description>buenaspracticas</description>
+    <name>cognest</name>
+    <description>cognest</description>
     <url/>
     <licenses>
         <license/>
@@ -189,7 +189,7 @@
                 <configuration>
                     <image>
                         <!--suppress UnresolvedMavenProperty -->
-                        <name>buenaspracticas:${env.VERSION}</name>
+                        <name>cognest:${env.VERSION}</name>
                     </image>
                 </configuration>
             </plugin>
