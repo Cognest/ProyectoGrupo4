@@ -13,4 +13,6 @@ public interface LikeRepo extends JpaRepository<Like, Integer> {
     Integer countByContenidoId(Integer contenidoId);
     Optional<Like> findByContenidoIdAndUsuario(Integer contenidoId, Usuario usuario);
     List<Like> findByUsuario(Usuario usuario);
+
+    void deleteAllByUsuario(Usuario usuario);
 }

@@ -2,6 +2,7 @@ package com.atm.buenas_practicas_java.config;
 
 import com.atm.buenas_practicas_java.entities.Usuario;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -15,9 +16,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return usuario.getToken() != null && usuario.getToken() == 1
-                ? List.of((GrantedAuthority) () -> "ROLE_ADMIN")
-                : List.of((GrantedAuthority) () -> "ROLE_USER");
+        return List.of(new SimpleGrantedAuthority(usuario.getRol().name()));
     }
 
     @Override public String getPassword() { return usuario.getPassword(); }

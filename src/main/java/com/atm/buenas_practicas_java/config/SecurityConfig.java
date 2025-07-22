@@ -107,6 +107,7 @@ public class SecurityConfig {
                     .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**", "/archivos/**", "/contenido/**", "/usuario/*").permitAll()
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
                     .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
+                    .requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -119,6 +120,10 @@ public class SecurityConfig {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/iniciar-sesion?logout")
                     .permitAll()
+            ).exceptionHandling(exception -> exception
+                    .accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.sendRedirect("/?accesoDenegado");
+                    })
             ).userDetailsService(userDetailsService);
         return http.build();
     }

@@ -14,4 +14,6 @@ public interface GuardadoRepo extends JpaRepository<Guardado, Integer> {
     Optional<Guardado> findByUsuarioAndContenido(Usuario usuario, Contenido contenido);
     int countByContenidoId(Integer contenidoId);
     List<Guardado> findByUsuario(Usuario usuario);
+
+    void deleteAllByUsuario(Usuario usuario);
 }

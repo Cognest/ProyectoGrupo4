@@ -11,4 +11,6 @@ import java.util.List;
 public interface CarteraRepo extends JpaRepository<Cartera, Integer> {
 
     List<Cartera> findAllByUsuarioOrderByFechaDesc(Usuario usuario);
+
+    void deleteAllByUsuario(Usuario usuario);
 }
