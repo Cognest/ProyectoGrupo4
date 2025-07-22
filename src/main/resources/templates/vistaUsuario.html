@@ -11,25 +11,50 @@ class="bg-gradient-primary">
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
-    <div class="container-fluid mt-4">
-        <div class="row h-auto">
+    <div class="container px-4">
+        <div class="row">
 
             <!-- Sidebar izquierda -->
-            <div class="col-md-3">
-                <img th:src="${usuario.avatar}" alt="Foto de perfil">
-                <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
-                <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
-                <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
+            <div class="col-3 menu-lateral">
+                <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                    <div class="foto-perfil-container">
+                        <img src="/assets/img/anonimo.png" alt="Foto de perfil" class="foto-perfil">
+
+                        <nav class="menu-opciones">
+                            <a th:href="@{/iniciar-sesion}" class="nav-link-guardados">Iniciar sesión</a>
+                        </nav>
+                    </div>
+                </div>
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <div class="foto-perfil-container">
+                        <img th:src="${usuarioLogueado.avatar}" alt="Foto de perfil" class="foto-perfil">
+
+                        <nav class="menu-opciones">
+                            <a th:href="@{/actividad}" class="nav-link-guardados">Tu actividad</a>
+                            <a th:href="@{/config-perfil}" class="nav-link-guardados">Configuración</a>
+                            <a th:href="@{/conocenos}" class="nav-link-guardados">Conócenos</a>
+                        </nav>
+                    </div>
+                </div>
             </div>
 
             <!-- Columna central -->
-            <div class="col-md-6">
-                <div class="perfil-box p-4 mb-3 rounded">
-                    <h4 class="nombre-usuario mb-2" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></h4>
-                    <p class="descripcion-usuario mb-0" th:text="${'@'+usuario.nickname}"></p>
+            <div class="col-7">
+                <div class="perfil-box p-3 mb-3 rounded d-flex align-items-center">
+                    <!-- Imagen con alineación vertical centrada y sin margen extra -->
+                    <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; display: block;">
+
+                    <!-- Contenedor de texto bien alineado -->
+                    <div class="info-usuario d-flex flex-column justify-content-center">
+                        <h4 class="nombre-usuario mb-1" th:text="${usuario.nombre + ' ' + usuario.apellidos}"
+                            style="line-height: 1.2;"></h4>
+                        <p class="descripcion-usuario mb-0 text-muted" th:text="${'@' + usuario.nickname}"
+                           style="line-height: 1.2; font-size: 0.95rem;"></p>
+                    </div>
                 </div>
+
                 <!-- Publicación -->
-                <div class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
+                <div th:if="${galeria != null and !galeria.isEmpty()}" class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
                     <!-- Previsualización del contenido -->
                     <div class="masonry">
                         <div th:each="itemGaleria, iterStat : ${galeria}" data-aos="fade-up" th:attr="data-aos-delay=${iterStat.index * 100}">
@@ -192,9 +217,9 @@ class="bg-gradient-primary">
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
                 <!-- Columna derecha -->
-            <div class="col-md-3">
+            <div class="col-2">
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>

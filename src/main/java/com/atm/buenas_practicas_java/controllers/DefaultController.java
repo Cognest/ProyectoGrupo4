@@ -225,6 +225,7 @@ public class DefaultController {
 
         if (principal != null) {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+            model.addAttribute("usuarioLogueado", usuario);
 
             // IDs de contenido con like o guardado
             Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
@@ -252,7 +253,13 @@ public class DefaultController {
     }
 
     @GetMapping("/chat")
-    public String pantallaChat(Model model) {
+    public String pantallaChat(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String miNick = userDetails.getUsername(); // Tu nickname
+
+        List<Usuario> otrosUsuarios = usuarioRepo.findByNicknameNot(miNick);
+        model.addAttribute("usuarios", otrosUsuarios);
+        model.addAttribute("miNick", miNick);
+
         return "chat";
     }
 
@@ -512,19 +519,49 @@ public class DefaultController {
         return "usuariosBloqueados"; // View name
     }
     @GetMapping("/actividad")
-    public String tuActividad(Model model) {
-        return "tuActividad"; // View name
+    public String tuActividad(Model model, Principal principal) {
+        List<ContenidoSubidoDTO> contenidos = contenidoRepo.findAllOrderByLikes();
+        model.addAttribute("contenidos", contenidos);
+
+        if (principal != null) {
+            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+
+            // IDs de contenido con like o guardado
+            Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
+                    .map(like -> like.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            Set<Integer> guardadosIds = guardadoRepo.findByUsuario(usuario).stream()
+                    .map(guardado -> guardado.getContenido().getId())
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("likesIds", likesIds);
+            model.addAttribute("guardadosIds", guardadosIds);
+            model.addAttribute("usuario", usuario);
+        } else {
+            model.addAttribute("likesIds", Set.of());
+            model.addAttribute("guardadosIds", Set.of());
+        }
+        return "tuActividad";
+
     }
+
     @GetMapping("/config-perfil")
-    public String configPerfil(Model model)
-    {
-        return "configPerfil"; // View name
+    public String configperfil(Model model, Principal principal) {
+        if (principal != null) {
+            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
+            model.addAttribute("usuario", usuario);
+        }
+        return "configperfil";
     }
 
     @GetMapping("/conocenos")
-    public String conocenos(Model model)
-    {
-        return "conocenos"; // View name
+    public String conocenos(Model model, Principal principal) {
+        if (principal != null) {
+            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
+            model.addAttribute("usuario", usuario);
+        }
+        return "conocenos";
     }
 
     @GetMapping("/cartera")

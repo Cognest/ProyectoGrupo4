@@ -1942,14 +1942,6 @@ section,
   gap: 30px;
 }
 
-.menu-lateral {
-  width: 280px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
 .foto-perfil-container {
   text-align: center;
   margin-bottom: 30px;
@@ -1975,6 +1967,19 @@ section,
   margin-top: 5px;
 }
 
+.menu-lateral {
+  width: 280px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  align-self: flex-start;
+}
+
 .menu-opciones .menu-btn {
   display: block;
   width: 100%;
@@ -1987,10 +1992,46 @@ section,
   cursor: pointer;
 }
 
-/*.menu-btn.activo {*/
-/*  background-color: var(--accent-color);*/
-/*  color: white;*/
-/*}*/
+.menu-opciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra todos los botones */
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  max-width: 250px; /* opcional: para que no sean demasiado anchos */
+  margin: 10px 0;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.menu-opciones a {
+  display: block;
+  width: 220px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
 
 .contenido-principal {
   flex: 1;

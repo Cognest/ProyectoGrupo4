@@ -12,25 +12,26 @@
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
-  <!--<h1>Configuración de Cuenta</h1> -->
-  <div class="configuracion-cuenta-container row">
+  <div class="container px-4">
     <h1>Conócenos</h1>
+    <div class="row">
+
     <!-- Menú lateral -->
-    <div class="menu-lateral col-4">
+    <div class="menu-lateral col-3">
       <div class="foto-perfil-container">
-        <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
       </div>
       <nav class="menu-opciones">
-        <button class="menu-btn" id="btn-preguntasFrec">Preguntas Frecuentes</button>
-        <button class="menu-btn" id="btn-acercaDe">Acerca de Nosotros</button>
-        <button class="menu-btn" id="btn-licenciaContenido">Licencia de Contenido</button>
-        <button class="menu-btn" id="btn-politicasPriv">Políticas de Privacidad</button>
-        <button class="menu-btn" id="btn-politicasCookies">Políticas de Cookies</button>
-        <button class="menu-btn" id="btn-leyServicios">Ley de Servicios Digitales</button>
+        <a class="nav-link-guardados" id="btn-preguntasFrec">Preguntas frecuentes</a>
+        <a class="nav-link-guardados" id="btn-acercaDe">Acerca de nosotros</a>
+        <a class="nav-link-guardados" id="btn-licenciaContenido">Licencia de contenido</a>
+        <a class="nav-link-guardados" id="btn-politicasPriv">Políticas de privacidad</a>
+        <a class="nav-link-guardados" id="btn-politicasCookies">Política de cookies</a>
+        <a class="nav-link-guardados" id="btn-leyServicios">Ley de servicios Digitales</a>
       </nav>
     </div>
     <!-- Contenido principal -->
-    <div class="col-8">
+    <div class="col-9">
       <div class="fondo-rectangulo-verde p-4">
         <!-- Preguntas Frecuentes -->
         <section id="contenido-preguntasFrec" class="contenido-principal">
@@ -88,10 +89,25 @@
           document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
           this.classList.add('activo');
         });
+
       });
-      document.getElementById('btn-preguntasFrec').click();
+      document.getElementById(btn).addEventListener('click', function(e) {
+        e.preventDefault(); // ⬅️ Añade esto
+        // Oculta todos los contenidos
+        botones.forEach(({contenido}) => {
+          document.getElementById(contenido).style.display = 'none';
+        });
+        // Muestra el contenido seleccionado
+        document.getElementById(contenido).style.display = 'block';
+
+        // Actualiza el botón activo
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+        this.classList.add('activo');
+      });
+
     });
   </script>
+</div>
 </div>
 </body>
 </html>

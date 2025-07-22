@@ -12,24 +12,25 @@
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
+    <div class="container px-4">
+        <div class="row">
     <!--<h1>Configuración de Cuenta</h1> -->
-    <div class="configuracion-cuenta-container row">
         <h1>Configuración de Perfil</h1>
         <!-- Menú lateral -->
-        <div class="menu-lateral col-4">
+        <div class="menu-lateral col-3">
             <div class="foto-perfil-container">
-                <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+                <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
             </div>
             <nav class="menu-opciones">
-                <button class="menu-btn" id="btn-foto">Editar Foto</button>
-                <button class="menu-btn" id="btn-seguridad">Contraseña y Seguridad</button>
-                <button class="menu-btn" id="btn-datosPerso">Datos Personales</button>
-                <button class="menu-btn" id="btn-bloqueados">Perfiles Bloqueados</button>
-                <button class="menu-btn" id="btn-notificaciones">Notificaciones</button>
+                <a class="nav-link-guardados" id="btn-foto">Editar Foto</a>
+                <a class="nav-link-guardados" id="btn-seguridad">Contraseña y Seguridad</a>
+                <a class="nav-link-guardados" id="btn-datosPerso">Datos Personales</a>
+                <a class="nav-link-guardados" id="btn-bloqueados">Perfiles Bloqueados</a>
+                <a class="nav-link-guardados" id="btn-notificaciones">Notificaciones</a>
             </nav>
         </div>
         <!-- Contenido principal -->
-        <div class="col-8">
+        <div class="col-9">
             <div class="fondo-rectangulo-verde p-4">
                 <!-- Editar Foto -->
                 <section id="contenido-fotoPerfil" class="contenido-principal">
@@ -83,9 +84,23 @@
                     this.classList.add('activo');
                 });
             });
-            document.getElementById('btn-foto').click();
+            document.getElementById(btn).addEventListener('click', function(e) {
+                e.preventDefault(); // ⬅️ Añade esto
+                // Oculta todos los contenidos
+                botones.forEach(({contenido}) => {
+                    document.getElementById(contenido).style.display = 'none';
+                });
+                // Muestra el contenido seleccionado
+                document.getElementById(contenido).style.display = 'block';
+
+                // Actualiza el botón activo
+                document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+                this.classList.add('activo');
+            });
+
         });
     </script>
+</div>
 </div>
 </body>
 </html>

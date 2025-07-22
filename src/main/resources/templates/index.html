@@ -77,7 +77,7 @@
             <!-- IMAGEN -->
             <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'">
               <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
-                <img th:src="${contenido.url}" class="image" alt="Contenido"/>
+                <img th:src="${contenido.url}" class="image select" alt="Contenido"/>
                 <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
                 <div class="overlay">
                   <div class="overlay-actions">

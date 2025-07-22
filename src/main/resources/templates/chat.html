@@ -36,7 +36,7 @@
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="d-flex align-items-center">
               <div class="profile-pic pic-miusuario"></div>
-              <span class="fw-bold ms-2">@Mi Usuario</span>
+              <span class="fw-bold ms-2" id="mi-nickname" th:text="${#authentication.name}" th:data-nick="${#authentication.name}"></span>
             </div>
             <button class="btn-icon btn-dark-icon"> <i class="bi bi-three-dots-vertical fs-4"></i> </button>
           </div>
@@ -47,18 +47,12 @@
           </div>
         </div>
 
-        <!-- Lista scrollable de usuarios -->
-        <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3">
-
-          <!-- Usuarios de prueba para scroll -->
-          <button class="btn-chat-user active filterDiv fav"> <div class="profile-pic pic-usuario1"></div> <span class="username">@Usuario 1</span> <i class="bi bi-star-fill fs-5 ms-auto"></i> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario2"></div> <span class="username">@Usuario 2</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario3"></div> <span class="username">@Usuario 3</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario4"></div> <span class="username">@Usuario 4</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario5"></div> <span class="username">@Usuario 5</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario6"></div> <span class="username">@Usuario 6</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario7"></div> <span class="username">@Usuario 7</span> </button>
-          <button class="btn-chat-user filterDiv"> <div class="profile-pic pic-usuario8"></div> <span class="username">@Usuario 8</span> </button>
+        <!-- Lista de usuarios reales de la base de datos -->
+        <div th:each="usuario : ${usuarios}">
+          <button class="btn-chat-user filterDiv fav" th:attr="data-usuario=${usuario.nickname}">
+            <div class="profile-pic"></div>
+            <span class="username" th:text="${usuario.nickname}">Nombre</span>
+          </button>
         </div>
       </div>
 
@@ -68,9 +62,10 @@
 
         <div class="chat-header">
           <div class="d-flex align-items-center">
-            <div class="profile-pic pic-usuario1"></div>
-            <span class="fw-bold ms-2">@Usuario 1</span>
+            <div class="profile-pic"></div>
+            <span id="chat-nombre-receptor" class="fw-bold ms-2"></span>
           </div>
+
           <div class="d-flex align-items-center gap-3">
             <button class="btn-icon"><i class="bi bi-star fs-4"></i> </button>
             <button class="btn-icon"><i class="bi bi-three-dots-vertical fs-4"></i> </button>
@@ -78,15 +73,7 @@
         </div>
 
         <div class="chat-body overflow-auto">
-          <div class="message">Hola, me encanta el contenido que estas subiendo este mes, pero me parece un poco caro. Querría saber si estás dispuesto a negociar</div>
-          <div class="message sent">Hola!, claro que sí (siempre que compres varios archivos)</div>
-          <div class="message">De cuantos archivos estariamos hablando aproximadamente?</div>
-          <div class="message sent">5 archivos</div>
-          <div class="message sent">como mínimo</div>
-          <div class="message">Solo estoy interesado en 3...</div>
-          <div class="message sent">Lo siento, no me sale a cuenta hacer rebaja por debajo de cinco</div>
-          <div class="message">Pues ya sabes que rima con cinco</div>
-          <div class="message sent">Quedas reportado amigo</div>
+          <!--          Aqui se cargan los mensajes-->
         </div>
 
         <div class="message-input">
@@ -134,25 +121,163 @@
 
   <script>
 
-      document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
       // Busca todas las estrellas dentro de .btn-icon
       const starButtons = document.querySelectorAll(".btn-icon i.bi-star, .btn-icon i.bi-star-fill");
 
       starButtons.forEach(icon => {
-      icon.parentElement.addEventListener("click", function(event) {
-      // Si está rellena, cambia a vacía
-      if (icon.classList.contains("bi-star-fill")) {
-      icon.classList.remove("bi-star-fill");
-      icon.classList.add("bi-star");
+        icon.parentElement.addEventListener("click", function(event) {
+          // Si está rellena, cambia a vacía
+          if (icon.classList.contains("bi-star-fill")) {
+            icon.classList.remove("bi-star-fill");
+            icon.classList.add("bi-star");
+          }
+          // Si está vacía, cambia a rellena
+          else if (icon.classList.contains("bi-star")) {
+            icon.classList.remove("bi-star");
+            icon.classList.add("bi-star-fill");
+          }
+        });
+      });
+    });
+  </script>
+
+
+  <!-- WebSocket + STOMP -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+  <script>
+
+    let stompClient = null;
+    let nickname = null;
+    let usuarioSeleccionado = null;
+
+
+    function conectarWebSocket() {
+
+      nickname = document.getElementById("mi-nickname").getAttribute("data-nick");
+      const socket = new SockJS("/ws");
+      stompClient = Stomp.over(socket);
+
+
+      stompClient.connect({}, function () {
+        console.log("✅ WebSocket conectado como:", nickname);
+
+        console.log(stompClient.emisor);
+        stompClient.subscribe("/user/messages", function (mensaje) {
+          console.log("***")
+          const body = JSON.parse(mensaje.body);
+          console.log("📩 Mensaje recibido por WebSocket:", body);
+          mostrarMensaje(body.contenido, false, body.fecha);
+        });
+      });
     }
-      // Si está vacía, cambia a rellena
-      else if (icon.classList.contains("bi-star")) {
-      icon.classList.remove("bi-star");
-      icon.classList.add("bi-star-fill");
+
+
+    function mostrarMensaje(texto, enviadoPorMi, fecha = null) {
+      const chatBody = document.querySelector(".chat-body");
+      console.log(texto);
+      console.log(enviadoPorMi);
+
+      const mensajeDiv = document.createElement("div");
+      mensajeDiv.classList.add("message");
+      if (enviadoPorMi) mensajeDiv.classList.add("sent");
+
+      let fechaHtml = "";
+      if (fecha) {
+        const fechaObj = new Date(fecha);
+        const hoy = new Date();
+        const esHoy = fechaObj.toDateString() === hoy.toDateString();
+        const horaFormateada = fechaObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const fechaFormateada = fechaObj.toLocaleDateString();
+        const mostrar = esHoy ? horaFormateada : `${fechaFormateada} ${horaFormateada}`;
+        fechaHtml = `<small class="text-muted">${mostrar}</small>`;
+      }
+
+      mensajeDiv.innerHTML = `<div>${texto}</div>${fechaHtml}`;
+
+      chatBody.appendChild(mensajeDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
     }
+
+
+
+    function enviarMensaje() {
+      const input = document.querySelector(".message-input input");
+      const mensaje = input.value.trim();
+      if (!mensaje || !usuarioSeleccionado) return;
+
+      stompClient.send("/app/chatsendMessage", {}, JSON.stringify({
+        'emisor': nickname,
+        'receptor': usuarioSeleccionado,
+        'contenido': mensaje
+      }));
+
+      mostrarMensaje(mensaje, true); // true = mensaje enviado
+      input.value = "";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      conectarWebSocket();
+
+      // Detectar clic en un usuario
+      document.querySelectorAll(".btn-chat-user").forEach(btn => {
+        btn.addEventListener("click", () => {
+          usuarioSeleccionado = btn.getAttribute("data-usuario");
+          console.log("Hablando con:", usuarioSeleccionado);
+          document.getElementById("chat-nombre-receptor").textContent = "@" + usuarioSeleccionado;
+
+          cargarHistorial(usuarioSeleccionado);
+        });
+      });
+
+
+
+      // Botón de enviar mensaje
+      const botonEnviar = document.querySelector(".message-input button");
+      if (botonEnviar) {
+        botonEnviar.addEventListener("click", enviarMensaje);
+      }
+
+      const inputMensaje = document.querySelector(".message-input input");
+      if (inputMensaje) {
+        inputMensaje.addEventListener("keydown", e => {
+          if (e.key === "Enter") enviarMensaje();
+        });
+      }
     });
-    });
-    });
+
+    function cargarHistorial(nicknameDestino) {
+      fetch(`/chat/historial/${nicknameDestino}`)
+              .then(res => res.json())
+              .then(mensajes => {
+                const chatBody = document.querySelector(".chat-body");
+                chatBody.innerHTML = ""; // limpiar mensajes anteriores
+
+                mensajes.forEach(m => {
+                  const div = document.createElement("div");
+                  div.classList.add("message");
+                  if (m.emisor.nickname === nickname) div.classList.add("sent");
+
+                  const fechaObj = new Date(m.fecha);
+                  const hoy = new Date();
+                  const esHoy = fechaObj.toDateString() === hoy.toDateString();
+
+                  const horaFormateada = fechaObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  const fechaFormateada = fechaObj.toLocaleDateString();
+                  const mostrar = esHoy ? horaFormateada : `${fechaFormateada} ${horaFormateada}`;
+
+                  div.innerHTML = `<div>${m.mensaje}</div><small class="text-muted">${mostrar}</small>`;
+
+                  chatBody.appendChild(div);
+                });
+
+
+                chatBody.scrollTop = chatBody.scrollHeight;
+              });
+    }
+
   </script>
 
 </div>

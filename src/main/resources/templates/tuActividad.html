@@ -12,49 +12,203 @@
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
-    <!--<h1>Configuración de Cuenta</h1> -->
-    <div class="configuracion-cuenta-container row">
+    <div class="container px-4">
+        <!--<h1>Configuración de Cuenta</h1> -->
         <h1>Tu Actividad</h1>
+        <div class="row">
         <!-- Menú lateral -->
-        <div class="menu-lateral col-4">
+        <div class="menu-lateral col-3">
             <div class="foto-perfil-container">
-                <img th:src="@{/assets/img/foto-perfil.png}" alt="Foto de perfil" class="foto-perfil">
+                <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
             </div>
             <nav class="menu-opciones">
-                <button class="menu-btn" id="btn-meGusta">Me Gusta</button>
-                <button class="menu-btn" id="btn-guardados">Guardados</button>
-                <button class="menu-btn" id="btn-contenidoPropio">Contenido Propio</button>
-                <button class="menu-btn" id="btn-contenidoAdquirido">Contenido Adquirido</button>
-                <button class="menu-btn" id="btn-historial">Historial</button>
-                <button class="menu-btn" id="btn-comentarios">Comentarios</button>
+                <a  class="nav-link-guardados" id="btn-guardados">Guardados</a>
+                <a  class="nav-link-guardados" id="btn-contenidoAdquirido">Contenido Adquirido</a>
+                <a  class="nav-link-guardados" id="btn-comentarios">Comentarios</a>
             </nav>
         </div>
         <!-- Contenido principal -->
-        <div class="col-8">
+        <div class="col-9">
             <div class="fondo-rectangulo-verde p-4">
-                <!-- Me Gusta -->
-                <section id="contenido-megusta" class="contenido-principal">
-                    <p> Publicaciones que te han gustado </p>
-                </section>
 
                 <!-- Guardados -->
                 <section id="contenido-guardados" class="contenido-principal" style="display:none;">
-                    <p> Publicaciones que has Guardado </p>
-                </section>
+                    <div class="topbar">GUARDADO</div>
 
-                <!-- Contenido propio -->
-                <section id="contenido-contenidoProp" class="contenido-principal" style="display:none;">
-                    <p> Contenido que has compartido </p>
+                    <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center gap-3 mt-3">
+                        <button class="btn custom-tab-nav w-75 active" data-filter="all">TODO</button>
+                        <button class="btn custom-tab-nav w-75" data-filter="select-img">IMAGENES</button>
+                        <button class="btn custom-tab-nav w-75" data-filter="select-vid">VIDEOS</button>
+                        <button class="btn custom-tab-nav w-75" data-filter="select-aud">AUDIO</button>
+                        <button class="btn custom-tab-nav w-75" data-filter="select-tres-d">3D</button>
+                    </div>
+
+                    <div class="masonry">
+                        <div th:each="contenido, iterStat : ${contenidos}" data-aos="fade-up" th:attr="data-aos-delay=${iterStat.index * 100}">
+                            <div class="masonry-item hover-container" th:switch="${contenido.formato}">
+
+                                <!-- IMAGEN -->
+                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'" class="filterDiv select-img preview-item" >
+                                    <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                        <img th:src="${contenido.url}" class="image" alt="Contenido"/>
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
+                                            <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                            <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- VIDEO -->
+                                <div th:case="'videos'" class="filterDiv select-vid preview-item hover-container"
+                                     th:attr="data-type='video',
+              data-src=${contenido.url},
+              data-id=${contenido.id},
+              data-title=${contenido.titulo},
+              data-user=${'@' + contenido.nicknameCreador},
+              data-avatar=${contenido.avatarCreador},
+              data-nickname=${contenido.nicknameCreador}"
+                                >
+
+                                    <!-- Enlace al contenido -->
+                                    <a class="video-link" th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                        <!-- Imagen de preview (poster generado por JS) -->
+                                        <img class="image preview-img" alt="Preview"/>
+
+                                        <!-- Marca de agua -->
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua"/>
+
+                                        <!-- Video (oculto por defecto) -->
+                                        <video class="image hover-video" muted playsinline loop preload="metadata">
+                                            <source th:src="${contenido.url}" type="video/mp4" />
+                                        </video>
+
+                                        <!-- Botón de play -->
+                                        <span class="play-button"><i class="fa fa-play"></i></span>
+
+                                        <!-- Overlay de info -->
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
+                                            <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                            <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- AUDIO -->
+                                <div th:case="'audios'" class="filterDiv select-aud">
+                                    <div class="music-player">
+                                        <div class="cover">
+                                            <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                                <img th:src="${contenido.urlPortada}" alt="Portada"/>
+                                            </a>
+                                        </div>
+                                        <div class="titre">
+                                            <a th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
+                                                <h3 th:text="${contenido.nicknameCreador}"></h3>
+                                            </a>
+                                            <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                                <h1 th:text="${contenido.titulo}"></h1>
+                                            </a>
+                                        </div>
+                                        <audio th:src="${contenido.url}" preload="metadata"></audio>
+
+                                        <div class="controls">
+                                            <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
+                                            <div class="volume-container">
+                                                <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" />
+                                                <button class="volume-toggle" aria-label="Mute/Unmute">
+                                                    <i class="fa fa-volume-up"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="progress-container">
+                                            <div class="progress"></div>
+                                        </div>
+                                        <div class="time">
+                                            <span class="current-time">0:00</span>
+                                            <span class="duration">0:00</span>
+                                        </div>
+                                        <div class="actions-aud">
+                                            <!-- LIKE -->
+                                            <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
+                                                <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                            </button>
+
+                                            <!-- GUARDAR -->
+                                            <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
+                                                <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MODELO 3D -->
+                                <div th:case="'modelos3d'" class="filterDiv select-tres-d preview-item preview-3D">
+                                    <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                        <img th:src="${contenido.urlPortada}" class="image" alt="Portada"/>
+                                        <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
+                                        <div class="overlay">
+                                            <div class="overlay-actions">
+                                                <!-- LIKE -->
+                                                <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                </button>
+
+                                                <!-- GUARDAR -->
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
+                                                    <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                        </div>
+                                    </a>
+                                    <div class="overlay-user-wrapper">
+                                        <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
+                                            <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                            <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Contenido adquirido -->
                 <section id="contenido-contenidoAd" class="contenido-principal" style="display:none;">
                     <p> Contenidos que has Adquirido </p>
-                </section>
-
-                <!-- Historial -->
-                <section id="contenido-historial" class="contenido-principal" style="display:none;">
-                    <p> Tu historial de visualizaciones </p>
                 </section>
 
                 <!-- Comentarios -->
@@ -67,11 +221,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const botones = [
-                { btn: 'btn-meGusta', contenido: 'contenido-megusta' },
                 { btn: 'btn-guardados', contenido: 'contenido-guardados' },
-                { btn: 'btn-contenidoPropio', contenido: 'contenido-contenidoProp' },
                 { btn: 'btn-contenidoAdquirido', contenido: 'contenido-contenidoAd' },
-                { btn: 'btn-historial', contenido: 'contenido-historial' },
                 { btn: 'btn-comentarios', contenido: 'contenido-comentarios' }
             ];
 
@@ -90,6 +241,32 @@
                 });
             });
             document.getElementById('btn-meGusta').click();
+        });
+    </script>
+
+
+</div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function filterSelection(category) {
+                const items = document.getElementsByClassName("filterDiv");
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.remove("show");
+                    if (category === "all" || items[i].classList.contains(category)) {
+                        items[i].classList.add("show");
+                    }
+                }
+            }
+            filterSelection("all");
+            const buttons = document.querySelectorAll("#myBtnContainer .btn");
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const filter = this.getAttribute("data-filter");
+                    filterSelection(filter);
+                    document.querySelectorAll("#myBtnContainer .btn.active").forEach(b => b.classList.remove("active"));
+                    this.classList.add("active");
+                });
+            });
         });
     </script>
 </div>

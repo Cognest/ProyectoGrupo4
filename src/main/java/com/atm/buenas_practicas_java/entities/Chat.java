@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
 
@@ -22,10 +23,12 @@ public class Chat {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_emisor", nullable = false)
+    @JsonIgnoreProperties({"usuarioContenidos", "comentarios", "likes", "reportes", "bloqueados", "bloqueadores", "chatsEnviados", "chatsRecibidos", "movimientos"})
     private Usuario emisor;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_receptor", nullable = false)
+    @JsonIgnoreProperties({"usuarioContenidos", "comentarios", "likes", "reportes", "bloqueados", "bloqueadores", "chatsEnviados", "chatsRecibidos", "movimientos"})
     private Usuario receptor;
 
     @Column(nullable = false, length = 200)

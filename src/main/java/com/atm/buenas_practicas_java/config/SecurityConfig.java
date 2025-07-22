@@ -102,7 +102,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/ws/**")  // ← Ignorar CSRF para WebSocket
+                        .disable()
+                )
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**", "/archivos/**", "/contenido/**", "/usuario/*").permitAll()
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()

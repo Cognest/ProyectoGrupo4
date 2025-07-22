@@ -16,4 +16,5 @@ public interface UsuarioRepo extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByEmailOrNickname(String email, String nickname);
     Optional<Usuario> findByNickname(String nickname);
     Page<Usuario> findAllByIdNot(Integer idActual, Pageable pageable);
+    List<Usuario> findByNicknameNot(String nickname);
 }
