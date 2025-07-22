@@ -25,6 +25,9 @@ services:
     restart: always
     expose: 
       - "8080"
+    volumes:
+      - proyecto4_files:/uploads
+
 
   db:
     image: postgres:latest
@@ -39,3 +42,12 @@ services:
     restart: always
     ports:
       - "${PUERTO_DB_DESARROLLO}:5432"
+    volumes:
+      - proyecto4_data:/var/lib/postgresql/data
+      - ./cargadatos/datos.sql:/docker-entrypoint-initdb.d/datos.sql
+
+
+volumes:
+  proyecto4_data:
+
+  proyecto4_files:
