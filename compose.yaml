@@ -10,7 +10,7 @@ services:
       - /c/UploadsExternos:/uploads
 
   db:
-    image: postgres:15
+    image: postgres:latest
     container_name: proyecto4-db
     restart: unless-stopped
     environment:
