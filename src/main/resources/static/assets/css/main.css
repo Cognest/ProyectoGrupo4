@@ -3253,6 +3253,10 @@ PANTALLA GUARDADOS
   max-height: 400px;
 }
 
+/*--------------------------------------------
+---------------- Tipo de Contenido -----------
+--------------------------------------------*/
+
 /* Filtro: Oculta todos los elementos inicialmente */
 .filterDivContenido {
   display: none;

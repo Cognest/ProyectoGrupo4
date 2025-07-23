@@ -48,7 +48,7 @@
                             <div class="masonry-item hover-container" th:switch="${contenido.formato}">
 
                                 <!-- IMAGEN -->
-                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'" class="filterDiv select-img preview-item" >
+                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'" class="filterDivContenido select-img preview-item" >
                                     <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
                                         <img th:src="${contenido.url}" class="image" alt="Contenido"/>
                                         <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
@@ -76,7 +76,7 @@
                                 </div>
 
                                 <!-- VIDEO -->
-                                <div th:case="'videos'" class="filterDiv select-vid preview-item hover-container"
+                                <div th:case="'videos'" class="filterDivContenido select-vid preview-item hover-container"
                                      th:attr="data-type='video',
               data-src=${contenido.url},
               data-id=${contenido.id},
@@ -127,7 +127,7 @@
                                 </div>
 
                                 <!-- AUDIO -->
-                                <div th:case="'audios'" class="filterDiv select-aud">
+                                <div th:case="'audios'" class="filterDivContenido select-aud">
                                     <div class="music-player">
                                         <div class="cover">
                                             <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
@@ -175,7 +175,7 @@
                                 </div>
 
                                 <!-- MODELO 3D -->
-                                <div th:case="'modelos3d'" class="filterDiv select-tres-d preview-item preview-3D">
+                                <div th:case="'modelos3d'" class="filterDivContenido select-tres-d preview-item preview-3D">
                                     <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
                                         <img th:src="${contenido.urlPortada}" class="image" alt="Portada"/>
                                         <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
@@ -248,7 +248,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filterSelection(category) {
-                const items = document.getElementsByClassName("filterDiv");
+                const items = document.getElementsByClassName("filterDivContenido");
                 for (let i = 0; i < items.length; i++) {
                     items[i].classList.remove("show");
                     if (category === "all" || items[i].classList.contains(category)) {
