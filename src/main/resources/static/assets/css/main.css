@@ -3252,3 +3252,13 @@ PANTALLA GUARDADOS
   overflow-y: auto;
   max-height: 400px;
 }
+
+/* Filtro: Oculta todos los elementos inicialmente */
+.filterDiv {
+  display: none;
+}
+
+/* Filtro: Muestra solo los elementos que coinciden con el filtro */
+.filterDiv.show {
+  display: block;
+}
