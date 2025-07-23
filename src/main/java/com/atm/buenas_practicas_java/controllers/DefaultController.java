@@ -95,6 +95,10 @@ public class DefaultController {
     private GuardadoRepo guardadoRepo;
 
     @Autowired
+    private ChatRepo chatRepo;
+
+
+    @Autowired
     private UsuarioContenidoRepo usuarioContenidoRepo;
 
     private final EntidadHijaService entidadHijaService;
@@ -253,15 +257,39 @@ public class DefaultController {
     }
 
     @GetMapping("/chat")
-    public String pantallaChat(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        String miNick = userDetails.getUsername(); // Tu nickname
+    public String pantallaChat(@RequestParam(name = "usuario", required = false) String receptorNickname,
+                               Model model,
+                               @AuthenticationPrincipal CustomUserDetails userDetails,
+                               Principal principal) {
 
-        List<Usuario> otrosUsuarios = usuarioRepo.findByNicknameNot(miNick);
-        model.addAttribute("usuarios", otrosUsuarios);
+        String miNick = userDetails.getUsername();
+        Usuario yo = usuarioRepo.findByNickname(principal.getName()).orElse(null);
+
+        List<String> nicknamesConversados = chatRepo.findUsuariosConConversacion(yo.getId());
+        List<Usuario> usuarios = usuarioRepo.findByNicknameInAndNicknameNot(nicknamesConversados, miNick);
+
+        if (receptorNickname != null && !receptorNickname.equals(miNick)) {
+            boolean yaIncluido = usuarios.stream().anyMatch(u -> u.getNickname().equals(receptorNickname));
+            if (!yaIncluido) {
+                usuarioRepo.findByNickname(receptorNickname).ifPresent(usuarios::add);
+            }
+
+            model.addAttribute("receptorPreseleccionado", receptorNickname);
+        }
+
+        model.addAttribute("usuarios", usuarios);
         model.addAttribute("miNick", miNick);
+        model.addAttribute("persona", yo);
+
+        // Nueva línea clave:
+        model.addAttribute("accesoDesdeBoton", receptorNickname == null);
 
         return "chat";
     }
+
+
+
+
 
     @GetMapping("/guardados")
     public String pantallaGuardados(Model model) {

@@ -42,18 +42,26 @@ class="bg-gradient-primary">
 
             <!-- Columna central -->
             <div class="col-7">
-                <div class="perfil-box p-3 mb-3 rounded d-flex align-items-center">
-                    <!-- Imagen con alineación vertical centrada y sin margen extra -->
-                    <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; display: block;">
+                <div class="perfil-box p-3 mb-3 rounded d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil me-3"
+                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; display: block;">
 
-                    <!-- Contenedor de texto bien alineado -->
-                    <div class="info-usuario d-flex flex-column justify-content-center">
-                        <h4 class="nombre-usuario mb-1" th:text="${usuario.nombre + ' ' + usuario.apellidos}"
-                            style="line-height: 1.2;"></h4>
-                        <p class="descripcion-usuario mb-0 text-muted" th:text="${'@' + usuario.nickname}"
-                           style="line-height: 1.2; font-size: 0.95rem;"></p>
+                        <div class="info-usuario d-flex flex-column justify-content-center">
+                            <h4 class="nombre-usuario mb-1" th:text="${usuario.nombre + ' ' + usuario.apellidos}" style="line-height: 1.2;"></h4>
+                            <p class="descripcion-usuario mb-0 text-muted" th:text="${'@' + usuario.nickname}"
+                               style="line-height: 1.2; font-size: 0.95rem;"></p>
+                        </div>
+                    </div>
+
+                    <!-- Botón de mensaje: solo si NO es tu propio perfil -->
+                    <div th:if="${#authentication.name != usuario.nickname}">
+                        <a th:href="@{/chat(usuario=${usuario.nickname})}" class="btn btn-chat-enviar">
+                            Enviar mensaje
+                        </a>
                     </div>
                 </div>
+
 
                 <!-- Publicación -->
                 <div th:if="${galeria != null and !galeria.isEmpty()}" class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">

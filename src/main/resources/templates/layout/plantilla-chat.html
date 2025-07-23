@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
@@ -11,13 +12,14 @@
     <meta name="keywords" content="">
 
     <!-- Favicons -->
-    <link th:href="@{/assets/img/favicon.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <link sizes="64x64" th:href="@{/assets/img/logos/logoBlanco.png}" rel="icon">
+    <link sizes="64x64" th:href="@{/assets/img/logos/logoBlanco.png}" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -28,6 +30,7 @@
 
     <!-- Main CSS File -->
     <link th:href="@{/assets/css/main.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <!-- =======================================================
     * Template Name: Mentor
@@ -40,82 +43,118 @@
 
 <body class="index-page">
 
-<header id="header" class="header d-flex align-items-center">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid d-flex align-items-center position-relative px-5">
 
         <a th:href="@{/}" class="logo d-flex align-items-center me-auto">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
-            <img class="sitelogo" src="/assets/img/logos/logoVerde.png" alt="CogNest" style="width:110px; height:auto;">
-            <img class="sitename" src="/assets/img/logos/cognestVerde.png" alt="CogNest" style="height:45px; width:auto;">
+            <img class="sitelogo" src="/assets/img/logos/cognestHeader.png" alt="CogNest"
+                 style="width:220px; height:auto;">
         </a>
 
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a th:href="@{/}" class="active">Inicio<br></a></li>
-                <li class="dropdown"><a href="#"><span>Catálogo</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <li class="dropdown"><a href="#"><span>Catálogo</span> <i
+                        class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
-                        <li class="dropdown"><a href="#"><span>Imágenes</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <li class="dropdown"><a href="#"><span>Imágenes</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
-                                <li><a href="#">Fondos removidos</a></li>
-                                <li><a href="#">Texturas</a></li>
-                                <li><a href="#">Mockups</a></li>
+                                <li><a href="#">Stock</a></li>
                                 <li><a href="#">Ilustraciones</a></li>
-                                <li><a href="#">Fotografías</a></li>
+                                <li><a href="#">Texturas</a></li>
+                                <li><a href="#">Vectores</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown"><a href="#"><span>Videos</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <li class="dropdown"><a href="#"><span>Vídeos</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
-                                <li><a href="#">Loops</a></li>
-                                <li><a href="#">Chroma Key</a></li>
-                                <li><a href="#">Efectos de vídeo (VFX)</a></li>
+                                <li><a href="#">Stock</a></li>
+                                <li><a href="#">VFX</a></li>
                                 <li><a href="#">Transiciones</a></li>
-                                <li><a href="#">Stock Footage</a></li>
+                                <li><a href="#">Loops</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown"><a href="#"><span>Audios</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <li class="dropdown"><a href="#"><span>Audios</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
-                                <li><a href="#">Efectos de sonido (FX)</a></li>
+                                <li><a href="#">Música</a></li>
+                                <li><a href="#">SFX</a></li>
                                 <li><a href="#">Ambientes sonoros</a></li>
-                                <li><a href="#">Samples musicales</a></li>
-                                <li><a href="#">Vocals</a></li>
-                                <li><a href="#">Instrumentales</a></li>
-                                <li><a href="#">Voz en off</a></li>
-                                <li><a href="#">MIDI</a></li>
+                                <li><a href="#">Samples</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown"><a href="#"><span>Vectores</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Íconos</a></li>
-                                <li><a href="#">Logos</a></li>
-                                <li><a href="#">Plantillas gráficas</a></li>
-                                <li><a href="#">Infografías</a></li>
-                                <li><a href="#">Mapas vectoriales</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>Modelos 3D</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <li class="dropdown"><a href="#"><span>Modelos 3D</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                                 <li><a href="#">Modelos estáticos</a></li>
                                 <li><a href="#">Modelos con rigging</a></li>
-                                <li><a href="#">Modelos texturizados</a></li>
+                                <li><a href="#">Lowpoly</a></li>
                                 <li><a href="#">Escenarios</a></li>
-                                <li><a href="#">Elementos para videojuegos</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
+                <!-- Si no está autenticado -->
+                <li class="nav-buttons" sec:authorize="isAnonymous()">
+                    <a th:href="@{/iniciar-sesion}">
+                        <span class="btn-getstarted">Iniciar sesión</span>
+                    </a>
+                </li>
+
+
+                <!-- Si está autenticado -->
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/cartera}" class="wallet-button">
+                        <i id="token-counter" class="bi bi-wallet2 fw-bold me-1" th:text="' ' + ${tokensUsuario + ' Tk'}">0Tk</i>
+                    </a>
+                </li>
+
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/carrito}" class="d-flex align-items-center">
+                        <i class="bi bi-cart-plus ms-3 fs-4"></i>
+                    </a>
+                </li>
+
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/subir-contenido}">
+                    <span class="btn-getstarted">
+                        <i class="bi bi-cloud-upload-fill"></i>
+                        <span> Subir Contenido</span>
+                    </span>
+                    </a>
+                </li>
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <a th:href="@{'/usuario/' + ${#authentication.name}}">
+                        <span class="btn-getstarted">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span th:text="${#authentication.name}">Usuario</span>
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-buttons" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-getstarted btn">
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                        </button>
+                    </form>
+                </li>
+
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
-
-        <a class="btn-getstarted" th:href="@{/login}">Iniciar sesión</a>
-
     </div>
 </header>
 
 <main class="main" layout:fragment="contenido">
     <h1>Sección sin modificar busqueda</h1>
 </main>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
 <!-- Preloader -->
 <div id="preloader"></div>
@@ -130,7 +169,10 @@
 
 <!-- Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
-
+<script th:src="@{/assets/js/audios.js}"></script>
+<script th:src="@{/assets/js/waterMark.js}"></script>
+<script th:src="@{/assets/js/videos.js}"></script>
+<script th:src="@{/assets/js/likesYGuardados.js}"></script>
 
 </body>
 

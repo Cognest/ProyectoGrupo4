@@ -169,9 +169,10 @@
         class="bi bi-arrow-up-short"></i></a>
 
 <!--acceso directo a chat-->
+<li class="nav-buttons" sec:authorize="isAuthenticated()">
 <a th:href="@{/chat}" id="go-chat" class="go-chat d-flex align-items-center justify-content-center"><i
         class="bi bi-chat-left-text"></i></a>
-
+</li>
 <!-- Preloader -->
 <div id="preloader"></div>
 

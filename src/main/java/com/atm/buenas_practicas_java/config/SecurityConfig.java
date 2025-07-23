@@ -111,6 +111,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
                     .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
                     .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/api/chat/**").authenticated()
                     .anyRequest().authenticated()
             )
             .formLogin(form -> form

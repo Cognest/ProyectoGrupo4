@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Setter
 public class ChatDto {
     private Integer id;
-    private Usuario emisor;
-    private Usuario receptor;
+    private String emisor;
+    private String receptor;
     private String mensaje;
     private LocalDateTime fecha;
 }

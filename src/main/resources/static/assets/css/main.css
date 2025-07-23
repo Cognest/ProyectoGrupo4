@@ -224,7 +224,7 @@ h6 {
 .header {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 1rem;
+  padding: 13px;
   transition: all 0.5s;
   z-index: 1000;
 
@@ -237,7 +237,7 @@ h6 {
 }
 
 .header .logo img {
-  max-height: 110px;
+  max-height: 100px;
   margin-right: 4px;
 }
 
@@ -2147,7 +2147,10 @@ section,
 }
 
 .perfil-box {
-  background-color: #5fcf80; /* verde */
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  background-color: #5fcf80;
   color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
@@ -2166,11 +2169,25 @@ section,
 /*-----------------------------------------------
 PANTALLA CHAT
 -------------------------------------------------*/
+.opciones-chat {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.opciones-chat .custom-tab-nav {
+  flex: 1;
+  text-align: center;
+}
 
 .chat-sidebar {
+  border-radius: 1rem 0 0 1rem;
   background-color: #efefef;
   height: 100%;
   padding: 1rem;
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
 }
@@ -2194,6 +2211,7 @@ PANTALLA CHAT
 }
 
 .chat-header {
+  border-radius: 0 1rem 0 0;
   background-color: var(--accent-color);
   padding: 0.8rem 1rem;
   display: flex;
@@ -2226,6 +2244,24 @@ PANTALLA CHAT
 }
 .chat-body::-webkit-scrollbar {
   width: 8px;
+}
+
+.btn-chat-enviar {
+  background-color: white;
+  color: #232323;
+  border: 2px solid var(--accent-color);
+  transition: 0.3s;
+}
+
+.btn-chat-enviar:hover {
+  background-color: white !important;
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+.btn-chat-enviar:active {
+  transform: scale(0.96); /* efecto de hundirse */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
 }
 
 .message {
@@ -2388,10 +2424,6 @@ PANTALLA CHAT
   background-color: #aaaaaa; /* fallback si no hay imagen */
   display: inline-block;
   margin-right: 0.5rem;
-}
-
-.pic-miusuario{
-  background-image: url("https://media.licdn.com/dms/image/v2/D4E03AQH2xbT6_fWJyA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1725629886019?e=1755129600&v=beta&t=ucc5TUB8kzP0lrLI4-GBKqcZHbiFulZcOUgcGDEzio8")
 }
 
 .pic-usuario1 {

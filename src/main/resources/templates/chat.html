@@ -21,65 +21,119 @@
       background-color: var(--accent-color);
       color: white;
     }
+
+    #chat-contenido {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    #chat-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #888;
+      font-size: 1.2rem;
+    }
   </style>
 </head>
-<body>
-<div layout:fragment="contenido" >
+<body th:attr="data-receptor-preseleccionado=${receptorPreseleccionado}, data-usuario-logueado=${#authentication.name}, data-acceso-desde-boton=${accesoDesdeBoton}">
 
-  <div class="container-fluid chat-wrapper">
+
+<div layout:fragment="contenido">
+
+  <div class="container px-4 chat-wrapper">
     <div class="row h-100 gx-3 d-lg-flex">
 
       <!-- Columna izquierda -->
-      <div class="col-md-3 chat-sidebar d-flex flex-column">
-        <!-- Cabecera con mi usuario y botones -->
-        <div class="chat-sidebar-header">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="d-flex align-items-center">
-              <div class="profile-pic pic-miusuario"></div>
-              <span class="fw-bold ms-2" id="mi-nickname" th:text="${#authentication.name}" th:data-nick="${#authentication.name}"></span>
-            </div>
-            <button class="btn-icon btn-dark-icon"> <i class="bi bi-three-dots-vertical fs-4"></i> </button>
-          </div>
+      <div class="col-3 chat-sidebar d-flex flex-column">
 
-          <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center">
-            <button class="btn custom-tab-nav w-50 active" data-filter="all">General</button>
-            <button class="btn custom-tab-nav w-50" data-filter="fav"> Favoritos</button>
+        <!-- Cabecera con mi usuario -->
+        <div class="chat-sidebar-header mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div id="mi-perfil" class="d-flex align-items-center text-dark" style="cursor: pointer;">
+                <img th:src="${persona.avatar}" alt="Foto de perfil" class="profile-pic">
+                <span class="fw-bold ms-2" id="mi-nickname" th:text="${#authentication.name}" th:data-nick="${#authentication.name}"></span>
+              </div>
+            </div>
+
+            <button class="btn-icon btn-dark-icon">
+              <i class="bi bi-three-dots-vertical fs-4"></i>
+            </button>
           </div>
         </div>
+
+
+        <!-- Botones General / Favoritos -->
+        <div id="myBtnContainer" class="btn-chat-tabs d-flex justify-content-center mb-3">
+          <button class="btn custom-tab-nav w-50 active" data-filter="all">General</button>
+          <button class="btn custom-tab-nav w-50" data-filter="fav">Favoritos</button>
+        </div>
+
 
         <!-- Lista de usuarios reales de la base de datos -->
         <div th:each="usuario : ${usuarios}">
-          <button class="btn-chat-user filterDiv fav" th:attr="data-usuario=${usuario.nickname}">
-            <div class="profile-pic"></div>
+          <button class="btn-chat-user filterDiv all"
+                  th:attr="data-usuario=${usuario.nickname}">
+
+            <!-- Foto de perfil -->
+            <img class="user-img me-2"
+                 th:src="${usuario.avatar != null ? usuario.avatar : '/assets/img/foto-perfil.png'}"
+                 alt="avatar"
+                 style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+
+            <!-- Nickname -->
             <span class="username" th:text="${usuario.nickname}">Nombre</span>
+
+            <!-- Estrella -->
+            <i class="bi bi-star-fill estrella-fav ms-2 d-none"></i>
           </button>
         </div>
+
       </div>
 
-
       <!-- Columna central -->
-      <div class="col-md-9 col-content flex-column p-0">
+      <div class="col-9 col-content p-0 d-flex flex-column">
 
-        <div class="chat-header">
-          <div class="d-flex align-items-center">
-            <div class="profile-pic"></div>
-            <span id="chat-nombre-receptor" class="fw-bold ms-2"></span>
-          </div>
-
-          <div class="d-flex align-items-center gap-3">
-            <button class="btn-icon"><i class="bi bi-star fs-4"></i> </button>
-            <button class="btn-icon"><i class="bi bi-three-dots-vertical fs-4"></i> </button>
-          </div>
+        <!-- Mensaje por defecto -->
+        <div id="chat-placeholder">
+          <span>Selecciona un usuario para conversar</span>
         </div>
 
-        <div class="chat-body overflow-auto">
-          <!--          Aqui se cargan los mensajes-->
-        </div>
+        <!-- Contenido del chat (inicialmente oculto) -->
+        <div id="chat-contenido">
 
-        <div class="message-input">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Escribe un mensaje">
-            <button class="btn btn-light" type="button"><i class="bi bi-send-fill fs-4"></i></button>
+          <!-- Cabecera del chat -->
+          <div class="chat-header">
+            <!-- Hacemos que este bloque se comporte como un enlace -->
+            <div id="info-receptor"
+                 class="d-flex align-items-center text-white"
+                 style="cursor: pointer;">
+              <img id="chat-avatar-receptor"
+                   src="/assets/img/foto-perfil.png"
+                   class="user-img me-2"
+                   alt="avatar"
+                   style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+              <span id="chat-nombre-receptor" class="fw-bold ms-2">Usuario</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+              <button class="btn-icon"><i class="bi bi-star fs-4"></i></button>
+              <button class="btn-icon"><i class="bi bi-three-dots-vertical fs-4"></i></button>
+            </div>
+          </div>
+
+          <div class="chat-body overflow-auto">
+            <!-- Aquí se cargan los mensajes -->
+          </div>
+
+          <div class="message-input">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Escribe un mensaje">
+              <button class="btn btn-light" type="button"><i class="bi bi-send-fill fs-4"></i></button>
+            </div>
           </div>
         </div>
       </div>
@@ -87,10 +141,108 @@
   </div>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      console.log("DOM cargado");
+      const FAVORITOS_KEY = "usuariosFavoritos";
+      const botonesUsuario = document.querySelectorAll(".btn-chat-user");
+      const chatNombreReceptor = document.getElementById("chat-nombre-receptor");
+      const chatAvatarReceptor = document.getElementById("chat-avatar-receptor");
+      const infoReceptor = document.getElementById("info-receptor");
+      const estrellaHeader = document.querySelector(".btn-icon i.bi-star, .btn-icon i.bi-star-fill");
+      const perfilActual = document.getElementById("mi-perfil");
+      const miNickname = document.body.dataset.usuarioLogueado || document.getElementById("mi-nickname")?.textContent;
+
+      let usuarioSeleccionado = null;
+
+      // Aplicar favoritos al iniciar desde localStorage
+      const favoritos = JSON.parse(localStorage.getItem(FAVORITOS_KEY)) || [];
+      favoritos.forEach(nick => {
+        const btn = document.querySelector(`.btn-chat-user[data-usuario="${nick}"]`);
+        if (btn) {
+          btn.classList.add("fav");
+          const estrella = btn.querySelector(".estrella-fav");
+          if (estrella) estrella.classList.remove("d-none");
+        }
+      });
+
+      // Activar al hacer clic en un usuario
+      botonesUsuario.forEach(boton => {
+        boton.addEventListener("click", function () {
+          usuarioSeleccionado = this.getAttribute("data-usuario");
+          history.pushState(null, "", `/chat?usuario=${usuarioSeleccionado}`);
+          botonesUsuario.forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+
+          const nickname = this.getAttribute("data-usuario");
+          usuarioSeleccionado = nickname;
+          chatNombreReceptor.textContent = "@" + nickname;
+
+          // Cambiar avatar en el header
+          const avatarSrc = this.querySelector("img.user-img")?.getAttribute("src") || "/assets/img/anonimo.png";
+          chatAvatarReceptor.setAttribute("src", avatarSrc);
+
+          // Redirección desde el header
+          infoReceptor.onclick = () => window.location.href = `/usuario/${nickname}`;
+
+          // Mostrar/ocultar bloques
+          document.getElementById("chat-placeholder").style.display = "none";
+          document.getElementById("chat-contenido").style.display = "flex";
+
+          // Activar estrella si es favorito
+          if (estrellaHeader) {
+            if (favoritos.includes(nickname)) {
+              estrellaHeader.classList.remove("bi-star");
+              estrellaHeader.classList.add("bi-star-fill");
+            } else {
+              estrellaHeader.classList.remove("bi-star-fill");
+              estrellaHeader.classList.add("bi-star");
+            }
+          }
+
+          cargarHistorial(nickname);
+        });
+      });
+
+      // Estrella del header
+      const starBtn = document.querySelector(".btn-icon i.bi-star, .btn-icon i.bi-star-fill");
+      starBtn?.parentElement.addEventListener("click", function () {
+        const btnChatUser = document.querySelector(".btn-chat-user.active");
+        if (!btnChatUser) return;
+
+        const nick = btnChatUser.getAttribute("data-usuario");
+        const estrellaIcono = btnChatUser.querySelector(".estrella-fav");
+        let favoritos = JSON.parse(localStorage.getItem(FAVORITOS_KEY)) || [];
+
+        const isFavorito = favoritos.includes(nick);
+        if (isFavorito) {
+          favoritos = favoritos.filter(f => f !== nick);
+          starBtn.classList.replace("bi-star-fill", "bi-star");
+          btnChatUser.classList.remove("fav");
+          if (estrellaIcono) estrellaIcono.classList.add("d-none");
+        } else {
+          favoritos.push(nick);
+          starBtn.classList.replace("bi-star", "bi-star-fill");
+          btnChatUser.classList.add("fav");
+          if (estrellaIcono) estrellaIcono.classList.remove("d-none");
+        }
+
+        localStorage.setItem(FAVORITOS_KEY, JSON.stringify(favoritos));
+
+        const activeFilterBtn = document.querySelector(".btn.custom-tab-nav.active");
+        const currentFilter = activeFilterBtn?.getAttribute("data-filter") || "all";
+        filterSelection(currentFilter);
+      });
+
+      // Filtro (general / favoritos)
+      document.querySelectorAll(".btn.custom-tab-nav").forEach(button => {
+        button.addEventListener("click", function () {
+          const filter = this.getAttribute("data-filter");
+          filterSelection(filter);
+
+          document.querySelectorAll(".btn.custom-tab-nav").forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
 
       function filterSelection(category) {
-        console.log("Filtro activado para:", category);
         const items = document.getElementsByClassName("filterDiv");
         for (let i = 0; i < items.length; i++) {
           items[i].classList.remove("show");
@@ -100,47 +252,33 @@
         }
       }
 
+      // Click a mi perfil
+      if (perfilActual && miNickname) {
+        perfilActual.addEventListener("click", function () {
+          window.location.href = `/usuario/${miNickname}`;
+        });
+      }
+
+      // Iniciar filtro
       filterSelection("all");
 
-      const containers = ["#myBtnContainer", "#chatTabContainer"];
-      containers.forEach(containerId => {
-        const buttons = document.querySelectorAll(`${containerId} .btn`);
-        console.log("Botones encontrados en", containerId, buttons.length);
-        buttons.forEach(button => {
-          button.addEventListener("click", function () {
-            const filter = this.getAttribute("data-filter");
-            filterSelection(filter);
+      // Autoabrir conversación si viene preseleccionada desde el servidor
+      // Autoabrir conversación si el servidor nos pasó un receptor preseleccionado
+      const receptorPreseleccionado = document.body.dataset.receptorPreseleccionado;
 
-            document.querySelectorAll(`${containerId} .btn.active`).forEach(b => b.classList.remove("active"));
-            this.classList.add("active");
-          });
-        });
-      });
+      if (receptorPreseleccionado) {
+        const btn = document.querySelector(`.btn-chat-user[data-usuario="${receptorPreseleccionado}"]`);
+        if (btn) {
+          btn.click();
+        }
+      }
+
+
     });
   </script>
 
-  <script>
 
-    document.addEventListener("DOMContentLoaded", function() {
-      // Busca todas las estrellas dentro de .btn-icon
-      const starButtons = document.querySelectorAll(".btn-icon i.bi-star, .btn-icon i.bi-star-fill");
 
-      starButtons.forEach(icon => {
-        icon.parentElement.addEventListener("click", function(event) {
-          // Si está rellena, cambia a vacía
-          if (icon.classList.contains("bi-star-fill")) {
-            icon.classList.remove("bi-star-fill");
-            icon.classList.add("bi-star");
-          }
-          // Si está vacía, cambia a rellena
-          else if (icon.classList.contains("bi-star")) {
-            icon.classList.remove("bi-star");
-            icon.classList.add("bi-star-fill");
-          }
-        });
-      });
-    });
-  </script>
 
 
   <!-- WebSocket + STOMP -->
@@ -204,6 +342,7 @@
 
 
     function enviarMensaje() {
+      console.log("ha entrado");
       const input = document.querySelector(".message-input input");
       const mensaje = input.value.trim();
       if (!mensaje || !usuarioSeleccionado) return;
@@ -214,51 +353,86 @@
         'contenido': mensaje
       }));
 
-      mostrarMensaje(mensaje, true); // true = mensaje enviado
+      mostrarMensaje(mensaje, true, new Date().toISOString()); // true = mensaje enviado
       input.value = "";
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+      console.log("antes de conectar websocket");
       conectarWebSocket();
+      console.log("despues de conectar websocket");
+      const preseleccionado = document.body.dataset.receptorPreseleccionado;
+      const desdeBoton = document.body.dataset.accesoDesdeBoton === "true";
+
+      if (preseleccionado) {
+        console.log("Cargando chat preseleccionado:", preseleccionado);
+        usuarioSeleccionado = preseleccionado;
+        document.getElementById("chat-nombre-receptor").textContent = "@" + usuarioSeleccionado;
+        document.getElementById("chat-placeholder").style.display = "none";
+        document.getElementById("chat-contenido").style.display = "flex";
+        cargarHistorial(usuarioSeleccionado);
+      } else if (desdeBoton) {
+        // Entramos desde el botón del layout -> mostrar placeholder
+        console.log("Acceso desde botón del layout: mostrar placeholder");
+        document.getElementById("chat-placeholder").style.display = "flex";
+        document.getElementById("chat-contenido").style.display = "none";
+      }
 
       // Detectar clic en un usuario
       document.querySelectorAll(".btn-chat-user").forEach(btn => {
         btn.addEventListener("click", () => {
           usuarioSeleccionado = btn.getAttribute("data-usuario");
-          console.log("Hablando con:", usuarioSeleccionado);
+
           document.getElementById("chat-nombre-receptor").textContent = "@" + usuarioSeleccionado;
+
+          // Mostrar chat y ocultar placeholder
+          document.getElementById("chat-placeholder").style.display = "none";
+          document.getElementById("chat-contenido").style.display = "flex";
 
           cargarHistorial(usuarioSeleccionado);
         });
       });
 
 
-
+      console.log("antes de boton enviar");
       // Botón de enviar mensaje
+
       const botonEnviar = document.querySelector(".message-input button");
+      console.log(botonEnviar);
       if (botonEnviar) {
+        console.log("entra click");
         botonEnviar.addEventListener("click", enviarMensaje);
       }
 
       const inputMensaje = document.querySelector(".message-input input");
+      console.log(inputMensaje);
       if (inputMensaje) {
+        console.log("entra enter");
         inputMensaje.addEventListener("keydown", e => {
           if (e.key === "Enter") enviarMensaje();
         });
       }
     });
 
-    function cargarHistorial(nicknameDestino) {
-      fetch(`/chat/historial/${nicknameDestino}`)
+    function cargarHistorial(nickname) {
+      fetch(`/api/chat/historial/${nickname}`)
               .then(res => res.json())
               .then(mensajes => {
                 const chatBody = document.querySelector(".chat-body");
+                const miNickname = document.body.dataset.usuarioLogueado; // <- nickname del usuario autenticado
+
                 chatBody.innerHTML = ""; // limpiar mensajes anteriores
 
                 mensajes.forEach(m => {
                   const div = document.createElement("div");
                   div.classList.add("message");
-                  if (m.emisor.nickname === nickname) div.classList.add("sent");
+
+                  // CORRECTO: si el emisor soy yo, se alinea a la derecha
+                  if (m.emisor === miNickname) {
+                    div.classList.add("sent");
+                  } else {
+                    div.classList.add("received"); // opcional, por si quieres darle estilo distinto
+                  }
 
                   const fechaObj = new Date(m.fecha);
                   const hoy = new Date();
@@ -272,7 +446,6 @@
 
                   chatBody.appendChild(div);
                 });
-
 
                 chatBody.scrollTop = chatBody.scrollHeight;
               });
