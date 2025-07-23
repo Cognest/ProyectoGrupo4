@@ -51,9 +51,8 @@ private UsuarioRepo usuarioRepo;
  * Cada método anotado con `@Profile` y `@PostConstruct` permite la carga de datos
  * iniciales dependiendo del perfil activo.
  */
-public DesarrolloDataLoader(EntidadPadreRepository repository, EntidadHijaRepository entidadHijaRepository) {
-    this.repository = repository;
-    this.entidadHijaRepository = entidadHijaRepository;
+public DesarrolloDataLoader(UsuarioRepo usuarioRepo) {
+    this.usuarioRepo = usuarioRepo;
 }
 
 @PostConstruct
