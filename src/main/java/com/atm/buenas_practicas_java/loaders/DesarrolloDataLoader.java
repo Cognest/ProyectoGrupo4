@@ -6,6 +6,7 @@ import com.atm.buenas_practicas_java.entities.UserRol;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.repositories.EntidadHijaRepository;
 import com.atm.buenas_practicas_java.repositories.EntidadPadreRepository;
+import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ public class DesarrolloDataLoader {
 
 private final EntidadPadreRepository repository;
 private final EntidadHijaRepository entidadHijaRepository;
+private UsuarioRepo usuarioRepo;
 /**
  * Clase de configuración que permite cargar datos iniciales en los repositorios
  * de entidades para diferentes perfiles de configuración.
@@ -67,6 +69,8 @@ public void loadDataDesarrollo() {
     usuario1.setToken(57);
     usuario1.setAvatar("");
 
+    usuarioRepo.save(usuario1);
+
     Usuario usuario2 = new Usuario();
     usuario2.setApellidos("Admin 1");
     usuario2.setEmail("admin@admin.com");
@@ -76,6 +80,8 @@ public void loadDataDesarrollo() {
     usuario2.setRol(UserRol.valueOf("ADMIN"));
     usuario2.setToken(77);
     usuario2.setAvatar("");
+
+    usuarioRepo.save(usuario2);
     log.info("Datos de entidades cargados correctamente.");
 
 }
