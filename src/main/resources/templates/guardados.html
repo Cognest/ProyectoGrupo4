@@ -9,13 +9,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-        .filterDiv {
-            display: none;
-        }
-
-        .filterDiv.show {
-            display: block;
-        }
 
         .btn.active {
             background-color: var(--accent-color);
@@ -375,7 +368,7 @@
                 <div class="chat-sidebar-body flex-grow-1 overflow-auto mt-3 d-flex justify-content-center gap-3 flex-wrap">
 
                     <!-- AUDIOS -->
-                    <div class="filterDiv select-aud">
+                    <div class="filterDivContenido select-aud">
                         <div class="music-player" data-index="0">
                             <div class="cover">
                                 <img src="https://pbs.twimg.com/media/FL6DkQAXIAMfAqM.jpg" alt="Mi canastera - Canelita" />
@@ -404,7 +397,7 @@
                         </div>
                     </div>
 
-                    <div class="filterDiv select-aud">
+                    <div class="filterDivContenido select-aud">
                         <div class="music-player" data-index="0">
                             <div class="cover">
                                 <img src="https://source.boomplaymusic.com/group10/M00/12/13/17ec8d02dd12446c9908d187b44ae0b7_320_320.jpg" alt="LPDC-Desidia" />
@@ -435,23 +428,23 @@
 
                     <!-- MODELOS 3D (sacados de su contenedor-flex y puestos directamente aquí) -->
 
-                    <div class="visor3d-container filterDiv select-tres-d">
+                    <div class="visor3d-container filterDivContenido select-tres-d">
                         <img src="/assets/img/preview/previewKnight.png" alt="Preview Knight" class="preview-img" data-model="/archivos/modelos3d/javier/knight.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
                         <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
                     </div>
 
-                    <div class="visor3d-container filterDiv select-tres-d">
+                    <div class="visor3d-container filterDivContenido select-tres-d">
                         <img src="/assets/img/preview/previewCow.png" alt="Preview Cow" class="preview-img" data-model="/assets/models/Cow.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
                         <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
                     </div>
 
-                    <div class="visor3d-container filterDiv select-tres-d">
+                    <div class="visor3d-container filterDivContenido select-tres-d">
                         <img src="/assets/img/preview/previewHospital.png" alt="Preview Hospital" class="preview-img" data-model="/assets/models/Hospital.glb" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;z-index:2;">
                         <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
                     </div>
 
 <!--                VÍDEOS-->
-                    <div class="filterDiv select-vid video-item"
+                    <div class="filterDivContenido select-vid video-item"
                          data-src="/assets/img/videos/carretera.mp4"
                          data-poster="/assets/img/preview/previewCarretera.png"
                          data-title="Título del vídeo super largo para ver como queda no vaya a ser que haga algo raro"
@@ -459,7 +452,7 @@
                          data-avatar="https://randomuser.me/api/portraits/men/32.jpg">
                     </div>
 
-                    <div class="filterDiv select-vid video-item"
+                    <div class="filterDivContenido select-vid video-item"
                          data-src="/assets/img/videos/olas.mp4"
                          data-poster="/assets/img/preview/previewOlas.png"
                          data-title="Título del vídeo"
@@ -469,7 +462,7 @@
 
                     <!--                IMAGENES-->
 
-                <div class="masonry filterDiv select-img">
+                <div class="masonry filterDivContenido select-img">
                     <!-- GALERIA CON OVERLAY -->
                     <div class="masonry-item hover-container"
                          th:each="imagen, iterStat : ${imagenes}"
@@ -512,7 +505,7 @@
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filterSelection(category) {
-                const items = document.getElementsByClassName("filterDiv");
+                const items = document.getElementsByClassName("filterDivContenido");
                 for (let i = 0; i < items.length; i++) {
                     items[i].classList.remove("show");
                     if (category === "all" || items[i].classList.contains(category)) {

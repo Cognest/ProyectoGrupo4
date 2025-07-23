@@ -3254,11 +3254,11 @@ PANTALLA GUARDADOS
 }
 
 /* Filtro: Oculta todos los elementos inicialmente */
-.filterDiv {
+.filterDivContenido {
   display: none;
 }
 
 /* Filtro: Muestra solo los elementos que coinciden con el filtro */
-.filterDiv.show {
+.filterDivContenido.show {
   display: block;
 }
