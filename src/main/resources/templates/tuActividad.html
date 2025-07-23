@@ -22,9 +22,9 @@
                 <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
             </div>
             <nav class="menu-opciones">
-                <a  class="nav-link-guardados" id="btn-guardados">Guardados</a>
-                <a  class="nav-link-guardados" id="btn-contenidoAdquirido">Contenido Adquirido</a>
-                <a  class="nav-link-guardados" id="btn-comentarios">Comentarios</a>
+                <a  class="nav-link-guardados menu-btn activo" id="btn-guardados">Guardados</a>
+                <a  class="nav-link-guardados menu-btn" id="btn-contenidoAdquirido">Contenido Adquirido</a>
+                <a  class="nav-link-guardados menu-btn" id="btn-comentarios">Comentarios</a>
             </nav>
         </div>
         <!-- Contenido principal -->
@@ -240,7 +240,6 @@
                     this.classList.add('activo');
                 });
             });
-            document.getElementById('btn-meGusta').click();
         });
     </script>
 
