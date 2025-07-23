@@ -75,7 +75,9 @@ public class SubidaController {
             File directory = new File(basePath);
             if (!directory.exists()) {
                 log.info("Creando directorio: {}", basePath);
-                directory.mkdirs();
+                if (directory.mkdirs()) {
+                    log.info("Directorio creado: {}", basePath);
+                }
             }
 
             Path filepath = Paths.get(basePath, filename.replaceAll("\\s+", "_"));
