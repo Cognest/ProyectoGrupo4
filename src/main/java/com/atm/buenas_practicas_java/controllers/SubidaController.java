@@ -9,6 +9,7 @@ import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import com.atm.buenas_practicas_java.services.ContenidoService;
 import com.atm.buenas_practicas_java.services.EtiquetaContenidoService;
 import com.atm.buenas_practicas_java.services.UsuarioContenidoService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Log4j2
 @Controller
 public class SubidaController {
 
@@ -39,13 +41,15 @@ public class SubidaController {
     private EtiquetaContenidoService etiquetaContenidoService;
 
     private final ContenidoService contenidoService;
-    public SubidaController(ContenidoService contenidoService) {this.contenidoService = contenidoService;}
+    public SubidaController(ContenidoService contenidoService) {
+        this.contenidoService = contenidoService;
+    }
 
     @GetMapping("/subir-contenido")
-    public String mostrarSubidaContenido(Model model)
-    {
+    public String mostrarSubidaContenido(Model model) {
+        log.info("Mostrando formulario para subir contenido.");
         model.addAttribute("contenido", new ContenidoDto());
-        return "subirContenido"; // View name
+        return "subirContenido";
     }
 
     @PostMapping("/subir-contenido")
@@ -57,44 +61,46 @@ public class SubidaController {
                                  @AuthenticationPrincipal CustomUserDetails usuarioAutenticado,
                                  RedirectAttributes redirectAttributes) {
         try {
+            log.info("Iniciando proceso de subida de contenido. Usuario: {}", usuarioAutenticado.getUsername());
+
             String filename = file.getOriginalFilename();
             if (filename == null || !esExtensionPermitida(filename, tipo)) {
+                log.warn("Archivo con extensión no permitida: {} para tipo {}", filename, tipo);
                 redirectAttributes.addFlashAttribute("error", "Tipo de archivo no permitido para el tipo seleccionado.");
                 return "redirect:/subir-contenido";
             }
 
-            // Asegura que el directorio exista
             String nickname = usuarioAutenticado.getUsername();
             String basePath = "/uploads/" + tipo + "/" + nickname;
             File directory = new File(basePath);
             if (!directory.exists()) {
+                log.info("Creando directorio: {}", basePath);
                 directory.mkdirs();
             }
 
-            // Guarda el archivo
             Path filepath = Paths.get(basePath, filename.replaceAll("\\s+", "_"));
+            log.info("Guardando archivo en ruta: {}", filepath);
             Files.write(filepath, file.getBytes());
 
-            //Guardar portada
             String portadaUrl = null;
-
             if (portada != null && !portada.isEmpty()) {
                 String portadaFilename = portada.getOriginalFilename().replaceAll("\\s+", "_");
-
-                // Validación de extensión de portada
                 String portadaExtension = portadaFilename.substring(portadaFilename.lastIndexOf('.') + 1).toLowerCase();
+
                 if (!List.of("jpg", "jpeg", "png", "gif").contains(portadaExtension)) {
+                    log.warn("Portada con extensión no válida: {}", portadaExtension);
                     redirectAttributes.addFlashAttribute("error", "La portada debe ser una imagen válida.");
                     return "redirect:/subir-contenido";
                 }
 
-                // Guardar portada en carpeta separada pero dentro del mismo tipo/nickname
                 Path portadaPath = Paths.get(basePath, "portadas");
                 if (!Files.exists(portadaPath)) {
+                    log.info("Creando directorio para portada: {}", portadaPath);
                     Files.createDirectories(portadaPath);
                 }
 
                 Path portadaFullPath = portadaPath.resolve(portadaFilename);
+                log.info("Guardando portada en: {}", portadaFullPath);
                 Files.write(portadaFullPath, portada.getBytes());
 
                 String portadaStr = portadaFullPath.toString().replace("\\", "/");
@@ -102,35 +108,34 @@ public class SubidaController {
                 portadaUrl = "/archivos" + relativePortada;
             }
 
-            //Guardar en contenido
-            // 1. Convertir a URLs accesibles desde navegador
             String url = filepath.toString().replace("\\", "/");
-            System.out.println("Remplazando las barras: " + url);
             String relativeUrl = url.substring(url.indexOf("/uploads/") + "/uploads".length());
-            System.out.println("Quitando uploads: " + relativeUrl);
             String webUrl = "/archivos" + relativeUrl;
-            System.out.println("Añadiendo archivos: " + webUrl);
 
-            // 2. Llama al servicio usando rutas web
+            log.info("URL accesible del contenido: {}", webUrl);
+
             Contenido contenido = contenidoService.subirContenido(contenidoDto, tipo, webUrl, nickname, portadaUrl);
+            log.info("Contenido guardado en base de datos con ID: {}", contenido.getId());
 
-            // Buscar el usuario
             Usuario usuario = usuarioRepo.findByNickname(nickname)
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                    .orElseThrow(() -> {
+                        log.error("Usuario no encontrado: {}", nickname);
+                        return new RuntimeException("Usuario no encontrado");
+                    });
 
-            String tipoRelacion = "Creador";
+            usuarioContenidoService.vincularUsuarioContenido(usuario, contenido, "Creador");
+            log.info("Usuario {} vinculado como Creador del contenido ID {}", nickname, contenido.getId());
 
-            usuarioContenidoService.vincularUsuarioContenido(usuario, contenido, tipoRelacion);
-
-            // Crear etiquetas y vincular al contenido
             etiquetaContenidoService.vincularEtiquetaContenido(contenido, etiquetas);
+            log.info("Etiquetas '{}' vinculadas al contenido ID {}", etiquetas, contenido.getId());
 
             redirectAttributes.addFlashAttribute("success", "Archivo subido exitosamente.");
         } catch (Exception e) {
+            log.error("Error al subir el contenido: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error", "Error al subir el archivo: " + e.getMessage());
         }
 
-        return "redirect:/subir-contenido"; // Volvemos a la página del formulario
+        return "redirect:/subir-contenido";
     }
 
     private boolean esExtensionPermitida(String filename, String tipo) {
@@ -139,7 +144,7 @@ public class SubidaController {
         String extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
         tipo = tipo.toLowerCase().trim();
 
-        System.out.println("🧪 Validando archivo: " + filename + " | tipo: " + tipo + " | extensión: " + extension);
+        log.debug("Validando extensión del archivo: {} | tipo: {} | extensión: {}", filename, tipo, extension);
 
         return switch (tipo) {
             case "imagenes" -> List.of("jpg", "jpeg", "png", "gif").contains(extension);

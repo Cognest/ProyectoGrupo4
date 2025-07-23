@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{/layout/plantilla}">
 <head>
     <meta charset="UTF-8">
@@ -33,6 +34,7 @@ class="bg-gradient-primary">
                             <a th:href="@{/actividad}" class="nav-link-guardados">Tu actividad</a>
                             <a th:href="@{/config-perfil}" class="nav-link-guardados">Configuración</a>
                             <a th:href="@{/conocenos}" class="nav-link-guardados">Conócenos</a>
+                            <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/usuarios}" class="nav-link-guardados">Administrar usuarios</a>
                         </nav>
                     </div>
                 </div>

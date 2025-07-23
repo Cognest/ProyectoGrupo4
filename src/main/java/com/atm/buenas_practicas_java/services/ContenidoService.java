@@ -1,6 +1,7 @@
 package com.atm.buenas_practicas_java.services;
 
 import com.atm.buenas_practicas_java.dtos.ContenidoDto;
+import com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO;
 import com.atm.buenas_practicas_java.entities.Contenido;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.entities.UsuarioContenido;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ContenidoService extends AbstractBusinessService<Contenido, Integer, ContenidoDto,
@@ -42,6 +44,10 @@ public class ContenidoService extends AbstractBusinessService<Contenido, Integer
         contenidoRepo.save(contenido);
 
         return contenido;
+    }
+
+    public List<ContenidoSubidoDTO> buscarPorTermino(String termino) {
+        return contenidoRepo.buscarContenidoPorTermino(termino);
     }
 }
 

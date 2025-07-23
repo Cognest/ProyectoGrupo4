@@ -40,4 +40,23 @@ public interface ContenidoRepo extends JpaRepository<Contenido, Integer> {
         ORDER BY COUNT(l) DESC
     """)
     List<ContenidoSubidoDTO> findAllOrderByLikesExcludingId(@Param("contenidoId") Integer contenidoId);
+
+    @Query("""
+    SELECT new com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO(
+        c.id, c.titulo, c.formato, c.url, c.urlPortada,
+        u.nickname, u.avatar, COUNT(l), c.fecha
+    )
+    FROM Contenido c
+    JOIN UsuarioContenido uc ON uc.contenido = c AND uc.tipo = 'Creador'
+    JOIN Usuario u ON u.id = uc.usuario.id
+    LEFT JOIN Like l ON l.contenido = c
+    LEFT JOIN EtiquetaContenido ec ON ec.contenido = c
+    LEFT JOIN Etiqueta e ON e.id = ec.etiqueta.id
+    WHERE LOWER(c.titulo) LIKE LOWER(CONCAT('%', :termino, '%'))
+       OR LOWER(c.descripcion) LIKE LOWER(CONCAT('%', :termino, '%'))
+       OR LOWER(e.nombre) LIKE LOWER(CONCAT('%', :termino, '%'))
+    GROUP BY c.id, c.titulo, c.formato, c.url, c.urlPortada, u.nickname, u.avatar, c.fecha
+    ORDER BY COUNT(l) DESC
+""")
+    List<ContenidoSubidoDTO> buscarContenidoPorTermino(@Param("termino") String termino);
 }

@@ -25,35 +25,35 @@
         <div class="col-xl-3 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
           <div class="features-item">
             <i class="bi bi-camera" style="color: #ffbb2c;"></i>
-            <h3><a href="" class="stretched-link">Imágenes</a></h3>
+            <h3><a href="#" class="stretched-link">Imágenes</a></h3>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="200">
           <div class="features-item">
             <i class="bi bi-camera-video" style="color: #5578ff;"></i>
-            <h3><a href="" class="stretched-link">Videos</a></h3>
+            <h3><a href="#" class="stretched-link">Videos</a></h3>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="300">
           <div class="features-item">
             <i class="bi bi-music-note-beamed" style="color: #e80368;"></i>
-            <h3><a href="" class="stretched-link">Audios</a></h3>
+            <h3><a href="#" class="stretched-link">Audios</a></h3>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="500">
           <div class="features-item">
             <i class="bi bi-box" style="color: #47aeff;"></i>
-            <h3><a href="" class="stretched-link">Modelos 3D</a></h3>
+            <h3><a href="#" class="stretched-link">Modelos 3D</a></h3>
           </div>
         </div>
       </div>
     </div>
 
     <div class="container">
-      <form class="buscador-form" data-aos="fade-up" data-aos-delay="200">
+      <form th:action="@{/busqueda}" method="get" class="buscador-form" data-aos="fade-up" data-aos-delay="200">
         <div class="row gy-4">
           <div class="col-12">
-            <input type="search" id="buscador" name="buscador" class="form-control focus-ring focus-ring-success" placeholder="Buscador" required="">
+            <input type="search" id="buscador" name="buscador" class="form-control" placeholder="Buscador" required>
           </div>
         </div>
       </form>

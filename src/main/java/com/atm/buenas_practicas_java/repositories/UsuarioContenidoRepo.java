@@ -28,7 +28,7 @@ public interface UsuarioContenidoRepo extends JpaRepository<UsuarioContenido, In
     FROM UsuarioContenido uc
     JOIN uc.usuario u
     JOIN uc.contenido c
-    WHERE u = :usuario
+    WHERE u = :usuario AND uc.tipo = 'Creador'
     ORDER BY c.fecha DESC
     """)
     List<ContenidoSubidoDTO> findContenidosSubidosPorUsuario(@Param("usuario") Usuario usuario);
