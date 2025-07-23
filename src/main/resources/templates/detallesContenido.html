@@ -21,6 +21,8 @@
               <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
             </div>
 
+
+
             <!--VIDEOS-->
             <div class="media-container" th:case="'videos'">
               <video class="image hover-video w-100" playsinline loop controls preload="metadata">
@@ -38,6 +40,8 @@
                 <div class="titre">
                   <h3 th:text="${usuario.nickname}"></h3>
                   <h1 th:text="${contenido.titulo}"></h1>
+                  <h4 class="text-muted mt-2">Precio: <span th:text="${contenido.precio + ' €'}"></span></h4>
+
                 </div>
                 <audio th:src="${contenido.url}" preload="metadata"></audio>
 
@@ -60,6 +64,7 @@
               </div>
             </div>
 
+
             <!--MODELOS 3D-->
             <div th:case="'modelos3d'" class="media-container visor3d-container select-tres-d">
               <img th:src="${contenido.urlPortada}"
@@ -70,9 +75,29 @@
               <div class="visor3d" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:1;"></div>
             </div>
           </div>
-
           <div class="mb-3 mt-3">
-            <h1 th:text="${contenido.titulo}"></h1>
+
+            <div class="d-flex align-items-center" style="gap: 1rem;">
+
+              <h1 class="mb-0" th:text="${contenido.titulo}"></h1>
+
+              <!-- Solo visible para el creador -->
+              <th:block th:if="${relacion == 'Creador'}">
+                <a class="btn btn-outline-success rounded-2 px-3" th:href="@{'/contenido/editar/' + ${contenido.id}}">
+                  <i class="bi bi-pencil"></i> Editar
+                </a>
+
+                <form th:action="@{'/contenido/eliminar/' + ${contenido.id}}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este contenido?')">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
+                </form>
+              </th:block>
+
+            </div>
+
+            <!-- El resto sigue igual -->
+            <h4 class="text-muted mt-2">Precio: <span th:text="${contenido.precio + ' TK'}"></span></h4>
             <div class="d-flex gap-1">
               <div th:each="etiqueta : ${etiquetas}">
                 <button type="button" class="btn btn-outline-success" th:text="${etiqueta.nombre}"></button>
@@ -128,11 +153,17 @@
                 <button id="save-button" class="btn btn-outline-success ms-1" th:attr="data-id=${contenido.id}">
                   <i id="save-icon" th:class="${estaGuardado} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                 </button>
+
+                <button class="btn btn-outline-danger ms-2" th:attr="data-id=${contenido.id}" title="Reportar contenido">
+                  <i class="bi bi-flag"></i>
+                </button>
+
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div class="mt-4 p-2 comentarios">
         <h2>Comentarios</h2>
         <div th:if="${#authorization.expression('isAuthenticated()')}" class="card mb-5 p-4 comment-card">
@@ -208,6 +239,8 @@
                     <button class="action-btn guardar-btn" th:attr="data-id=${itemGaleria.id}">
                       <i th:class="${guardadosIds.contains(itemGaleria.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                     </button>
+
+
                   </div>
                   <div class="overlay-title" th:text="${itemGaleria.titulo}"></div>
                 </div>
