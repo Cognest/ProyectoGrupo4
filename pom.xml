@@ -181,7 +181,7 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <release>24</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -190,6 +190,7 @@
                 <version>3.4.3</version>
                 <configuration>
                     <image>
+                        <!--suppress UnresolvedMavenProperty -->
                         <name>docker.io/${env.PROJECT_NAME}:${env.VERSION}</name>
                         <builder>paketobuildpacks/builder-jammy-full:latest</builder>
                         <cleanCache>true</cleanCache>
