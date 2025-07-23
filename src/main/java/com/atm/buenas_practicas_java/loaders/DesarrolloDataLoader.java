@@ -2,6 +2,8 @@ package com.atm.buenas_practicas_java.loaders;
 
 import com.atm.buenas_practicas_java.entities.EntidadHija;
 import com.atm.buenas_practicas_java.entities.EntidadPadre;
+import com.atm.buenas_practicas_java.entities.UserRol;
+import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.repositories.EntidadHijaRepository;
 import com.atm.buenas_practicas_java.repositories.EntidadPadreRepository;
 import jakarta.annotation.PostConstruct;
@@ -55,13 +57,25 @@ public DesarrolloDataLoader(EntidadPadreRepository repository, EntidadHijaReposi
 @PostConstruct
 public void loadDataDesarrollo() {
     log.info("Iniciando la carga de datos para el perfil desarrollo");
-    int numeroEntidades = 10;
-    EntidadPadre[] entidades = new EntidadPadre[numeroEntidades];
-    Arrays.setAll(entidades, i -> new EntidadPadre("Entidad-" + i+1));
-    repository.saveAll(Arrays.asList(entidades));
-    for (EntidadPadre entidadPadre : entidades) {
-        entidadHijaRepository.save(new EntidadHija("Hija de " + entidadPadre.getNombre()));
-    }
+    Usuario usuario1 = new Usuario();
+    usuario1.setApellidos("Apellido 1");
+    usuario1.setEmail("pepe@pepe.com");
+    usuario1.setNickname("pepe");
+    usuario1.setNombre("pepe");
+    usuario1.setPassword("$2a$10$w5ewfdBtL87AMoMk7MGJm.qWma.swNh.oxQCiGkQalRGz7rebnLae");
+    usuario1.setRol(UserRol.valueOf("USUARIO"));
+    usuario1.setToken(57);
+    usuario1.setAvatar("");
+
+    Usuario usuario2 = new Usuario();
+    usuario2.setApellidos("Admin 1");
+    usuario2.setEmail("admin@admin.com");
+    usuario2.setNickname("admin");
+    usuario2.setNombre("admin");
+    usuario2.setPassword("$2a$10$w5ewfdBtL87AMoMk7MGJm.qWma.swNh.oxQCiGkQalRGz7rebnLae");
+    usuario2.setRol(UserRol.valueOf("ADMIN"));
+    usuario2.setToken(77);
+    usuario2.setAvatar("");
     log.info("Datos de entidades cargados correctamente.");
 
 }

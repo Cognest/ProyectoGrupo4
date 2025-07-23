@@ -21,12 +21,12 @@ ALTER TABLE IF EXISTS public.usuario
 
 
 INSERT INTO public.usuario(
-    apellidos, email, nickname, nombre, password, rol, token)
+    apellidos, email, nickname, nombre, password, rol, token, avatar)
 VALUES ('Apellido 1', 'pepe@pepe.com', 'pepe', 'pepe',
         '$2a$10$w5ewfdBtL87AMoMk7MGJm.qWma.swNh.oxQCiGkQalRGz7rebnLae',
-        'USUARIO', 57);
+        'USUARIO', 57, '');
 INSERT INTO public.usuario(
-    apellidos, email, nickname, nombre, password, rol, token)
+    apellidos, email, nickname, nombre, password, rol, token, avatar)
 VALUES ('Admin 1', 'admin@admin.com', 'admin', 'admin',
         '$2a$10$w5ewfdBtL87AMoMk7MGJm.qWma.swNh.oxQCiGkQalRGz7rebnLae',
-        'ADMIN', 77);
+        'ADMIN', 77, '');
