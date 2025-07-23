@@ -71,12 +71,15 @@ public class SubidaController {
             }
 
             String nickname = usuarioAutenticado.getUsername();
-            String basePath = "//uploads/" + tipo + "/" + nickname;
+            String basePath = "uploads/" + tipo + "/" + nickname;
             File directory = new File(basePath);
             if (!directory.exists()) {
                 log.info("Creando directorio: {}", basePath);
                 if (directory.mkdirs()) {
                     log.info("Directorio creado: {}", basePath);
+                }
+                else {
+                    log.error("Error creando directorio: {}", basePath);
                 }
             }
 
