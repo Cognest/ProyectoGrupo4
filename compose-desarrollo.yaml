@@ -51,5 +51,3 @@ services:
 
 volumes:
   proyecto4_data:
-
-  proyecto4_files:
