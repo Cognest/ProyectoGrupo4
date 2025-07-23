@@ -31,8 +31,6 @@ import java.util.Arrays;
 @Profile("desarrollo")
 public class DesarrolloDataLoader {
 
-private final EntidadPadreRepository repository;
-private final EntidadHijaRepository entidadHijaRepository;
 private UsuarioRepo usuarioRepo;
 /**
  * Clase de configuración que permite cargar datos iniciales en los repositorios
