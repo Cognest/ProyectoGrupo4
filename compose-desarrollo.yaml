@@ -29,6 +29,8 @@ services:
       - "8080"
     volumes:
       - proyecto4_files:/uploads
+    command: >
+      - sh -c "chown -R 1000:1000 /uploads"
 
 
   db:
