@@ -5,6 +5,8 @@ name: ${COMPOSE_NAME}
 # Definimos los servicios que se ejecutarán en los contenedores Docker.
 services:
   java:
+    tty: true
+    stdin_open: true
     image: ${PROJECT_NAME}:${VERSION:-SNAPSHOT}
     ports:
       - "${PUERTO_DESARROLLO:-8080}:8080"
