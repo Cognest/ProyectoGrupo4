@@ -61,9 +61,11 @@ jobs:
       - name: Desplegar contenedor de desarrollo
         env:
           VERSION: 'SNAPSHOT'
-
           COMPOSE_NAME: ${{ vars.CURSO }}-${{ vars.GRUPO }}-dev
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           PUERTO_DESARROLLO: ${{ vars.PUERTO_DESARROLLO }}
           PUERTO_DB_DESARROLLO: ${{ vars.PUERTO_DB_DESARROLLO }}
-        run: docker compose -f compose-desarrollo.yaml up -d
+        run: |
+          docker volume create proyecto4_files
+          docker run --rm -v proyecto4_files:/uploads alpine sh -c "chown -R 1000:1000 /uploads"
+          docker compose -f compose-desarrollo.yaml up -d
