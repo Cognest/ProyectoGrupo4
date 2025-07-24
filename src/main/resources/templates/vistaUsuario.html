@@ -31,9 +31,9 @@ class="bg-gradient-primary">
                         <img th:src="${usuarioLogueado.avatar}" alt="Foto de perfil" class="foto-perfil">
 
                         <nav class="menu-opciones">
-                            <a th:href="@{/actividad}" class="nav-link-guardados">Tu actividad</a>
-                            <a th:href="@{/config-perfil}" class="nav-link-guardados">Configuración</a>
-                            <a th:href="@{/conocenos}" class="nav-link-guardados">Conócenos</a>
+                            <a th:href="@{/actividad}" class="nav-link-guardados menu-btn">Tu actividad</a>
+                            <a th:href="@{/config-perfil}" class="nav-link-guardados menu-btn">Configuración</a>
+                            <a th:href="@{/conocenos}" class="nav-link-guardados menu-btn">Conócenos</a>
                             <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/usuarios}" class="nav-link-guardados">Administrar usuarios</a>
                         </nav>
                     </div>
