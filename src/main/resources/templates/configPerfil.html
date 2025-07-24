@@ -34,7 +34,33 @@
             <div class="fondo-rectangulo-verde p-4">
                 <!-- Editar Foto -->
                 <section id="contenido-fotoPerfil" class="contenido-principal">
-                    <p> Editar foto </p>
+                    <form th:action="@{/usuario/cambiar-avatar}" method="post" enctype="multipart/form-data" class="d-flex flex-column align-items-center gap-3">
+
+                        <!-- Imagen circular con overlay siempre visible -->
+                        <div class="position-relative" style="width: 220px; height: 220px;">
+                            <img id="avatarPreview" th:src="${usuario.avatar}" alt="Avatar actual"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid #ccc;">
+
+                            <!-- Overlay siempre visible con texto pequeño -->
+                            <label for="avatar"
+                                   class="d-flex justify-content-center align-items-center text-white"
+                                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                  border-radius: 50%; background-color: rgba(0, 0, 0, 0.4);
+                  font-size: 0.8rem; text-align: center; cursor: pointer;">
+                                Cambiar<br>foto de perfil
+                            </label>
+                        </div>
+
+                        <!-- Input de archivo oculto -->
+                        <input type="file" name="avatar" id="avatar" accept="image/*" style="display: none;" onchange="previewAvatar(this)" required>
+
+                        <!-- Botón de enviar -->
+                        <button type="submit" class="nav-link-guardados active" style="width: auto; border: none; outline: none;">
+                            Guardar
+                        </button>
+                    </form>
+
+
                 </section>
 
                 <!-- Contraseña y Seguridad -->
@@ -100,7 +126,20 @@
 
         });
     </script>
-</div>
+        <script>
+            function previewAvatar(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('avatarPreview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+
+
+    </div>
 </div>
 </body>
 </html>

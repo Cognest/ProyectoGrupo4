@@ -113,6 +113,13 @@ public class SubidaController {
                 String relativePortada = portadaStr.substring(portadaStr.indexOf("/uploads/") + "/uploads".length());
                 portadaUrl = "/archivos" + relativePortada;
             }
+            // Si no se ha subido portada, se asigna una por defecto solo si es audio o modelo
+            if (portadaUrl == null || portadaUrl.isBlank()) {
+                if (tipo.equalsIgnoreCase("audios") || tipo.equalsIgnoreCase("modelos3d")) {
+                    portadaUrl = "/assets/img/logos/logoVerdeFondo.png";
+                }
+            }
+
 
             String url = filepath.toString().replace("\\", "/");
             String relativeUrl = url.substring(url.indexOf("/uploads/") + "/uploads".length());
