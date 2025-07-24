@@ -48,7 +48,7 @@
                             <div class="masonry-item hover-container" th:switch="${contenido.formato}">
 
                                 <!-- IMAGEN -->
-                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'" class="filterDivContenido select-img preview-item" >
+                                <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'" class="filterDiv select-img preview-item" >
                                     <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
                                         <img th:src="${contenido.url}" class="image" alt="Contenido"/>
                                         <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
@@ -76,7 +76,7 @@
                                 </div>
 
                                 <!-- VIDEO -->
-                                <div th:case="'videos'" class="filterDivContenido select-vid preview-item hover-container"
+                                <div th:case="'videos'" class="filterDiv select-vid preview-item hover-container"
                                      th:attr="data-type='video',
               data-src=${contenido.url},
               data-id=${contenido.id},
@@ -127,7 +127,7 @@
                                 </div>
 
                                 <!-- AUDIO -->
-                                <div th:case="'audios'" class="filterDivContenido select-aud">
+                                <div th:case="'audios'" class="filterDiv select-aud">
                                     <div class="music-player">
                                         <div class="cover">
                                             <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
@@ -175,7 +175,7 @@
                                 </div>
 
                                 <!-- MODELO 3D -->
-                                <div th:case="'modelos3d'" class="filterDivContenido select-tres-d preview-item preview-3D">
+                                <div th:case="'modelos3d'" class="filterDiv select-tres-d preview-item preview-3D">
                                     <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
                                         <img th:src="${contenido.urlPortada}" class="image" alt="Portada"/>
                                         <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
@@ -213,7 +213,16 @@
 
                 <!-- Comentarios -->
                 <section id="contenido-comentarios" class="contenido-principal" style="display:none;">
-                    <p> Comentarios realizados </p>
+                    <div class="comentario-realizado mb-3 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="me-2" th:text="${#authentication.name}"></span>
+                            <i class="bi bi-arrow-right-short"></i>
+                            <span class="text-muted" th:text="${usuario.nickname}"></span>
+                        </div>
+                        <div class="text-muted mb-2" style="font-size: 0.9rem;">23 de julio de 2025 - 14:35</div>
+                        <p class="mb-3">¡Excelente trabajo en esta pieza! Me gustó mucho la composición.</p>
+                        <a href="/contenido/usuarioComentado/123" class="btn btn-outline-primary btn-sm">Ver publicación</a>
+                    </div>
                 </section>
             </div>
         </div>
@@ -248,7 +257,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filterSelection(category) {
-                const items = document.getElementsByClassName("filterDivContenido");
+                const items = document.getElementsByClassName("filterDiv");
                 for (let i = 0; i < items.length; i++) {
                     items[i].classList.remove("show");
                     if (category === "all" || items[i].classList.contains(category)) {
