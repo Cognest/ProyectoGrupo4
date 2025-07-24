@@ -207,20 +207,12 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        .contenido-wrapper {
-            display: none;
-        }
-
-        .contenido-wrapper.show {
-            display: block;
-        }
     </style>
 </head>
 
 <body>
 <div layout:fragment="contenido">
-    <form th:action="@{/busqueda}" method="get" id="filtro-form">
+    <form th:action="@{/busqueda/{tipo}/{subtipo}(tipo=${tipo}, subtipo=${subtipo})}" method="get" id="filtro-form">
         <div class="search-container">
             <div class="container">
                 <div class="row justify-content-center">
@@ -264,26 +256,12 @@
 
     <!-- Contenido principal -->
     <div class="container">
-        <!-- Barra de filtros -->
-        <div class="filter-bar">
-            <div class="container">
-                <div id="myBtnContainer" class="d-flex flex-wrap align-items-center">
-                    <div class="filter-item active" data-filter="all">Todo</div>
-                    <div class="filter-item" data-filter="select-img">Imagenes</div>
-                    <div class="filter-item" data-filter="select-vid">Vídeos</div>
-                    <div class="filter-item" data-filter="select-aud">Audios</div>
-                    <div class="filter-item" data-filter="select-tres-d">Modelos 3D</div>
-                </div>
-            </div>
-        </div>
-
         <div th:if="${contenidos.isEmpty()}">
             <p>No se han encontrado resultados para esa búsqueda.</p>
         </div>
         <div class="masonry">
             <div th:each="contenido, iterStat : ${contenidos}"
                  class="contenido-wrapper"
-                 th:classappend="' ' + ${contenido.claseFiltro}"
                  data-aos="fade-up"
                  th:attr="data-aos-delay=${iterStat.index * 100}">
                 <div class="masonry-item hover-container" th:switch="${contenido.formato}">
@@ -456,39 +434,6 @@
 
             document.getElementById('orden').addEventListener('change', function () {
                 form.submit();
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function filterSelection(category) {
-                const items = document.getElementsByClassName("contenido-wrapper");
-
-                for (let i = 0; i < items.length; i++) {
-                    items[i].classList.remove("show");
-
-                    if (category === "all" || items[i].classList.contains(category)) {
-                        items[i].classList.add("show");
-                        items[i].style.display = "block";
-                    } else {
-                        items[i].style.display = "none";
-                    }
-                }
-            }
-
-
-            filterSelection("all");
-
-            const buttons = document.querySelectorAll("#myBtnContainer .filter-item");
-            buttons.forEach(button => {
-                button.addEventListener("click", function () {
-                    const filter = this.getAttribute("data-filter");
-                    filterSelection(filter);
-
-                    document.querySelectorAll("#myBtnContainer .filter-item.active")
-                        .forEach(b => b.classList.remove("active"));
-                    this.classList.add("active");
-                });
             });
         });
     </script>

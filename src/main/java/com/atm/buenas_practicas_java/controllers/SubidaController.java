@@ -55,6 +55,7 @@ public class SubidaController {
     @PostMapping("/subir-contenido")
     public String subirContenido(@RequestParam("file") MultipartFile file,
                                  @RequestParam("tipo") String tipo,
+                                 @RequestParam("subtipo") String subtipo,
                                  @RequestParam("etiquetas") String etiquetas,
                                  @RequestParam(value = "portada", required = false) MultipartFile portada,
                                  @ModelAttribute("contenido") ContenidoDto contenidoDto,
@@ -119,7 +120,7 @@ public class SubidaController {
 
             log.info("URL accesible del contenido: {}", webUrl);
 
-            Contenido contenido = contenidoService.subirContenido(contenidoDto, tipo, webUrl, nickname, portadaUrl);
+            Contenido contenido = contenidoService.subirContenido(contenidoDto, tipo, subtipo, webUrl, nickname, portadaUrl);
             log.info("Contenido guardado en base de datos con ID: {}", contenido.getId());
 
             Usuario usuario = usuarioRepo.findByNickname(nickname)

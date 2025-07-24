@@ -65,9 +65,9 @@
                 <h5 class="section-title-publish fw-bold">Datos adicionales</h5>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Precio (€)</label>
+                    <label class="form-label fw-bold">Precio (Tk)</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+                        <span class="input-group-text"><i class="bi bi-coin"></i></span>
                         <input type="number" name="precio" th:field="*{precio}" class="form-control" placeholder="Introduce el precio" min="0" step="1" required>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <label class="form-label fw-bold">Tipo de archivo</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-collection"></i></span>
-                        <select class="form-select" name="tipo" required>
+                        <select class="form-select" name="tipo" id="tipoArchivo" required>
                             <option value="">Selecciona un tipo</option>
                             <option value="imagenes">Imagen</option>
                             <option value="videos">Video</option>
@@ -86,6 +86,16 @@
                     </div>
                     <div id="ayuda-extensiones" class="form-text text-muted mt-1" style="display:none;">
                         Extensiones permitidas:
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Subtipo de archivo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-filter-square"></i></span>
+                        <select class="form-select" name="subtipo" id="subtipoArchivo" required>
+                            <option value="">Selecciona un subtipo</option>
+                        </select>
                     </div>
                 </div>
 
@@ -148,6 +158,38 @@
             } else {
                 ayudaDiv.style.display = "none";
             }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipoSelect = document.getElementById("tipoArchivo");
+            const subtipoSelect = document.getElementById("subtipoArchivo");
+
+            const subtipos = {
+                imagenes: ["Stock", "Ilustraciones", "Texturas", "Vectores"],
+                videos: ["Stock", "VFX", "Transiciones", "Loops"],
+                audios: ["Musica", "SFX", "Ambientes sonoros", "Samples"],
+                modelos3d: ["Modelos estaticos", "Modelos con rigging", "Lowpoly", "Escenarios"]
+            };
+
+            tipoSelect.addEventListener("change", function () {
+                const tipoSeleccionado = this.value;
+
+                // Limpia los subtipos anteriores
+                subtipoSelect.innerHTML = '<option value="">Selecciona un subtipo</option>';
+
+                if (subtipos[tipoSeleccionado]) {
+                    subtipos[tipoSeleccionado].forEach(subtipo => {
+                        const option = document.createElement("option");
+                        option.value = subtipo.toLowerCase();
+                        option.textContent = subtipo;
+                        subtipoSelect.appendChild(option);
+                    });
+                    subtipoSelect.disabled = false;
+                } else {
+                    subtipoSelect.disabled = true;
+                }
+            });
         });
     </script>
 </div>

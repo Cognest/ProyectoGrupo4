@@ -18,10 +18,12 @@ public class ContenidoDto {
     private String titulo;
     private String descripcion;
     private String formato;
+    private String subtipo;
     private Integer precio;
     private String ubicacion;
     private String url;
     private String urlPortada;
+    private Integer visitas;
     private LocalDateTime fecha;
     private List<UsuarioContenido> usuarioContenidos;
     private List<Comentario> comentarios;

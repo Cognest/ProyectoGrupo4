@@ -321,11 +321,6 @@ public class DefaultController {
     @GetMapping("/contenido/{nickname}/{id}")
     public String mostrarContenido(@PathVariable String nickname, @PathVariable("id") Integer id, Model interfazConPantalla, Principal principal){
         System.out.println("Entro en servicios con id");
-        Prueba prueba = new Prueba();
-        prueba.setId(1);
-        prueba.setNum_visitas(1232);
-        prueba.setNum_descargas(145);
-        prueba.setNota(6);
 
         Contenido contenido = contenidoRepo.findById(id).get();
         Usuario autor = usuarioRepo.findByNickname(nickname).get(); // Este es el dueño del contenido
@@ -342,7 +337,10 @@ public class DefaultController {
                 .map(EtiquetaContenido::getEtiqueta)
                 .collect(Collectors.toList());
 
-        interfazConPantalla.addAttribute("prueba", prueba);
+        //Sumar visita
+        contenido.setVisitas(contenido.getVisitas() + 1);
+        contenidoRepo.save(contenido);
+
         interfazConPantalla.addAttribute("contenido", contenido);
         interfazConPantalla.addAttribute("likes", numLikes);
         interfazConPantalla.addAttribute("descargas", numDescargas);
@@ -750,6 +748,11 @@ public class DefaultController {
         }
 
         Resource resource = new UrlResource(path.toUri());
+
+        Descarga descarga = new Descarga();
+        descarga.setFecha(LocalDate.now());
+        descarga.setUsuarioContenido(relacion);
+        descargaRepo.save(descarga);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path.getFileName() + "\"")

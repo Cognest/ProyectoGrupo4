@@ -29,6 +29,9 @@ public class Contenido {
     @Column(nullable = false, length = 20)
     private String formato;
 
+    @Column(length = 50)
+    private String subtipo;
+
     @Column(nullable = false)
     private Integer precio;
 
@@ -43,6 +46,8 @@ public class Contenido {
 
     @Column(name = "fecha_subida")
     private LocalDateTime fecha;
+
+    private Integer visitas = 0;
 
     // Relaciones bidireccionales
     @OneToMany(mappedBy = "contenido")

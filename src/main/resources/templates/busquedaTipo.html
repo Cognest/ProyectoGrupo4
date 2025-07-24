@@ -220,7 +220,7 @@
 
 <body>
 <div layout:fragment="contenido">
-    <form th:action="@{/busqueda}" method="get" id="filtro-form">
+    <form th:action="@{/busqueda/{tipo}(tipo = ${tipo})}" method="get" id="filtro-form">
         <div class="search-container">
             <div class="container">
                 <div class="row justify-content-center">
@@ -267,12 +267,13 @@
         <!-- Barra de filtros -->
         <div class="filter-bar">
             <div class="container">
-                <div id="myBtnContainer" class="d-flex flex-wrap align-items-center">
-                    <div class="filter-item active" data-filter="all">Todo</div>
-                    <div class="filter-item" data-filter="select-img">Imagenes</div>
-                    <div class="filter-item" data-filter="select-vid">Vídeos</div>
-                    <div class="filter-item" data-filter="select-aud">Audios</div>
-                    <div class="filter-item" data-filter="select-tres-d">Modelos 3D</div>
+                <div id="subtipoFilterContainer" class="d-flex flex-wrap align-items-center">
+                    <div class="filter-item active" data-subtipo="all">Todo</div>
+                    <div class="filter-item"
+                         th:each="subtipo : ${subtipos}"
+                         th:attr="data-subtipo=${subtipo.toLowerCase().replace(' ', '-')}"
+                         th:text="${subtipo}">
+                    </div>
                 </div>
             </div>
         </div>
@@ -283,7 +284,7 @@
         <div class="masonry">
             <div th:each="contenido, iterStat : ${contenidos}"
                  class="contenido-wrapper"
-                 th:classappend="' ' + ${contenido.claseFiltro}"
+                 th:classappend="' subtipo-' + ${contenido.subtipo?.toLowerCase()?.replace(' ', '-')}"
                  data-aos="fade-up"
                  th:attr="data-aos-delay=${iterStat.index * 100}">
                 <div class="masonry-item hover-container" th:switch="${contenido.formato}">
@@ -461,35 +462,30 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            function filterSelection(category) {
-                const items = document.getElementsByClassName("contenido-wrapper");
+            const subtipoButtons = document.querySelectorAll('#subtipoFilterContainer .filter-item');
+            const contenidos = document.querySelectorAll('.contenido-wrapper');
 
-                for (let i = 0; i < items.length; i++) {
-                    items[i].classList.remove("show");
+            subtipoButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const selected = button.getAttribute('data-subtipo');
 
-                    if (category === "all" || items[i].classList.contains(category)) {
-                        items[i].classList.add("show");
-                        items[i].style.display = "block";
-                    } else {
-                        items[i].style.display = "none";
-                    }
-                }
-            }
+                    // Activar visualmente
+                    subtipoButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
 
-
-            filterSelection("all");
-
-            const buttons = document.querySelectorAll("#myBtnContainer .filter-item");
-            buttons.forEach(button => {
-                button.addEventListener("click", function () {
-                    const filter = this.getAttribute("data-filter");
-                    filterSelection(filter);
-
-                    document.querySelectorAll("#myBtnContainer .filter-item.active")
-                        .forEach(b => b.classList.remove("active"));
-                    this.classList.add("active");
+                    // Mostrar u ocultar elementos según el filtro
+                    contenidos.forEach(item => {
+                        if (selected === 'all' || item.classList.contains('subtipo-' + selected)) {
+                            item.classList.add('show');
+                        } else {
+                            item.classList.remove('show');
+                        }
+                    });
                 });
             });
+
+            // Mostrar todos por defecto al cargar
+            contenidos.forEach(item => item.classList.add('show'));
         });
     </script>
 </div>

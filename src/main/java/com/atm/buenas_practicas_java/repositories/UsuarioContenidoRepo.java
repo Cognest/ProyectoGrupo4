@@ -18,6 +18,7 @@ public interface UsuarioContenidoRepo extends JpaRepository<UsuarioContenido, In
         c.id,
         c.titulo,
         c.formato,
+        c.subtipo,
         c.url,
         c.urlPortada,
         u.nickname,

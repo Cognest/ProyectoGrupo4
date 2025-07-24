@@ -107,7 +107,7 @@ public class SecurityConfig {
                         .disable()
                 )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**", "/archivos/**", "/contenido/**", "/usuario/*").permitAll()
+                    .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**", "/archivos/**", "/contenido/**", "/usuario/*", "/busqueda/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
                     .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
                     .requestMatchers("/admin/**").hasAuthority("ADMIN")
