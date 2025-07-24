@@ -578,7 +578,7 @@ public class DefaultController {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
             model.addAttribute("usuario", usuario);
         }
-        return "configperfil";
+        return "configPerfil";
     }
 
     @GetMapping("/conocenos")
