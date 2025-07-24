@@ -19,4 +19,5 @@ public interface UsuarioRepo extends JpaRepository<Usuario, Integer> {
     List<Usuario> findByNicknameNot(String nickname);
     List<Usuario> findByNicknameInAndNicknameNot(List<String> nicknames, String exclude);
 
+    boolean existsUsuarioByNickname(String nickname);
 }

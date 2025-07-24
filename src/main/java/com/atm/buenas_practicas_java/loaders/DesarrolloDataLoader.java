@@ -65,8 +65,10 @@ public void loadDataDesarrollo() {
     usuario1.setRol(UserRol.valueOf("USUARIO"));
     usuario1.setToken(57);
     usuario1.setAvatar("");
+    if(!usuarioRepo.existsUsuarioByNickname(usuario1.getNickname())) {
+        usuarioRepo.save(usuario1);
+    }
 
-    usuarioRepo.save(usuario1);
 
     Usuario usuario2 = new Usuario();
     usuario2.setApellidos("Admin 1");
@@ -78,7 +80,9 @@ public void loadDataDesarrollo() {
     usuario2.setToken(77);
     usuario2.setAvatar("");
 
-    usuarioRepo.save(usuario2);
+    if(!usuarioRepo.existsUsuarioByNickname(usuario2.getNickname())) {
+        usuarioRepo.save(usuario2);
+    }
     log.info("Datos de entidades cargados correctamente.");
 
 }
