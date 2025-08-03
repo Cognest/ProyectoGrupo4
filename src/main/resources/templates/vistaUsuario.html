@@ -16,7 +16,7 @@ class="bg-gradient-primary">
         <div class="row">
 
             <!-- Sidebar izquierda -->
-            <div class="col-3 menu-lateral">
+            <div class="col-lg-3 menu-lateral">
                 <div th:unless="${#authorization.expression('isAuthenticated()')}">
                     <div class="foto-perfil-container">
                         <img src="/assets/img/anonimo.png" alt="Foto de perfil" class="foto-perfil">
@@ -28,12 +28,14 @@ class="bg-gradient-primary">
                 </div>
                 <div th:if="${#authorization.expression('isAuthenticated()')}">
                     <div class="foto-perfil-container">
-                        <img th:src="${usuarioLogueado.avatar}" alt="Foto de perfil" class="foto-perfil">
+                        <a th:href="@{/usuario/{nickname}(nickname = ${usuarioLogueado.nickname})}">
+                            <img th:src="${usuarioLogueado.avatar}" alt="Foto de perfil" class="foto-perfil">
+                        </a>
 
                         <nav class="menu-opciones">
-                            <a th:href="@{/actividad}" class="nav-link-guardados menu-btn">Tu actividad</a>
-                            <a th:href="@{/config-perfil}" class="nav-link-guardados menu-btn">Configuración</a>
-                            <a th:href="@{/conocenos}" class="nav-link-guardados menu-btn">Conócenos</a>
+                            <a th:href="@{/actividad}" class="nav-link-guardados">Tu actividad</a>
+                            <a th:href="@{/config-perfil}" class="nav-link-guardados">Configuración</a>
+                            <a th:href="@{/conocenos}" class="nav-link-guardados">Conócenos</a>
                             <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/usuarios}" class="nav-link-guardados">Administrar usuarios</a>
                         </nav>
                     </div>
@@ -41,7 +43,7 @@ class="bg-gradient-primary">
             </div>
 
             <!-- Columna central -->
-            <div class="col-7">
+            <div class="col-lg-7">
                 <div class="perfil-box p-3 mb-3 rounded d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil me-3"
@@ -66,7 +68,7 @@ class="bg-gradient-primary">
                 <!-- Publicación -->
                 <div th:if="${galeria != null and !galeria.isEmpty()}" class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
                     <!-- Previsualización del contenido -->
-                    <div class="masonry">
+                    <div class="masonry-guardados">
                         <div th:each="itemGaleria, iterStat : ${galeria}" data-aos="fade-up" th:attr="data-aos-delay=${iterStat.index * 100}">
                             <div class="masonry-item hover-container" th:switch="${itemGaleria.formato}">
 
@@ -229,7 +231,7 @@ class="bg-gradient-primary">
                 </div>
                 </div>
                 <!-- Columna derecha -->
-            <div class="col-2">
+            <div class="col-lg-2">
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>
                 <div class="fondoVerde text-white p-2 mb-2 rounded">Sugerencia de Usuarios</div>

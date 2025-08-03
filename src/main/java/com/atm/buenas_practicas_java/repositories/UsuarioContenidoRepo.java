@@ -34,6 +34,29 @@ public interface UsuarioContenidoRepo extends JpaRepository<UsuarioContenido, In
     """)
     List<ContenidoSubidoDTO> findContenidosSubidosPorUsuario(@Param("usuario") Usuario usuario);
 
+    @Query("""
+
+            SELECT new com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO(
+                 c.id,
+                 c.titulo,
+                 c.formato,
+                 c.subtipo,
+                 c.url,
+                 c.urlPortada,
+                 creador.nickname,
+                 creador.avatar,
+                 SIZE(c.likes),
+                 c.fecha
+             )
+             FROM UsuarioContenido uc
+             JOIN uc.contenido c
+             JOIN UsuarioContenido ucCreador ON ucCreador.contenido = c AND ucCreador.tipo = 'Creador'
+             JOIN ucCreador.usuario creador
+             WHERE uc.usuario = :usuario AND uc.tipo = 'Adquirido'
+             ORDER BY c.fecha DESC
+    """)
+    List<ContenidoSubidoDTO> findContenidosAdquiridosPorUsuario(@Param("usuario") Usuario usuario);
+
     List<UsuarioContenido> findAllByTipoAndUsuario(String tipo, Usuario usuario);
 
     UsuarioContenido findByContenidoAndUsuario(Contenido contenido, Usuario usuario);

@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{/layout/plantilla}">
 <title>Interfaz de Guardados</title>
 <head>
@@ -42,14 +43,33 @@
 
 <body>
 <div layout:fragment="contenido">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <!-- Sidebar izquierda -->
-            <div class="col-md-3 sidebar-guardados">
-                <img th:src="${usuario.avatar}" alt="Foto de perfil">
-                <a th:href="@{/actividad}" class="nav-link-guardados mt-4">Tu actividad</a>
-                <a th:href="@{/config-perfil}" class="nav-link-guardados mt-4">Configuración de Cuenta</a>
-                <a th:href="@{/conocenos}" class="nav-link-guardados mt-4">Conócenos</a>
+            <div class="col-md-3 menu-lateral">
+                <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                    <div class="foto-perfil-container">
+                        <img src="/assets/img/anonimo.png" alt="Foto de perfil" class="foto-perfil">
+
+                        <nav class="menu-opciones">
+                            <a th:href="@{/iniciar-sesion}" class="nav-link-guardados">Iniciar sesión</a>
+                        </nav>
+                    </div>
+                </div>
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <div class="foto-perfil-container">
+                        <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                            <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                        </a>
+
+                        <nav class="menu-opciones">
+                            <a th:href="@{/actividad}" class="nav-link-guardados">Tu actividad</a>
+                            <a th:href="@{/config-perfil}" class="nav-link-guardados">Configuración</a>
+                            <a th:href="@{/conocenos}" class="nav-link-guardados">Conócenos</a>
+                            <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/usuarios}" class="nav-link-guardados">Administrar usuarios</a>
+                        </nav>
+                    </div>
+                </div>
             </div>
 
             <!-- Contenido central -->

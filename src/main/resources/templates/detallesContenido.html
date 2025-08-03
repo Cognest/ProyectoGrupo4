@@ -95,7 +95,9 @@
 
             <div class="d-flex gap-1">
               <div th:each="etiqueta : ${etiquetas}">
-                <button type="button" class="btn btn-outline-success" th:text="${etiqueta.nombre}"></button>
+                  <a th:href="@{/busqueda(buscador=${etiqueta.nombre})}">
+                      <button type="button" class="btn btn-outline-success" th:text="${etiqueta.nombre}"></button>
+                  </a>
               </div>
             </div>
           </div>
@@ -104,8 +106,12 @@
           <div class="border rounded p-4 counts">
             <div>
               <div class="d-flex align-items-start align-items-center mb-4">
-                <img th:src="${usuario.avatar}" class="avatar me-3 mt-1">
-                <h3 class="fw-bold" th:text="${usuario.nickname}">user1_</h3>
+                  <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                      <img th:src="${usuario.avatar}" class="avatar me-3 mt-1">
+                  </a>
+                  <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                      <h3 class="fw-bold" th:text="${usuario.nickname}">user1_</h3>
+                  </a>
               </div>
               <div class="mb-2">
                 <span class="h3" th:text="${contenido.precio}"></span><sub>Tk</sub>

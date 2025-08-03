@@ -1968,7 +1968,6 @@ section,
 }
 
 .menu-lateral {
-  width: 280px;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -2021,16 +2020,19 @@ section,
 
 .menu-opciones a {
   display: block;
-  width: 220px;
+  width: 100%;
   margin: 10px auto;
   padding: 10px 20px;
   text-align: center;
-  white-space: nowrap;
   background-color: #f0f0f0;
   border-radius: 6px;
   text-decoration: none;
   color: #333;
   font-weight: 500;
+}
+
+.menu-btn-actividad {
+  cursor: pointer;
 }
 
 .contenido-principal {
@@ -2460,7 +2462,7 @@ PANTALLA CHAT
   box-sizing: border-box;
 }
 
-.menu-btn.activo {
+.menu-btn.activo, .menu-btn-actividad.activo {
   background-color: var(--accent-color) !important;
   color: white !important;
 }
@@ -2469,7 +2471,9 @@ PANTALLA CHAT
 .menu-btn:focus,
 .menu-btn:active,
 .menu-btn.activo:focus,
-.menu-btn.activo:active {
+.menu-btn.activo:active,
+.menu-btn-actividad.activo:focus,
+.menu-btn-actividad.activo:active {
   background-color: var(--accent-color) !important;
   color: white !important;
   border: none !important;
@@ -2746,6 +2750,11 @@ PANTALLA GUARDADOS
   column-gap: 1rem;
 }
 
+.masonry-guardados {
+  column-count: 1;
+  column-gap: 1rem;
+}
+
 @media (min-width: 768px) {
   .masonry {
     column-count: 2;
@@ -2755,6 +2764,10 @@ PANTALLA GUARDADOS
 @media (min-width: 992px) {
   .masonry {
     column-count: 4;
+  }
+
+  .masonry-guardados {
+    column-count: 2;
   }
 }
 

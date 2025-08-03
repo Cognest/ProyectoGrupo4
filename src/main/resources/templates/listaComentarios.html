@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Comentarios</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <div class="container px-4">
+        <!--<h1>Configuración de Cuenta</h1> -->
+        <h1>Tu Actividad</h1>
+        <div class="row">
+            <!-- Menú lateral -->
+            <div class="menu-lateral col-md-3">
+                <div class="foto-perfil-container">
+                    <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                    </a>
+                </div>
+                <nav class="menu-opciones">
+                    <a th:href="@{/actividad/guardados}" class="nav-link-guardados menu-btn-actividad">Guardados</a>
+                    <a th:href="@{/actividad/contenidos-adquiridos}" class="nav-link-guardados menu-btn-actividad">Contenido Adquirido</a>
+                    <a th:href="@{/actividad/comentarios}" class="nav-link-guardados menu-btn-actividad activo">Comentarios</a>
+                </nav>
+            </div>
+            <!-- Contenido principal -->
+            <div class="col-md-9">
+                <div class="fondo-rectangulo-verde p-4">
+                    <!-- Comentarios -->
+                    <section id="contenido-comentarios" class="contenido-principal">
+                        <div th:each="comentario : ${comentarios.content}" class="comentario-realizado mb-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="me-2" th:text="${comentario.nicknameUsuario}">nicknameUsuario</span>
+                                <i class="bi bi-arrow-right-short"></i>
+                                <span class="text-muted" th:text="${comentario.nicknameCreador}">nicknameCreador</span>
+                            </div>
+                            <div class="text-muted mb-2" style="font-size: 0.9rem;" th:text="${#temporals.format(comentario.fecha, 'd MMMM yyyy - HH:mm')}">
+                                23 de julio de 2025 - 14:35
+                            </div>
+                            <p class="mb-3" th:text="${comentario.mensaje}">Comentario del usuario...</p>
+                            <a th:href="@{'/contenido/' + ${comentario.nicknameCreador} + '/' + ${comentario.idContenido}}" class="btn btn-outline-primary btn-sm">Ver publicación</a>
+                        </div>
+
+                        <!-- Paginación simple -->
+                        <nav th:if="${comentarios.totalPages > 1}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${comentarios.first}? 'disabled'">
+                                    <a class="page-link" th:href="@{/actividad/comentarios(page=${comentarios.number - 1})}">Anterior</a>
+                                </li>
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, comentarios.totalPages - 1)}"
+                                    th:classappend="${comentarios.number == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/actividad/comentarios(page=${i})}" th:text="${i + 1}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${comentarios.last}? 'disabled'">
+                                    <a class="page-link" th:href="@{/actividad/comentarios(page=${comentarios.number + 1})}">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

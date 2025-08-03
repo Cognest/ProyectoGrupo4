@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
-    <title>Guardados</title>
+    <title>Contenido adquirido</title>
     <style>
         .btn-chat-tabs {
             display: block;
@@ -35,20 +35,19 @@
                     </a>
                 </div>
                 <nav class="menu-opciones">
-                    <a th:href="@{/actividad/guardados}" class="nav-link-guardados menu-btn-actividad activo">Guardados</a>
-                    <a th:href="@{/actividad/contenidos-adquiridos}" class="nav-link-guardados menu-btn-actividad">Contenido Adquirido</a>
+                    <a th:href="@{/actividad/guardados}" class="nav-link-guardados menu-btn-actividad">Guardados</a>
+                    <a th:href="@{/actividad/contenidos-adquiridos}" class="nav-link-guardados menu-btn-actividad activo">Contenido Adquirido</a>
                     <a th:href="@{/actividad/comentarios}" class="nav-link-guardados menu-btn-actividad">Comentarios</a>
                 </nav>
             </div>
             <!-- Contenido principal -->
             <div class="col-md-9">
                 <div class="fondo-rectangulo-verde p-4">
+                    <!-- Contenido adquirido -->
+                    <section id="contenido-contenidoAd" class="contenido-principal">
+                        <div class="topbar">CONTENIDO ADQUIRIDO</div>
 
-                    <!-- Guardados -->
-                    <section id="contenido-guardados" class="contenido-principal">
-                        <div class="topbar">GUARDADO</div>
-
-                        <div id="myBtnContainer" class="btn-chat-tabs justify-content-center gap-3 mt-3 mb-3 px-2">
+                        <div id="myBtnContainerAdquirido" class="btn-chat-tabs justify-content-center gap-3 mt-3 mb-3 px-2">
                             <button class="btn custom-tab-nav mx-0 mb-1 w-100 active" data-filter="all">TODO</button>
                             <button class="btn custom-tab-nav mx-0 mb-1 w-100" data-filter="select-img">IMAGENES</button>
                             <button class="btn custom-tab-nav mx-0 mb-1 w-100" data-filter="select-vid">VIDEOS</button>
@@ -57,37 +56,37 @@
                         </div>
 
                         <div class="masonry-guardados">
-                            <div th:each="contenido, iterStat : ${contenidos}"
-                                 class="contenido-wrapper"
-                                 th:classappend="' ' + ${contenido.claseFiltro}"
+                            <div th:each="adquirido, iterStat : ${adquiridos}"
+                                 class="contenido-wrapper-adquiridos"
+                                 th:classappend="' ' + ${adquirido.claseFiltro}"
                                  data-aos="fade-up"
                                  th:attr="data-aos-delay=${iterStat.index * 100}">
-                                <div class="masonry-item hover-container" th:switch="${contenido.formato}">
+                                <div class="masonry-item hover-container" th:switch="${adquirido.formato}">
 
                                     <!-- IMAGEN -->
-                                    <div th:case="'imagenes'" th:style="'--bg:url(' + ${contenido.url} + ')'">
-                                        <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
-                                            <img th:src="${contenido.url}" class="image select" alt="Contenido"/>
+                                    <div th:case="'imagenes'" th:style="'--bg:url(' + ${adquirido.url} + ')'">
+                                        <a th:href="@{'/contenido/' + ${adquirido.nicknameCreador} + '/' + ${adquirido.id}}">
+                                            <img th:src="${adquirido.url}" class="image select" alt="Contenido"/>
                                             <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
                                             <div class="overlay">
                                                 <div class="overlay-actions">
                                                     <!-- LIKE -->
-                                                    <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                    <button class="action-btn like-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${likesIds.contains(adquirido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                                                     </button>
 
                                                     <!-- GUARDAR -->
-                                                    <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                    <button class="action-btn guardar-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${guardadosIds.contains(adquirido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                                                     </button>
                                                 </div>
-                                                <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                                <div class="overlay-title" th:text="${adquirido.titulo}"></div>
                                             </div>
                                         </a>
                                         <div class="overlay-user-wrapper">
-                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
-                                                <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
-                                                <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${adquirido.nicknameCreador}}">
+                                                <img th:src="${adquirido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                                <span class="user-name" th:text="${'@' + adquirido.nicknameCreador}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -95,15 +94,15 @@
                                     <!-- VIDEO -->
                                     <div th:case="'videos'" class="preview-item hover-container"
                                          th:attr="data-type='video',
-                                              data-src=${contenido.url},
-                                              data-id=${contenido.id},
-                                              data-title=${contenido.titulo},
-                                              data-user=${'@' + contenido.nicknameCreador},
-                                              data-avatar=${contenido.avatarCreador},
-                                              data-nickname=${contenido.nicknameCreador}">
+                                              data-src=${adquirido.url},
+                                              data-id=${adquirido.id},
+                                              data-title=${adquirido.titulo},
+                                              data-user=${'@' + adquirido.nicknameCreador},
+                                              data-avatar=${adquirido.avatarCreador},
+                                              data-nickname=${adquirido.nicknameCreador}">
 
                                         <!-- Enlace al contenido -->
-                                        <a class="video-link" th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
+                                        <a class="video-link" th:href="@{'/contenido/' + ${adquirido.nicknameCreador} + '/' + ${adquirido.id}}">
                                             <!-- Imagen de preview (poster generado por JS) -->
                                             <img class="image preview-img" alt="Preview"/>
 
@@ -112,7 +111,7 @@
 
                                             <!-- Video (oculto por defecto) -->
                                             <video class="image hover-video" muted playsinline loop preload="metadata">
-                                                <source th:src="${contenido.url}" type="video/mp4" />
+                                                <source th:src="${adquirido.url}" type="video/mp4" />
                                             </video>
 
                                             <!-- Botón de play -->
@@ -122,22 +121,22 @@
                                             <div class="overlay">
                                                 <div class="overlay-actions">
                                                     <!-- LIKE -->
-                                                    <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                    <button class="action-btn like-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${likesIds.contains(adquirido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                                                     </button>
 
                                                     <!-- GUARDAR -->
-                                                    <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                    <button class="action-btn guardar-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${guardadosIds.contains(adquirido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                                                     </button>
                                                 </div>
-                                                <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                                <div class="overlay-title" th:text="${adquirido.titulo}"></div>
                                             </div>
                                         </a>
                                         <div class="overlay-user-wrapper">
-                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
-                                                <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
-                                                <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${adquirido.nicknameCreador}}">
+                                                <img th:src="${adquirido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                                <span class="user-name" th:text="${'@' + adquirido.nicknameCreador}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -146,19 +145,19 @@
                                     <div th:case="'audios'">
                                         <div class="music-player">
                                             <div class="cover">
-                                                <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
-                                                    <img th:src="${contenido.urlPortada}" alt="Portada"/>
+                                                <a th:href="@{'/contenido/' + ${adquirido.nicknameCreador} + '/' + ${adquirido.id}}">
+                                                    <img th:src="${adquirido.urlPortada}" alt="Portada"/>
                                                 </a>
                                             </div>
                                             <div class="titre">
-                                                <a th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
-                                                    <h3 th:text="${contenido.nicknameCreador}"></h3>
+                                                <a th:href="@{'/usuario/' + ${adquirido.nicknameCreador}}">
+                                                    <h3 th:text="${adquirido.nicknameCreador}"></h3>
                                                 </a>
-                                                <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
-                                                    <h1 th:text="${contenido.titulo}"></h1>
+                                                <a th:href="@{'/contenido/' + ${adquirido.nicknameCreador} + '/' + ${adquirido.id}}">
+                                                    <h1 th:text="${adquirido.titulo}"></h1>
                                                 </a>
                                             </div>
-                                            <audio th:src="${contenido.url}" preload="metadata"></audio>
+                                            <audio th:src="${adquirido.url}" preload="metadata"></audio>
 
                                             <div class="controls">
                                                 <button class="play-pause play btn-play" aria-label="Play/Pause"></button>
@@ -178,13 +177,13 @@
                                             </div>
                                             <div class="actions-aud">
                                                 <!-- LIKE -->
-                                                <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
-                                                    <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                <button class="action-btn like-btn" th:attr="data-id=${adquirido.id}">
+                                                    <i th:class="${likesIds.contains(adquirido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                                                 </button>
 
                                                 <!-- GUARDAR -->
-                                                <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
-                                                    <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                <button class="action-btn guardar-btn" th:attr="data-id=${adquirido.id}">
+                                                    <i th:class="${guardadosIds.contains(adquirido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -192,28 +191,28 @@
 
                                     <!-- MODELO 3D -->
                                     <div th:case="'modelos3d'">
-                                        <a th:href="@{'/contenido/' + ${contenido.nicknameCreador} + '/' + ${contenido.id}}">
-                                            <img th:src="${contenido.urlPortada}" class="image" alt="Portada"/>
+                                        <a th:href="@{'/contenido/' + ${adquirido.nicknameCreador} + '/' + ${adquirido.id}}">
+                                            <img th:src="${adquirido.urlPortada}" class="image" alt="Portada"/>
                                             <img src="/assets/img/logos/logoBlanco.png" class="watermark" alt="Marca de agua">
                                             <div class="overlay">
                                                 <div class="overlay-actions">
                                                     <!-- LIKE -->
-                                                    <button class="action-btn like-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${likesIds.contains(contenido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                                                    <button class="action-btn like-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${likesIds.contains(adquirido.id)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                                                     </button>
 
                                                     <!-- GUARDAR -->
-                                                    <button class="action-btn guardar-btn" th:attr="data-id=${contenido.id}">
-                                                        <i th:class="${guardadosIds.contains(contenido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+                                                    <button class="action-btn guardar-btn" th:attr="data-id=${adquirido.id}">
+                                                        <i th:class="${guardadosIds.contains(adquirido.id)} ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
                                                     </button>
                                                 </div>
-                                                <div class="overlay-title" th:text="${contenido.titulo}"></div>
+                                                <div class="overlay-title" th:text="${adquirido.titulo}"></div>
                                             </div>
                                         </a>
                                         <div class="overlay-user-wrapper">
-                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${contenido.nicknameCreador}}">
-                                                <img th:src="${contenido.avatarCreador}" class="user-avatar" alt="Avatar"/>
-                                                <span class="user-name" th:text="${'@' + contenido.nicknameCreador}"></span>
+                                            <a class="d-flex gap-1 user-btn" th:href="@{'/usuario/' + ${adquirido.nicknameCreador}}">
+                                                <img th:src="${adquirido.avatarCreador}" class="user-avatar" alt="Avatar"/>
+                                                <span class="user-name" th:text="${'@' + adquirido.nicknameCreador}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -228,7 +227,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filterSelection(category) {
-                const items = document.getElementsByClassName("contenido-wrapper");
+                const items = document.getElementsByClassName("contenido-wrapper-adquiridos");
 
                 for (let i = 0; i < items.length; i++) {
                     items[i].classList.remove("show");
@@ -245,13 +244,13 @@
 
             filterSelection("all");
 
-            const buttons = document.querySelectorAll("#myBtnContainer .custom-tab-nav");
+            const buttons = document.querySelectorAll("#myBtnContainerAdquirido .custom-tab-nav");
             buttons.forEach(button => {
                 button.addEventListener("click", function () {
                     const filter = this.getAttribute("data-filter");
                     filterSelection(filter);
 
-                    document.querySelectorAll("#myBtnContainer .custom-tab-nav.active")
+                    document.querySelectorAll("#myBtnContainerAdquirido .custom-tab-nav.active")
                         .forEach(b => b.classList.remove("active"));
                     this.classList.add("active");
                 });

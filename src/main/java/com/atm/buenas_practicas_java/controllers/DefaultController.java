@@ -2,6 +2,7 @@ package com.atm.buenas_practicas_java.controllers;
 
 
 import com.atm.buenas_practicas_java.config.CustomUserDetails;
+import com.atm.buenas_practicas_java.dtos.ComentarioRealizadoDto;
 import com.atm.buenas_practicas_java.dtos.ContenidoDto;
 import com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO;
 import com.atm.buenas_practicas_java.entities.*;
@@ -111,6 +112,8 @@ public class DefaultController {
     );
     @Autowired
     private CarteraRepo carteraRepo;
+    @Autowired
+    private ComentarioService comentarioService;
 
     /**
      * Constructor de la clase DefaultController.
@@ -285,27 +288,6 @@ public class DefaultController {
         model.addAttribute("accesoDesdeBoton", receptorNickname == null);
 
         return "chat";
-    }
-
-
-
-
-
-    @GetMapping("/guardados")
-    public String pantallaGuardados(Model model) {
-        List<String> imagenes = List.of(
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp",
-                "https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-        );
-
-        model.addAttribute("imagenes", imagenes);
-        return "guardados";
     }
 
     @GetMapping("/guardadosPrueba")
@@ -543,33 +525,6 @@ public class DefaultController {
 
         model.addAttribute("imagenes", imagenes);
         return "usuariosBloqueados"; // View name
-    }
-    @GetMapping("/actividad")
-    public String tuActividad(Model model, Principal principal) {
-        List<ContenidoSubidoDTO> contenidos = contenidoRepo.findAllOrderByLikes();
-        model.addAttribute("contenidos", contenidos);
-
-        if (principal != null) {
-            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
-
-            // IDs de contenido con like o guardado
-            Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
-                    .map(like -> like.getContenido().getId())
-                    .collect(Collectors.toSet());
-
-            Set<Integer> guardadosIds = guardadoRepo.findByUsuario(usuario).stream()
-                    .map(guardado -> guardado.getContenido().getId())
-                    .collect(Collectors.toSet());
-
-            model.addAttribute("likesIds", likesIds);
-            model.addAttribute("guardadosIds", guardadosIds);
-            model.addAttribute("usuario", usuario);
-        } else {
-            model.addAttribute("likesIds", Set.of());
-            model.addAttribute("guardadosIds", Set.of());
-        }
-        return "tuActividad";
-
     }
 
     @GetMapping("/config-perfil")

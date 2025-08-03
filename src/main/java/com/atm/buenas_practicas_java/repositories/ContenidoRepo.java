@@ -2,6 +2,7 @@ package com.atm.buenas_practicas_java.repositories;
 
 import com.atm.buenas_practicas_java.dtos.ContenidoSubidoDTO;
 import com.atm.buenas_practicas_java.entities.Contenido;
+import com.atm.buenas_practicas_java.entities.Guardado;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
