@@ -57,16 +57,33 @@ class="bg-gradient-primary">
                     </div>
 
                     <!-- Botón de mensaje: solo si NO es tu propio perfil -->
-                    <div th:if="${#authentication.name != usuario.nickname}">
-                        <a th:href="@{/chat(usuario=${usuario.nickname})}" class="btn btn-chat-enviar">
-                            Enviar mensaje
+                    <div class="d-flex" th:if="${#authentication.name != usuario.nickname}">
+                        <a th:href="@{/chat(usuario=${usuario.nickname})}" title="Enviar mensaje" class="btn btn-chat-enviar">
+                            <i class="bi bi-send"></i>
                         </a>
+                        <!-- BLOQUEAR -->
+                        <form th:if="${!usuarioBloqueado}" method="post" th:action="@{/bloquear-usuario}">
+                            <input type="hidden" th:name="usuarioBloqueadoId" th:value="${usuario.id}" />
+                            <button type="submit" class="btn btn-danger" title="Bloquear">
+                                <i class="bi bi-ban"></i>
+                            </button>
+                        </form>
+
+                        <!-- DESBLOQUEAR -->
+                        <form th:if="${usuarioBloqueado}" method="post" th:action="@{/desbloquear-usuario}">
+                            <input type="hidden" th:name="usuarioBloqueadoId" th:value="${usuario.id}" />
+                            <button type="submit" class="btn btn-secondary" title="Desbloquear">
+                                <i class="bi bi-check2-circle"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
-
+                <div th:if="${usuarioBloqueado and #authorization.expression('isAuthenticated()')}">
+                    <p>Usted no puede ver el contenido de este usuario, si quiere verlo presione el botón de desbloquear usuario.</p>
+                </div>
                 <!-- Publicación -->
-                <div th:if="${galeria != null and !galeria.isEmpty()}" class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
+                <div th:if="${galeria != null and !galeria.isEmpty() and !usuarioBloqueado}" class="publicacion-box bg-white text-dark p-4 mb-4 rounded shadow-sm">
                     <!-- Previsualización del contenido -->
                     <div class="masonry-guardados">
                         <div th:each="itemGaleria, iterStat : ${galeria}" data-aos="fade-up" th:attr="data-aos-delay=${iterStat.index * 100}">

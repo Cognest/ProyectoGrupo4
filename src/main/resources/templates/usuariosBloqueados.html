@@ -11,7 +11,7 @@
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
     <!-- Page Title -->
-    <div class="page-title" data-aos="fade">
+    <div class="page-title mb-3" data-aos="fade">
         <nav class="breadcrumbs">
             <div class="container">
                 <ol>
@@ -22,13 +22,38 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <div class="container rounded border my-2">
+    <div class="container my-2">
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-12 text-center p-4" th:each="imagen, iterStat : ${imagenes}">
-                <img class="rounded-circle w-75 mb-2" th:src="${imagen}">
-                <h4 class="fw-bold">Usuario1</h4>
-                <p>14/02/2025</p>
-                <button class="btn btn-outline-secondary">Desbloquear</button>
+            <!-- Menú lateral -->
+            <div class="menu-lateral col-md-3">
+                <div class="foto-perfil-container">
+                    <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                    </a>
+                </div>
+                <nav class="menu-opciones">
+                    <a th:href="@{/config-perfil/editar-foto}" class="nav-link-guardados menu-btn-actividad">Editar Foto</a>
+                    <a th:href="@{/config-perfil/seguridad}" class="nav-link-guardados menu-btn-actividad">Contraseña y Seguridad</a>
+                    <a th:href="@{/config-perfil/datos-personales}" class="nav-link-guardados menu-btn-actividad">Datos Personales</a>
+                    <a th:href="@{/config-perfil/perfiles-bloqueados}" class="nav-link-guardados menu-btn-actividad">Perfiles Bloqueados</a>
+                </nav>
+            </div>
+            <!-- Contenido principal -->
+            <div class="col-md-9">
+                <div class="row">
+                    <div th:if="${usuariosBloqueados.isEmpty()}">
+                        <p>No has bloqueado a ningún usuario.</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12 text-center p-4" th:each="usuBlock, iterStat : ${usuariosBloqueados}">
+                        <img class="rounded-circle w-75 mb-2" th:src="${usuBlock.bloqueado.avatar}">
+                        <h4 class="fw-bold" th:text="${usuBlock.bloqueado.nickname}">Usuario1</h4>
+                        <p th:text="${#temporals.format(usuBlock.fecha, 'dd/MM/yyyy')}">14/02/2025</p>
+                        <form method="post" th:action="@{/desbloquear-usuario}">
+                            <input type="hidden" th:name="usuarioBloqueadoId" th:value="${usuBlock.bloqueado.id}" />
+                            <button type="submit" class="btn btn-outline-secondary">Desbloquear</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

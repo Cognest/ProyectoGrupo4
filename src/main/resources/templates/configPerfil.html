@@ -12,133 +12,40 @@
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title mb-3" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Configuración de Perfil</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
     <div class="container px-4">
         <div class="row">
-    <!--<h1>Configuración de Cuenta</h1> -->
-        <h1>Configuración de Perfil</h1>
         <!-- Menú lateral -->
-        <div class="menu-lateral col-3">
-            <div class="foto-perfil-container">
-                <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+            <div class="menu-lateral col-md-3">
+                <div class="foto-perfil-container">
+                    <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                    </a>
+                </div>
+                <nav class="menu-opciones">
+                    <a th:href="@{/config-perfil/editar-foto}" class="nav-link-guardados menu-btn-actividad">Editar Foto</a>
+                    <a th:href="@{/config-perfil/seguridad}" class="nav-link-guardados menu-btn-actividad">Contraseña y Seguridad</a>
+                    <a th:href="@{/config-perfil/datos-personales}" class="nav-link-guardados menu-btn-actividad">Datos Personales</a>
+                    <a th:href="@{/config-perfil/perfiles-bloqueados}" class="nav-link-guardados menu-btn-actividad">Perfiles Bloqueados</a>
+                </nav>
             </div>
-            <nav class="menu-opciones">
-                <a class="nav-link-guardados menu-btn" id="btn-foto">Editar Foto</a>
-                <a class="nav-link-guardados menu-btn" id="btn-seguridad">Contraseña y Seguridad</a>
-                <a class="nav-link-guardados menu-btn" id="btn-datosPerso">Datos Personales</a>
-                <a class="nav-link-guardados menu-btn" id="btn-bloqueados">Perfiles Bloqueados</a>
-                <a class="nav-link-guardados menu-btn" id="btn-notificaciones">Notificaciones</a>
-            </nav>
-        </div>
         <!-- Contenido principal -->
-        <div class="col-9">
-            <div class="fondo-rectangulo-verde p-4">
-                <!-- Editar Foto -->
-                <section id="contenido-fotoPerfil" class="contenido-principal">
-                    <form th:action="@{/usuario/cambiar-avatar}" method="post" enctype="multipart/form-data" class="d-flex flex-column align-items-center gap-3">
-
-                        <!-- Imagen circular con overlay siempre visible -->
-                        <div class="position-relative" style="width: 220px; height: 220px;">
-                            <img id="avatarPreview" th:src="${usuario.avatar}" alt="Avatar actual"
-                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid #ccc;">
-
-                            <!-- Overlay siempre visible con texto pequeño -->
-                            <label for="avatar"
-                                   class="d-flex justify-content-center align-items-center text-white"
-                                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                  border-radius: 50%; background-color: rgba(0, 0, 0, 0.4);
-                  font-size: 0.8rem; text-align: center; cursor: pointer;">
-                                Cambiar<br>foto de perfil
-                            </label>
-                        </div>
-
-                        <!-- Input de archivo oculto -->
-                        <input type="file" name="avatar" id="avatar" accept="image/*" style="display: none;" onchange="previewAvatar(this)" required>
-
-                        <!-- Botón de enviar -->
-                        <button type="submit" class="nav-link-guardados active" style="width: auto; border: none; outline: none;">
-                            Guardar
-                        </button>
-                    </form>
-
-
-                </section>
-
-                <!-- Contraseña y Seguridad -->
-                <section id="contenido-contraSeguridad" class="contenido-principal" style="display:none;">
-                    <p> Contraseña y Seguridad </p>
-                </section>
-
-                <!-- Datos personales -->
-                <section id="contenido-datosPersonales" class="contenido-principal" style="display:none;">
-                    <p> Datos Personales </p>
-                </section>
-
-                <!-- Perfiles Bloqueados -->
-                <section id="contenido-perfilesBloqueados" class="contenido-principal" style="display:none;">
-                    <p> Perfiles bloqueados</p>
-                </section>
-
-                <!-- Notificaciones -->
-                <section id="contenido-notificaciones" class="contenido-principal" style="display:none;">
-                    <p> Notificaciones </p>
-                </section>
-
+        <div class="col-md-9">
+            <div class="border rounded p-4">
+                <p>En esta sección podrás configurar todos los datos del usuario, además de que podrás ver los usuarios que has bloqueado.</p>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const botones = [
-                { btn: 'btn-foto', contenido: 'contenido-fotoPerfil' },
-                { btn: 'btn-seguridad', contenido: 'contenido-contraSeguridad' },
-                { btn: 'btn-datosPerso', contenido: 'contenido-datosPersonales' },
-                { btn: 'btn-bloqueados', contenido: 'contenido-perfilesBloqueados' },
-                { btn: 'btn-notificaciones', contenido: 'contenido-notificaciones' },
-            ];
-
-            botones.forEach(({btn, contenido}) => {
-                document.getElementById(btn).addEventListener('click', function() {
-                    // Oculta todos los contenidos
-                    botones.forEach(({contenido}) => {
-                        document.getElementById(contenido).style.display = 'none';
-                    });
-                    // Muestra el contenido seleccionado
-                    document.getElementById(contenido).style.display = 'block';
-
-                    // Actualiza el botón activo
-                    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
-                    this.classList.add('activo');
-                });
-            });
-            document.getElementById(btn).addEventListener('click', function(e) {
-                e.preventDefault(); // ⬅️ Añade esto
-                // Oculta todos los contenidos
-                botones.forEach(({contenido}) => {
-                    document.getElementById(contenido).style.display = 'none';
-                });
-                // Muestra el contenido seleccionado
-                document.getElementById(contenido).style.display = 'block';
-
-                // Actualiza el botón activo
-                document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
-                this.classList.add('activo');
-            });
-
-        });
-    </script>
-        <script>
-            function previewAvatar(input) {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        document.getElementById('avatarPreview').src = e.target.result;
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-        </script>
-
-
     </div>
 </div>
 </body>

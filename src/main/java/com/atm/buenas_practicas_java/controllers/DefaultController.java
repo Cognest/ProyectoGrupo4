@@ -114,6 +114,8 @@ public class DefaultController {
     private CarteraRepo carteraRepo;
     @Autowired
     private ComentarioService comentarioService;
+    @Autowired
+    private UsuarioBloqueadoRepo usuarioBloqueadoRepo;
 
     /**
      * Constructor de la clase DefaultController.
@@ -226,6 +228,7 @@ public class DefaultController {
     @GetMapping("/usuario/{nickname}")
     public String vistaUsuario(@PathVariable String nickname, Model model, Principal principal) {
         Usuario autor = usuarioRepo.findByNickname(nickname).get();
+        boolean usuarioBloqueado = false;
 
         List<ContenidoSubidoDTO> galeria = usuarioContenidoRepo.findContenidosSubidosPorUsuario(autor);
         model.addAttribute("galeria", galeria);
@@ -233,6 +236,8 @@ public class DefaultController {
         if (principal != null) {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
             model.addAttribute("usuarioLogueado", usuario);
+
+            usuarioBloqueado = usuarioBloqueadoRepo.existsByBloqueadoAndBloqueador(autor, usuario);
 
             // IDs de contenido con like o guardado
             Set<Integer> likesIds = likeRepo.findByUsuario(usuario).stream()
@@ -245,9 +250,11 @@ public class DefaultController {
 
             model.addAttribute("likesIds", likesIds);
             model.addAttribute("guardadosIds", guardadosIds);
+            model.addAttribute("usuarioBloqueado", usuarioBloqueado);
         } else {
             model.addAttribute("likesIds", Set.of());
             model.addAttribute("guardadosIds", Set.of());
+            model.addAttribute("usuarioBloqueado", usuarioBloqueado);
         }
 
         model.addAttribute("usuario", autor);
@@ -509,31 +516,6 @@ public class DefaultController {
             return ResponseEntity.ok(tokens);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    @GetMapping("/usuarios-bloqueados")
-    public String mostrarUsuariosBloqueados(Model model)
-    {
-        List<String> imagenes = List.of(
-                "https://randomuser.me/api/portraits/men/99.jpg",
-                "https://randomuser.me/api/portraits/men/1.jpg",
-                "https://randomuser.me/api/portraits/women/2.jpg",
-                "https://randomuser.me/api/portraits/women/99.jpg",
-                "https://randomuser.me/api/portraits/women/1.jpg",
-                "https://randomuser.me/api/portraits/men/2.jpg"
-        );
-
-        model.addAttribute("imagenes", imagenes);
-        return "usuariosBloqueados"; // View name
-    }
-
-    @GetMapping("/config-perfil")
-    public String configperfil(Model model, Principal principal) {
-        if (principal != null) {
-            Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
-            model.addAttribute("usuario", usuario);
-        }
-        return "configPerfil";
     }
 
     @GetMapping("/conocenos")
@@ -804,4 +786,36 @@ public class DefaultController {
         return "redirect:/admin/usuarios";
     }
 
+    @PostMapping("/bloquear-usuario")
+    public String bloquearUsuario(@RequestParam Integer usuarioBloqueadoId, Principal principal,
+                                  @RequestHeader(value = "referer", required = false) String referer) {
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        if (usuario == null) return "redirect:/iniciar-sesion";
+
+        Usuario userBloqueado = usuarioRepo.findById(usuarioBloqueadoId).get();
+
+        UsuarioBloqueado usuarioBloqueado = new UsuarioBloqueado();
+        usuarioBloqueado.setFecha(LocalDateTime.now());
+        usuarioBloqueado.setBloqueado(userBloqueado);
+        usuarioBloqueado.setBloqueador(usuario);
+        usuarioBloqueadoRepo.save(usuarioBloqueado);
+
+        return "redirect:" + (referer != null ? referer : "/");
+    }
+
+    @PostMapping("/desbloquear-usuario")
+    public String desbloquearUsuario(@RequestParam Integer usuarioBloqueadoId, Principal principal,
+                                  @RequestHeader(value = "referer", required = false) String referer) {
+
+        Usuario usuario = usuarioRepo.findByNickname(principal.getName()).get();
+        if (usuario == null) return "redirect:/iniciar-sesion";
+
+        Usuario userBloqueado = usuarioRepo.findById(usuarioBloqueadoId).get();
+
+        UsuarioBloqueado usuarioBloqueado = usuarioBloqueadoRepo.findByBloqueadoAndBloqueador(userBloqueado, usuario);
+        usuarioBloqueadoRepo.delete(usuarioBloqueado);
+
+        return "redirect:" + (referer != null ? referer : "/");
+    }
 }

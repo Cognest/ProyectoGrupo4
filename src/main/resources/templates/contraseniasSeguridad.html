@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <title>Contraseñas y Seguridad</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title mb-3" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Contraseña y Seguridad</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
+    <div class="container px-4">
+        <div class="row">
+            <!-- Menú lateral -->
+            <div class="menu-lateral col-md-3">
+                <div class="foto-perfil-container">
+                    <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                    </a>
+                </div>
+                <nav class="menu-opciones">
+                    <a th:href="@{/config-perfil/editar-foto}" class="nav-link-guardados menu-btn-actividad">Editar Foto</a>
+                    <a th:href="@{/config-perfil/seguridad}" class="nav-link-guardados menu-btn-actividad activo">Contraseña y Seguridad</a>
+                    <a th:href="@{/config-perfil/datos-personales}" class="nav-link-guardados menu-btn-actividad">Datos Personales</a>
+                    <a th:href="@{/config-perfil/perfiles-bloqueados}" class="nav-link-guardados menu-btn-actividad">Perfiles Bloqueados</a>
+                </nav>
+            </div>
+            <!-- Contenido principal -->
+            <div class="col-md-9">
+                <div class="fondo-rectangulo-verde p-4">
+                    <!-- Contraseña y Seguridad -->
+                    <section id="contenido-contraSeguridad" class="contenido-principal">
+                        <!-- Mensajes de éxito -->
+                        <div th:if="${exito}" class="alert alert-success" role="alert">
+                            <span th:text="${exito}"></span>
+                        </div>
+
+                        <!-- Mensajes de error -->
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <form th:action="@{/config-perfil/seguridad}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Contraseña actual</label>
+                                        <input type="password" class="form-control" name="contrasenaActual" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Nueva contraseña</label>
+                                        <input type="password" class="form-control" name="nuevaPassword" required>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

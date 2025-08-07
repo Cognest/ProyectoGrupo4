@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Datos Personales</title>
+</head>
+<body class="bg-gradient-primary">
+
+<!-- Aqui vamos a escribir el contenido de los bloques  -->
+<div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title mb-3" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Datos Personales</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
+    <div class="container px-4">
+        <div class="row">
+            <!-- Menú lateral -->
+            <div class="menu-lateral col-md-3">
+                <div class="foto-perfil-container">
+                    <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+                        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+                    </a>
+                </div>
+                <nav class="menu-opciones">
+                    <a th:href="@{/config-perfil/editar-foto}" class="nav-link-guardados menu-btn-actividad">Editar Foto</a>
+                    <a th:href="@{/config-perfil/seguridad}" class="nav-link-guardados menu-btn-actividad">Contraseña y Seguridad</a>
+                    <a th:href="@{/config-perfil/datos-personales}" class="nav-link-guardados menu-btn-actividad activo">Datos Personales</a>
+                    <a th:href="@{/config-perfil/perfiles-bloqueados}" class="nav-link-guardados menu-btn-actividad">Perfiles Bloqueados</a>
+                </nav>
+            </div>
+            <!-- Contenido principal -->
+            <div class="col-md-9">
+                <div class="fondo-rectangulo-verde p-4">
+                    <!-- Datos personales -->
+                    <section id="contenido-datosPersonales" class="contenido-principal">
+                        <!-- Mensajes de éxito -->
+                        <div th:if="${exito}" class="alert alert-success" role="alert">
+                            <span th:text="${exito}"></span>
+                        </div>
+
+                        <!-- Mensajes de error -->
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <form th:action="@{/config-perfil/datos-personales}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" th:field="*{usuario.nombre}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Apellidos</label>
+                                        <input type="text" class="form-control" th:field="*{usuario.apellidos}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Nickname</label>
+                                        <input type="text" class="form-control" th:field="*{usuario.nickname}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" th:field="*{usuario.email}" required>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

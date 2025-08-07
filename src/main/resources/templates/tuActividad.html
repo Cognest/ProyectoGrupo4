@@ -12,9 +12,18 @@
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
+    <!-- Page Title -->
+    <div class="page-title mb-3" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Tu Actividad</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
     <div class="container px-4">
-        <!--<h1>Configuración de Cuenta</h1> -->
-        <h1>Tu Actividad</h1>
         <div class="row">
         <!-- Menú lateral -->
         <div class="menu-lateral col-md-3">

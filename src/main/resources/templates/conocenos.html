@@ -5,62 +5,511 @@
       layout:decorate="~{/layout/plantilla}">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/main.css">
   <title>Conócenos</title>
 </head>
 <body class="bg-gradient-primary">
 
 <!-- Aqui vamos a escribir el contenido de los bloques  -->
 <div layout:fragment="contenido" >
+  <!-- Page Title -->
+  <div class="page-title mb-3" data-aos="fade">
+    <nav class="breadcrumbs">
+      <div class="container">
+        <ol>
+          <li><a th:href="@{/}">Inicio</a></li>
+          <li class="current">Conócenos</li>
+        </ol>
+      </div>
+    </nav>
+  </div><!-- End Page Title -->
   <div class="container px-4">
-    <h1>Conócenos</h1>
     <div class="row">
 
     <!-- Menú lateral -->
-    <div class="menu-lateral col-3">
+    <div class="menu-lateral col-md-3">
       <div class="foto-perfil-container">
-        <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+        <a th:href="@{/usuario/{nickname}(nickname = ${usuario.nickname})}">
+          <img th:src="${usuario.avatar}" alt="Foto de perfil" class="foto-perfil">
+        </a>
       </div>
       <nav class="menu-opciones">
-        <a class="nav-link-guardados menu-btn" id="btn-preguntasFrec">Preguntas frecuentes</a>
-        <a class="nav-link-guardados menu-btn" id="btn-acercaDe">Acerca de nosotros</a>
-        <a class="nav-link-guardados menu-btn" id="btn-licenciaContenido">Licencia de contenido</a>
-        <a class="nav-link-guardados menu-btn" id="btn-politicasPriv">Políticas de privacidad</a>
-        <a class="nav-link-guardados menu-btn" id="btn-politicasCookies">Política de cookies</a>
-        <a class="nav-link-guardados menu-btn" id="btn-leyServicios">Ley de servicios Digitales</a>
+        <a class="nav-link-guardados menu-btn-actividad activo" id="btn-preguntasFrec">Preguntas frecuentes</a>
+        <a class="nav-link-guardados menu-btn-actividad" id="btn-acercaDe">Acerca de nosotros</a>
+        <a class="nav-link-guardados menu-btn-actividad" id="btn-licenciaContenido">Licencia de contenido</a>
+        <a class="nav-link-guardados menu-btn-actividad" id="btn-politicasPriv">Políticas de privacidad</a>
+        <a class="nav-link-guardados menu-btn-actividad" id="btn-politicasCookies">Política de cookies</a>
+        <a class="nav-link-guardados menu-btn-actividad" id="btn-leyServicios">Ley de servicios Digitales</a>
       </nav>
     </div>
     <!-- Contenido principal -->
-    <div class="col-9">
+    <div class="col-md-9">
       <div class="fondo-rectangulo-verde p-4">
         <!-- Preguntas Frecuentes -->
         <section id="contenido-preguntasFrec" class="contenido-principal">
-          <p> Preguntas Frecuentes </p>
+          <h1>🛠️ Preguntas Frecuentes (FAQ)</h1>
+          <h2 class="mt-2">🔐 Cuenta y Seguridad</h2>
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  1. ¿Cómo creo una cuenta en la plataforma?
+                </button>
+              </h3>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">Solo necesitas registrarte con un nombre de usuario, email y contraseña.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  2. ¿Qué hago si olvidé mi contraseña?
+                </button>
+              </h3>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">Notifica a uno de los administradores para que te den una contraseña nueva.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                  3. ¿Puedo cambiar mi contraseña?
+                </button>
+              </h3>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">Sí, desde la sección de configuración de perfil > seguridad. Deberás introducir tu contraseña actual para confirmar el cambio.</div>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="mt-2">💳 Monedas y Pagos</h2>
+          <div class="accordion accordion-flush" id="accordionFlushExample2">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne2" aria-expanded="false" aria-controls="flush-collapseOne2">
+                  4. ¿Qué son las monedas digitales y cómo se usan?
+                </button>
+              </h3>
+              <div id="flush-collapseOne2" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample2">
+                <div class="accordion-body">Son la moneda interna de la plataforma. Puedes usarlas para comprar contenido exclusivo subido por otros usuarios.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo2" aria-expanded="false" aria-controls="flush-collapseTwo2">
+                  5. ¿Cómo recargo monedas digitales?
+                </button>
+              </h3>
+              <div id="flush-collapseTwo2" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample2">
+                <div class="accordion-body">Dirígete a tu cartera en tu perfil y selecciona el método de pago para recargar monedas. Aceptamos tarjetas y otros métodos digitales.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree2" aria-expanded="false" aria-controls="flush-collapseThree2">
+                  6. ¿Puedo retirar dinero real con mis monedas?
+                </button>
+              </h3>
+              <div id="flush-collapseThree2" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample2">
+                <div class="accordion-body">Actualmente no es posible convertir monedas digitales en dinero real. Las monedas solo se usan dentro de la plataforma.</div>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="mt-2">📦 Contenido y Publicaciones</h2>
+          <div class="accordion accordion-flush" id="accordionFlushExample3">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne3" aria-expanded="false" aria-controls="flush-collapseOne3">
+                  7. ¿Qué tipo de contenido puedo subir?
+                </button>
+              </h3>
+              <div id="flush-collapseOne3" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample3">
+                <div class="accordion-body">Puedes subir imágenes, videos, audios y modelos 3D. Asegúrate de respetar los derechos de autor y nuestras políticas de contenido.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo3" aria-expanded="false" aria-controls="flush-collapseTwo3">
+                  8. ¿Cómo vendo mi contenido?
+                </button>
+              </h3>
+              <div id="flush-collapseTwo3" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample3">
+                <div class="accordion-body">Al subir tu contenido, puedes establecer un precio en monedas digitales. Cuando alguien lo compra, las monedas se agregan a tu cuenta.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree3" aria-expanded="false" aria-controls="flush-collapseThree3">
+                  9. ¿Hay límites de tamaño o formato?
+                </button>
+              </h3>
+              <div id="flush-collapseThree3" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample3">
+                <div class="accordion-body">Sí, hay límites, normalmente el máximo permitido son 30 MB.</div>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="mt-2">💬 Interacción Social</h2>
+          <div class="accordion accordion-flush" id="accordionFlushExample4">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne4" aria-expanded="false" aria-controls="flush-collapseOne4">
+                  10. ¿Puedo comentar o dar like a los contenidos?
+                </button>
+              </h3>
+              <div id="flush-collapseOne4" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample4">
+                <div class="accordion-body">Sí, puedes comentar, dar like y guardar contenido. Las interacciones ayudan a visibilizar más tu perfil y el de otros usuarios.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo4" aria-expanded="false" aria-controls="flush-collapseTwo4">
+                  11. ¿Cómo funciona el sistema de guardado?
+                </button>
+              </h3>
+              <div id="flush-collapseTwo4" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample4">
+                <div class="accordion-body">Al guardar contenido, lo añades a tu galería privada para verlo después sin necesidad de volver a buscarlo.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree4" aria-expanded="false" aria-controls="flush-collapseThree4">
+                  12. ¿Puedo chatear con otros usuarios?
+                </button>
+              </h3>
+              <div id="flush-collapseThree4" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample4">
+                <div class="accordion-body">Sí, puedes iniciar chats privados con otros usuarios desde su perfil, siempre que no estén bloqueados o te hayan bloqueado</div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- Acerca de Nosotros -->
         <section id="contenido-acercaDe" class="contenido-principal" style="display:none;">
-          <p> Acerca de Nosotros </p>
+          <h1>🧑‍💻 Sobre Nosotros</h1>
+          <p>Somos una plataforma digital dedicada a impulsar la creatividad y la economía colaborativa. Nuestro objetivo es ofrecer un espacio seguro, moderno y funcional donde cualquier persona pueda <strong>compartir, comprar o vender contenido digital</strong>, como imágenes, videos, audios y modelos 3D.</p>
+          <p>Creemos en el poder de la comunidad, la libertad creativa y la innovación tecnológica. Por eso, integramos un sistema de <strong>monedas virtuales</strong> que facilita las transacciones dentro de la app, y fomentamos la interacción entre usuarios mediante <strong>comentarios, likes, guardados y chats.</strong></p>
+          <p>Nuestro compromiso es claro: <strong>crear un ecosistema justo, accesible y dinámico</strong>, donde cada usuario pueda encontrar valor en lo que crea o consume.</p>
         </section>
 
         <!-- Licencia de Contenido -->
         <section id="contenido-licenciaContenido" class="contenido-principal" style="display:none;">
-          <p> Licencia de Contenido </p>
+          <h1>📜 Licencias de Contenido</h1>
+          <p>En nuestra plataforma, la protección de la propiedad intelectual y los derechos de autor es una prioridad. Por eso, todo el contenido subido, comprado o descargado está sujeto a las siguientes políticas de licencia:</p>
+          <h2>🔐 1. Propiedad del Contenido</h2>
+          <ul>
+            <li>Todo el contenido subido por los usuarios sigue siendo propiedad del autor que lo publica.</li>
+            <li>Al subir contenido, el autor garantiza que es el creador o tiene los derechos necesarios para publicarlo y venderlo.</li>
+          </ul>
+          <h2>💰 2. Licencia de Uso al Comprar</h2>
+          <ul>
+            <li>Al comprar un contenido, el usuario adquiere una licencia personal, no exclusiva y no transferible.</li>
+            <li>Esto significa que puedes ver, utilizar y descargar el contenido para uso personal o comercial limitado, sin revenderlo ni redistribuirlo.</li>
+            <li>El autor conserva todos los derechos no expresamente cedidos.</li>
+          </ul>
+          <h2>🚫 3. Restricciones de Uso</h2>
+          <p>No está permitido:</p>
+          <ul>
+            <li>Revender, regalar o redistribuir el contenido comprado.</li>
+            <li>Utilizar el contenido para fines ilegales, difamatorios, violentos o discriminatorios.</li>
+            <li>Modificar el contenido sin el permiso explícito del autor (salvo que la licencia del autor lo permita).</li>
+          </ul>
+          <h2>🔄 4. Contenido Gratuito o Público</h2>
+          <ul>
+            <li>El contenido marcado como gratuito puede usarse bajo los términos indicados por el autor (por ejemplo, con atribución o con fines no comerciales).</li>
+            <li>Si no se especifica una licencia personalizada, se aplica una licencia básica de uso personal.</li>
+          </ul>
+          <h2>🧾 5. Reportes y Retiro de Contenido</h2>
+          <ul>
+            <li>Si detectas contenido que infringe derechos de autor o no respeta las normas de licencia, puedes reportarlo desde la plataforma.</li>
+            <li>Nos reservamos el derecho de eliminar cualquier contenido que infrinja estas normas o las leyes vigentes.</li>
+          </ul>
+          <h2>✅ 6. Licencias Personalizadas</h2>
+          <p>Los autores pueden establecer condiciones de licencia personalizadas para su contenido. Estas deben estar claramente especificadas en la descripción del contenido antes de su compra.</p>
+          <h2 class="mb-4">📄 Tipos de Licencias Disponibles</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle">
+              <thead class="table-dark">
+              <tr>
+                <th>Licencia</th>
+                <th>Uso Personal</th>
+                <th>Uso Comercial</th>
+                <th>Modificación Permitida</th>
+                <th>Redistribución Permitida</th>
+                <th>Requiere Atribución</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td><strong>Básica</strong></td>
+                <td>✅ Sí</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+              </tr>
+              <tr>
+                <td><strong>Comercial Limitada</strong></td>
+                <td>✅ Sí</td>
+                <td>✅ Sí (limitado)</td>
+                <td>✅ Sí (con restricciones)</td>
+                <td>❌ No</td>
+                <td>✅ Sí</td>
+              </tr>
+              <tr>
+                <td><strong>Total con Atribución</strong></td>
+                <td>✅ Sí</td>
+                <td>✅ Sí</td>
+                <td>✅ Sí</td>
+                <td>❌ No</td>
+                <td>✅ Sí</td>
+              </tr>
+              <tr>
+                <td><strong>Libre / Creative Commons</strong></td>
+                <td>✅ Sí</td>
+                <td>✅ Sí</td>
+                <td>✅ Sí</td>
+                <td>✅ Sí</td>
+                <td>✅ Sí (según tipo)</td>
+              </tr>
+              <tr>
+                <td><strong>Personalizada</strong></td>
+                <td>✅ Según autor</td>
+                <td>✅ Según autor</td>
+                <td>✅ Según autor</td>
+                <td>✅ Según autor</td>
+                <td>✅ Según autor</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-4 text-muted">
+            📌 <strong>Nota:</strong> Estas licencias no transfieren la propiedad intelectual del contenido, solo conceden permisos de uso según lo indicado.
+            Revisa siempre las condiciones específicas del autor antes de utilizar cualquier material.
+          </p>
         </section>
 
         <!-- Politicas de Privacidad -->
         <section id="contenido-politicasPriv" class="contenido-principal" style="display:none;">
-          <p> Politicas de priv </p>
+          <h1 class="mb-4">🔒 Políticas de Privacidad</h1>
+
+          <p>Tu privacidad es una prioridad para nosotros. Esta política explica cómo recopilamos, usamos y protegemos tu información personal al utilizar nuestra plataforma.</p>
+
+          <div class="accordion" id="privacidadAccordion">
+            <!-- 1. Información que Recopilamos -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                  📌 1. Información que Recopilamos
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Nombre, apellidos, nickname, correo electrónico, contraseña cifrada.</li>
+                    <li>Contenido subido, compras, comentarios, likes, chats.</li>
+                    <li>Dirección IP, dispositivo, navegador y uso general de la plataforma.</li>
+                    <li>Datos financieros limitados (solo a través de pasarelas de pago seguras).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Uso de la Información -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                  🛡️ 2. Uso de la Información
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Gestión de cuenta y autenticación.</li>
+                    <li>Compra, venta y visualización de contenido.</li>
+                    <li>Mejora del servicio y seguridad.</li>
+                    <li>Notificaciones e información relevante de la plataforma.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Compartición con Terceros -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                  🚫 3. Compartición con Terceros
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <p>No compartimos tus datos salvo en los siguientes casos:</p>
+                  <ul>
+                    <li>Plataformas de pago (para procesar recargas).</li>
+                    <li>Exigencias legales o requerimientos judiciales.</li>
+                    <li>Casos de fraude, seguridad o abuso.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Seguridad de tus Datos -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                  🔐 4. Seguridad de tus Datos
+                </button>
+              </h2>
+              <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <p>Protegemos tu información mediante:</p>
+                  <ul>
+                    <li>Cifrado de contraseñas (BCrypt u otro estándar seguro).</li>
+                    <li>Canales HTTPS.</li>
+                    <li>Control de acceso, validaciones y auditorías internas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Derechos del Usuario -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                  👤 5. Derechos del Usuario
+                </button>
+              </h2>
+              <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Acceder, modificar o eliminar tus datos personales.</li>
+                    <li>Eliminar tu cuenta y toda tu información.</li>
+                    <li>Retirar el consentimiento para el uso de tus datos.</li>
+                    <li>Solicitar copia de los datos almacenados.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Cambios en la Política -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSix">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                  📆 6. Cambios en la Política
+                </button>
+              </h2>
+              <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <p>Nos reservamos el derecho de actualizar esta política. Te notificaremos cambios importantes a través de la plataforma.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. Contacto -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSeven">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven">
+                  📩 7. Contacto
+                </button>
+              </h2>
+              <div id="collapseSeven" class="accordion-collapse collapse" data-bs-parent="#privacidadAccordion">
+                <div class="accordion-body">
+                  <p>Si tienes dudas sobre esta política o el uso de tus datos, escríbenos a:</p>
+                  <p><strong>privacidad@cognest.com</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- Politicas de Cookies-->
         <section id="contenido-politicasCookies" class="contenido-principal" style="display:none;">
-          <p> Politicas de Cookies </p>
+          <h1 class="mb-4">🍪 Políticas de Cookies</h1>
+
+          <p>Esta política explica qué son las cookies, cómo las usamos y cómo puedes gestionarlas.</p>
+
+          <h5>📌 ¿Qué son las Cookies?</h5>
+          <p>Son pequeños archivos que se almacenan en tu navegador para mejorar tu experiencia de navegación.</p>
+
+          <h5>🛠️ Tipos de Cookies que Utilizamos</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead class="table-light">
+              <tr>
+                <th>Tipo de Cookie</th>
+                <th>Descripción</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>Cookies esenciales</td>
+                <td>Necesarias para el funcionamiento básico de la plataforma.</td>
+              </tr>
+              <tr>
+                <td>Cookies de rendimiento</td>
+                <td>Ayudan a analizar el comportamiento de uso para mejorar el sitio.</td>
+              </tr>
+              <tr>
+                <td>Cookies de funcionalidad</td>
+                <td>Permiten recordar preferencias como idioma o configuración.</td>
+              </tr>
+              <tr>
+                <td>Cookies de terceros</td>
+                <td>Provenientes de servicios como Google Analytics, pagos o redes sociales.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h5>❓ ¿Por qué usamos Cookies?</h5>
+          <ul>
+            <li>Mantener sesiones activas y seguras.</li>
+            <li>Personalizar tu experiencia.</li>
+            <li>Mejorar el rendimiento de la plataforma.</li>
+          </ul>
+
+          <h5>⚙️ ¿Cómo gestionarlas?</h5>
+          <p>Puedes configurar tu navegador para bloquear o eliminar cookies. Ten en cuenta que algunas funciones pueden dejar de estar disponibles si desactivas cookies esenciales.</p>
+
+          <h5>🔐 Relación con tus datos</h5>
+          <p>Las cookies no almacenan directamente datos personales, pero pueden relacionarse con información que ya proporcionaste. Más detalles en nuestra Política de Privacidad.</p>
+
+          <h5>📩 Contacto</h5>
+          <p>Para más información, contáctanos en: <strong>cookies@cognest.com</strong></p>
         </section>
 
         <!-- Ley de Servicios Digitales -->
         <section id="contenido-leyServicios" class="contenido-principal" style="display:none;">
-          <p> Servicios Digitales ley </p>
+          <h2 class="mb-4">⚖️ Ley de Servicios Digitales (DSA)</h2>
+
+          <p>Nos comprometemos a cumplir con la Ley de Servicios Digitales de la Unión Europea para crear un entorno más seguro y transparente para nuestros usuarios.</p>
+
+          <h5>📜 Objetivos principales</h5>
+          <ul>
+            <li>Proteger los derechos digitales de los usuarios.</li>
+            <li>Eliminar contenido ilegal de forma eficaz.</li>
+            <li>Garantizar procesos de moderación claros y justos.</li>
+            <li>Fomentar la transparencia y la responsabilidad en línea.</li>
+          </ul>
+
+          <h5>🛡️ Nuestros compromisos</h5>
+          <ul>
+            <li>Revisión y eliminación de contenido ilegal.</li>
+            <li>Justificación y notificación en decisiones de moderación.</li>
+            <li>Canales de reporte accesibles y efectivos.</li>
+            <li>Informes de transparencia periódicos.</li>
+            <li>Medidas de protección para usuarios menores de edad.</li>
+          </ul>
+
+          <h5>⚖️ Derechos de los usuarios</h5>
+          <ul>
+            <li>Expresar y apelar decisiones sobre tu contenido.</li>
+            <li>Usar la plataforma con privacidad y seguridad.</li>
+            <li>Recibir información clara sobre nuestras políticas.</li>
+          </ul>
+
+          <h5>📩 Contacto Legal</h5>
+          <p>Para consultas relacionadas con la DSA, escríbenos a: <strong>legal@cognest.com</strong></p>
         </section>
       </div>
     </div>
@@ -86,7 +535,7 @@
           document.getElementById(contenido).style.display = 'block';
 
           // Actualiza el botón activo
-          document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+          document.querySelectorAll('.menu-btn-actividad').forEach(b => b.classList.remove('activo'));
           this.classList.add('activo');
         });
 
@@ -101,13 +550,14 @@
         document.getElementById(contenido).style.display = 'block';
 
         // Actualiza el botón activo
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('activo'));
+        document.querySelectorAll('.menu-btn-actividad').forEach(b => b.classList.remove('activo'));
         this.classList.add('activo');
       });
 
     });
   </script>
 </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </div>
 </body>
 </html>

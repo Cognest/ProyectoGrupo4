@@ -35,7 +35,7 @@ public class AvatarController {
             if (filename == null || !filename.matches(".*\\.(jpg|jpeg|png|gif)$")) {
                 log.warn("❌ Archivo no válido: {}", filename);
                 redirectAttributes.addFlashAttribute("error", "Solo se permiten imágenes jpg, jpeg, png o gif.");
-                return "redirect:/config-perfil";
+                return "redirect:/config-perfil/editar-foto";
             }
 
             String nickname = usuarioAutenticado.getUsername();
@@ -47,7 +47,7 @@ public class AvatarController {
                 if (!directory.mkdirs()) {
                     log.error("❌ No se pudo crear la carpeta: {}", basePath);
                     redirectAttributes.addFlashAttribute("error", "No se pudo crear la carpeta de destino.");
-                    return "redirect:/config-perfil";
+                    return "redirect:/config-perfil/editar-foto";
                 }
             }
 
@@ -76,6 +76,6 @@ public class AvatarController {
             redirectAttributes.addFlashAttribute("error", "Ocurrió un error al subir la imagen.");
         }
 
-        return "redirect:/config-perfil";
+        return "redirect:/config-perfil/editar-foto";
     }
 }
