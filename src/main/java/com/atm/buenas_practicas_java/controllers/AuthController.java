@@ -1,20 +1,12 @@
 package com.atm.buenas_practicas_java.controllers;
 
-import com.atm.buenas_practicas_java.dtos.UsuarioDto;
 import com.atm.buenas_practicas_java.dtos.UsuarioRegistroDto;
-import com.atm.buenas_practicas_java.entities.Usuario;
-import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import com.atm.buenas_practicas_java.services.UsuarioService;
-import com.atm.buenas_practicas_java.services.mapper.UsuarioMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class AuthController {
@@ -28,7 +20,7 @@ public class AuthController {
     public String mostrarFormularioRegistro(Model model, HttpServletRequest request) {
         if (request.getUserPrincipal() != null) return "redirect:/";
         model.addAttribute("usuario", new UsuarioRegistroDto());
-        return "signin";
+        return "sesion/signin";
     }
 
     @PostMapping("/registrarse")
@@ -40,12 +32,12 @@ public class AuthController {
             System.out.println("🟢 ENTRANDO EN EL MÉTODO DE REGISTRO");
             if (!usuarioDto.getPassword().equals(confirmPassword)) {
                 model.addAttribute("error", "Las contraseñas no coinciden.");
-                return "signin";
+                return "sesion/signin";
             }
 
             if (usuarioService.emailONicknameExiste(usuarioDto.getEmail(), usuarioDto.getNickname())) {
                 model.addAttribute("error", "El email o nickname ya están registrados.");
-                return "signin";
+                return "sesion/signin";
             }
 
             usuarioService.registrarUsuario(usuarioDto);
@@ -54,7 +46,7 @@ public class AuthController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Error inesperado: " + e.getMessage());
-            return "signin";
+            return "sesion/signin";
         }
 
     }
@@ -65,7 +57,7 @@ public class AuthController {
         if (request.getUserPrincipal() != null) {
             return "redirect:/";
         }
-        return "login"; // View name
+        return "sesion/login"; // View name
     }
 
     @GetMapping("/cerrar-sesion")

@@ -1,18 +1,12 @@
 package com.atm.buenas_practicas_java.loaders;
 
-import com.atm.buenas_practicas_java.entities.EntidadHija;
-import com.atm.buenas_practicas_java.entities.EntidadPadre;
 import com.atm.buenas_practicas_java.entities.UserRol;
 import com.atm.buenas_practicas_java.entities.Usuario;
-import com.atm.buenas_practicas_java.repositories.EntidadHijaRepository;
-import com.atm.buenas_practicas_java.repositories.EntidadPadreRepository;
 import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import java.util.Arrays;
 
 /**
 * Clase de configuración que permite cargar datos iniciales en los repositorios
@@ -86,7 +80,4 @@ public void loadDataDesarrollo() {
     log.info("Datos de entidades cargados correctamente.");
 
 }
-
-
-
 }

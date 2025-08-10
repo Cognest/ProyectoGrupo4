@@ -13,8 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/config-perfil")
@@ -31,7 +29,7 @@ public class ConfigUsuarioController {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
             model.addAttribute("usuario", usuario);
         }
-        return "configPerfil";
+        return "configPerfil/configPerfil";
     }
 
     @GetMapping("/editar-foto")
@@ -40,7 +38,7 @@ public class ConfigUsuarioController {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
             model.addAttribute("usuario", usuario);
         }
-        return "cambiarAvatar";
+        return "configPerfil/cambiarAvatar";
     }
 
     @GetMapping("/seguridad")
@@ -49,7 +47,7 @@ public class ConfigUsuarioController {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
             model.addAttribute("usuario", usuario);
         }
-        return "contraseniasSeguridad";
+        return "configPerfil/contraseniasSeguridad";
     }
 
     @PostMapping("/seguridad")
@@ -96,7 +94,7 @@ public class ConfigUsuarioController {
             Usuario usuario = usuarioRepo.findByNickname(principal.getName()).orElse(null);
             model.addAttribute("usuario", usuario);
         }
-        return "datosPersonales";
+        return "configPerfil/datosPersonales";
     }
 
     @PostMapping("/datos-personales")
@@ -130,6 +128,6 @@ public class ConfigUsuarioController {
             model.addAttribute("usuariosBloqueados", usuariosBloqueados);
         }
 
-        return "usuariosBloqueados"; // View name
+        return "configPerfil/usuariosBloqueados"; // View name
     }
 }

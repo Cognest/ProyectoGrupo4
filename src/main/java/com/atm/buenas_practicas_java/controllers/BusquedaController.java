@@ -70,7 +70,7 @@ public class BusquedaController {
         model.addAttribute("busqueda", termino);
         model.addAttribute("orden", orden);
         model.addAttribute("fecha", fecha);
-        return "busqueda"; // Nombre de la plantilla HTML con los resultados
+        return "busqueda/busqueda"; // Nombre de la plantilla HTML con los resultados
     }
 
     @GetMapping("/{tipo}")
@@ -134,7 +134,7 @@ public class BusquedaController {
         model.addAttribute("tipo", tipo);
         model.addAttribute("orden", orden);
         model.addAttribute("fecha", fecha);
-        return "busquedaTipo"; // Vista especializada (ej: solo imágenes)
+        return "busqueda/busquedaTipo"; // Vista especializada (ej: solo imágenes)
     }
 
     @GetMapping("/{tipo}/{subtipo}")
@@ -183,6 +183,6 @@ public class BusquedaController {
         model.addAttribute("subtipo", subtipo);
         model.addAttribute("orden", orden);
         model.addAttribute("fecha", fecha);
-        return "busquedaSubtipo"; // Vista especializada (ej: solo imágenes)
+        return "busqueda/busquedaSubtipo"; // Vista especializada (ej: solo imágenes)
     }
 }

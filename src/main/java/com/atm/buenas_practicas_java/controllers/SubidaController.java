@@ -2,7 +2,6 @@ package com.atm.buenas_practicas_java.controllers;
 
 import com.atm.buenas_practicas_java.config.CustomUserDetails;
 import com.atm.buenas_practicas_java.dtos.ContenidoDto;
-import com.atm.buenas_practicas_java.dtos.UsuarioRegistroDto;
 import com.atm.buenas_practicas_java.entities.Contenido;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
@@ -49,7 +48,7 @@ public class SubidaController {
     public String mostrarSubidaContenido(Model model) {
         log.info("Mostrando formulario para subir contenido.");
         model.addAttribute("contenido", new ContenidoDto());
-        return "subirContenido";
+        return "subir/subirContenido";
     }
 
     @PostMapping("/subir-contenido")

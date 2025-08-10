@@ -50,7 +50,7 @@ public class ActividadController {
             model.addAttribute("likesIds", Set.of());
             model.addAttribute("guardadosIds", Set.of());
         }
-        return "tuActividad";
+        return "actividad/tuActividad";
 
     }
 
@@ -78,7 +78,7 @@ public class ActividadController {
             model.addAttribute("likesIds", Set.of());
             model.addAttribute("guardadosIds", Set.of());
         }
-        return "guardados";
+        return "actividad/guardados";
     }
 
     @GetMapping("/contenidos-adquiridos")
@@ -105,7 +105,7 @@ public class ActividadController {
             model.addAttribute("likesIds", Set.of());
             model.addAttribute("guardadosIds", Set.of());
         }
-        return "contenidoAdquirido";
+        return "actividad/contenidoAdquirido";
     }
 
     @GetMapping("/comentarios")
@@ -120,6 +120,6 @@ public class ActividadController {
             model.addAttribute("likesIds", Set.of());
             model.addAttribute("guardadosIds", Set.of());
         }
-        return "listaComentarios";
+        return "actividad/listaComentarios";
     }
 }
